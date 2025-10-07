@@ -126,12 +126,13 @@
   <div class="wrap">
     <h2 class="section-title">Cross‑Chain Meme Swap Hub</h2>
     <p class="muted">Pick a chain, then one of its top meme coins. Links open the right DEX for that chain. <em>Admin: edit the addresses in the config below.</em></p>
-    <div class="pair-tabs" role="tablist" aria-label="Chains">
-      <button class="tab active" data-chain="ethereum" aria-selected="true">Ethereum</button>
-      <button class="tab" data-chain="solana" aria-selected="false">Solana</button>
-      <button class="tab" data-chain="bsc" aria-selected="false">BSC</button>
-      <button class="tab" data-chain="base" aria-selected="false">Base</button>
-      <button class="tab" data-chain="polygon" aria-selected="false">Polygon</button>
+    <div class=\"pair-tabs\" role=\"tablist\" aria-label=\"Chains\">
+      <button class=\"tab\" data-chain=\"cardano\" aria-selected=\"false\">Cardano</button>
+      <button class=\"tab active\" data-chain=\"ethereum\" aria-selected=\"true\">Ethereum</button>
+      <button class=\"tab\" data-chain=\"solana\" aria-selected=\"false\">Solana</button>
+      <button class=\"tab\" data-chain=\"bsc\" aria-selected=\"false\">BSC</button>
+      <button class=\"tab\" data-chain=\"base\" aria-selected=\"false\">Base</button>
+      <button class=\"tab\" data-chain=\"polygon\" aria-selected=\"false\">Polygon</button>
     </div>
     <div id="memeSwapResults" style="display:grid; gap:.8rem; margin-top:1rem"></div>
     <small class="muted">Note: Some DEXes require the exact token contract/mint to prefill. If a token doesn’t load, paste the address once—most wallets remember it after the first import.</small>
@@ -388,7 +389,7 @@
       tokens: [
         { name: 'POLYDOGE', address: '0x8a953cfe442c5e8855cc6c61b1293fa648bae472' },
         { name: 'SHIB',     address: '0x6f8a06447ff6fcf75d803135a7de15ce88c1d4ec' },
-        { name: '— add 3rd', address: '' }
+        { name: 'PEPE (Polygon – verify)', address: '' }
       ],
       link(addr){ return `https://app.uniswap.org/swap?chain=polygon&inputCurrency=${this.base}&outputCurrency=${addr}`; }
     }
@@ -448,7 +449,7 @@
   }));
 
   // initial render
-  renderChain('ethereum');
+  renderChain('cardano');
   const btcIn = document.getElementById('btc_hkdg_in');
   const outAda = document.getElementById('btc_out_ada');
   const outBtc = document.getElementById('btc_out_btc');
