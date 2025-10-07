@@ -134,8 +134,40 @@
           </div>
         </div>
         <div id="swapFrame" style="margin-top:.8rem">
-          <iframe id="dexFrame" src="https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace" width="100%" height="600" style="border:2px solid #8cf;border-radius:16px" title="Swap HKDG/ADA" loading="lazy"></iframe>
-        </div>
+  <div class="panel" style="display:grid; gap:.8rem">
+    <div class="muted">Choose a pair above, then trade on your preferred DEX in a new tab.</div>
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
+      <div><strong>💧 Minswap</strong><br><small class="muted">Deep link to current pair</small></div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <a id="openMinswap" class="btn" target="_blank" rel="noopener" href="#">Open</a>
+        <button id="copyMinswap" class="btn secondary" type="button">Copy link</button>
+      </div>
+    </div>
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
+      <div><strong>🪂 WingRiders</strong><br><small class="muted">Deep link to current pair</small></div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <a id="openWing" class="btn" target="_blank" rel="noopener" href="#">Open</a>
+        <button id="copyWing" class="btn secondary" type="button">Copy link</button>
+      </div>
+    </div>
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
+      <div><strong>🍨 SundaeSwap</strong><br><small class="muted">Deep link to current pair</small></div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <a id="openSundae" class="btn" target="_blank" rel="noopener" href="#">Open</a>
+        <button id="copySundae" class="btn secondary" type="button">Copy link</button>
+      </div>
+    </div>
+    <small class="muted">If a deep link doesn’t prefill, import tokens by Policy + Asset.</small>
+  </div>
+</div>
+    <div class="muted" style="max-width:520px">Some sites disallow being loaded in an iframe (CSP/X‑Frame‑Options). Use the direct link below to trade on Minswap in a new tab.</div>
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center">
+      <a id="openDexLink" class="btn" target="_blank" rel="noopener" href="https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace">Open Minswap</a>
+      <button id="copyDexLink" class="btn secondary" type="button">Copy link</button>
+    </div>
+  </div>
+  <iframe id="dexFrame" src="https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace" width="100%" height="600" style="border:2px solid #8cf;border-radius:16px" title="Swap HKDG/ADA" loading="lazy"></iframe>
+</div>
         <div class="muted" style="margin-top:.6rem">Tip: if the token doesn’t auto‑load on the DEX, import by Policy + Asset: <code>9560f8…f0ad484F534B444F47</code></div>
       </div>
 
@@ -334,22 +366,48 @@
     if (isFinite(maybe) && maybe > 0) { priceAdaPerHKDG = maybe; if (priceSpan) priceSpan.textContent = maybe.toString(); }
   } catch {}
 
-  // Swap iFrame pair switching
-  const frame = document.getElementById('dexFrame');
+  // Swap deep links (no iframes)
   const tabButtons = Array.from(document.querySelectorAll('.pair-tabs .tab'));
-  const urls = {
-    ada:   "https://app.minswap.org/swap?inputCurrency=" + POLICY + "&outputCurrency=lovelace",
-    snek:  "https://app.minswap.org/swap?inputCurrency=" + POLICY + "&outputCurrency=a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b",
-    hosky: "https://app.minswap.org/swap?inputCurrency=" + POLICY + "&outputCurrency=c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59"
-  };
+
+  const HKDG_UNIT = UNIT;
+  const ADA_ID = 'lovelace';
+  const SNEK_UNIT = 'a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b';
+  const HOSKY_UNIT = 'c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59';
+
+  function buildUrls(pair){
+    let from = HKDG_UNIT, to = ADA_ID;
+    if (pair === 'snek') to = SNEK_UNIT; else if (pair === 'hosky') to = HOSKY_UNIT; else to = ADA_ID;
+    return {
+      minswap: `https://app.minswap.org/swap?inputCurrency=${from}&outputCurrency=${to}`,
+      wing:    `https://app.wingriders.com/swap?from=${from}&to=${to}`,
+      sundae:  `https://sundaeswap.finance/app/swap?from=${from}&to=${to}`
+    };
+  }
+
+  function setLinks(pair){
+    const u = buildUrls(pair);
+    const entries = [
+      ['openMinswap', u.minswap, 'copyMinswap'],
+      ['openWing',    u.wing,    'copyWing'],
+      ['openSundae',  u.sundae,  'copySundae']
+    ];
+    entries.forEach(([openId, url, copyId]) => {
+      const a = document.getElementById(openId); if (a) a.href = url;
+      const c = document.getElementById(copyId); if (c) c.onclick = () => { navigator.clipboard.writeText(url).then(()=>{ c.textContent='Copied!'; setTimeout(()=>c.textContent='Copy link',1000); }); };
+    });
+  }
+
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       tabButtons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
       btn.classList.add('active'); btn.setAttribute('aria-selected','true');
       const pair = btn.getAttribute('data-pair');
-      if (urls[pair]) { frame.src = urls[pair]; frame.title = `Swap HKDG/${pair.toUpperCase()}`; }
+      setLinks(pair);
     });
   });
+
+  // Initialize links for default pair (ADA)
+  setLinks('ada');
 
   // Converter
   const inHKDG = document.getElementById('inHKDG');
