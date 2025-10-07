@@ -45,9 +45,9 @@
     h1{font-size:clamp(2.2rem,4vw,3.4rem); margin:.9rem 0 .6rem; letter-spacing:.5px}
     .tag{color:var(--muted); font-size:1.05rem; max-width:720px; margin:0 auto 1.4rem}
     .cta{display:flex; gap:.75rem; flex-wrap:wrap; justify-content:center; margin-top:1.1rem}
-    .btn{ padding:.8rem 1.1rem; border-radius:12px; border:2px solid var(--cyan2); color:#fff; background:var(--card); backdrop-filter: blur(4px); box-shadow:0 0 18px rgba(108,207,255,.25); cursor:pointer }
+    $1 #fff; background:var(--card); backdrop-filter: blur(4px); box-shadow:0 0 18px rgba(108,207,255,.25); cursor:pointer }
     .btn:hover{box-shadow:0 0 26px rgba(108,207,255,.5)}
-    .btn.secondary{border-color:#fff3; color:var(--txt)}
+    .btn.secondary{border-color:#fff3; color:#fff !important}
     .sound{ position:fixed; right:14px; bottom:14px; background:var(--card); border:1px solid #ffffff33; color:#fff; padding:.55rem .8rem; border-radius:10px; font-size:.9rem; z-index:15 }
 
     section{padding:4.5rem 1.1rem}
@@ -96,7 +96,7 @@
     .field{display:grid; gap:.35rem}
     .input{width:100%; padding:.7rem .8rem; border-radius:10px; border:1px solid #ffffff33; background:#0006; color:#fff}
     .pair-tabs{display:flex; gap:.5rem; flex-wrap:wrap}
-    .tab{padding:.55rem .8rem; border-radius:10px; border:1px solid #ffffff33; background:#ffffff12; cursor:pointer}
+    .tab{padding:.55rem .8rem; border-radius:10px; border:1px solid #ffffff33; background:#ffffff12; cursor:pointer; color:#fff !important}
     .tab.active{border-color:var(--cyan2); box-shadow:0 0 14px rgba(108,207,255,.25)}
   </style>
 </head>
@@ -358,45 +358,45 @@
     ethereum: {
       dex: 'Uniswap', base: 'ETH',
       tokens: [
-        // { name: 'SHIB', address: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE' },
-        // { name: 'PEPE', address: '0x6982508145454Ce325dDbE47a25d4ec3d2311933' },
-        // { name: 'FLOKI', address: '0x5fE4B...REPLACE' },
+        { name: 'SHIB',  address: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE' },
+        { name: 'PEPE',  address: '0x6982508145454Ce325dDbE47a25d4ec3d2311933' },
+        { name: 'FLOKI', address: '0xcf0c122c6b73ff809c693db761e7baebe62b6a2e' }
       ],
       link(addr){ return `https://app.uniswap.org/swap?inputCurrency=${this.base}&outputCurrency=${addr}`; }
     },
     solana: {
       dex: 'Jupiter', base: 'SOL',
       tokens: [
-        // { name: 'BONK', address: 'DezXz...REPLACE' },
-        // { name: 'WIF', address: '9n4nbM...REPLACE' },
-        // { name: 'POPCAT', address: '7a5x...REPLACE' },
+        { name: 'BONK',   address: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263' },
+        { name: 'WIF',    address: 'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm' },
+        { name: 'POPCAT', address: '7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr' }
       ],
       link(mint){ return `https://jup.ag/swap/${this.base}-${mint}`; }
     },
     bsc: {
       dex: 'PancakeSwap', base: 'BNB',
       tokens: [
-        // { name: 'BABYDOGE', address: '0xc748...REPLACE' },
-        // { name: 'FLOKI', address: '0xfb5b...REPLACE' },
-        // { name: 'PEPE', address: '0xe0a2...REPLACE (BSC bridge)'}
+        { name: 'BabyDoge', address: '0xc748673057861A797275CD8A068AbB95A902e8de' },
+        { name: 'FLOKI',    address: '0xfb5b838b6cfeedc2873ab27866079ac55363d37e' },
+        { name: 'PEPE',     address: '0x25d887ce7a35172c62febfd67a1856f20faebb00' }
       ],
       link(addr){ return `https://pancakeswap.finance/swap?outputCurrency=${addr}`; }
     },
     base: {
       dex: 'Uniswap', base: 'ETH',
       tokens: [
-        // { name: 'BRETT', address: '0x532f...REPLACE' },
-        // { name: 'TOSHI', address: '0xCA32...REPLACE' },
-        // { name: 'DEGEN', address: '0xD9aE...REPLACE' },
+        { name: 'BRETT', address: '0x532f27101965dd16442E59d40670FaF5eBB142E4' },
+        { name: 'TOSHI', address: '0xAC1Bd2486aAf3B5C0fc3Fd868558b082a531B2B4' },
+        { name: 'DEGEN', address: '0x4ed4e862860bed51a9570b96d89af5e1b0efefed' }
       ],
       link(addr){ return `https://app.uniswap.org/swap?chain=base&inputCurrency=${this.base}&outputCurrency=${addr}`; }
     },
     polygon: {
       dex: 'Uniswap', base: 'MATIC',
       tokens: [
-        // { name: 'DOGI', address: '0xC4Bf...REPLACE' },
-        // { name: 'PEPE', address: '0xD1Ba...REPLACE (Polygon bridge)' },
-        // { name: 'SHIB', address: '0x6f8a...REPLACE (Polygon bridge)'}
+        { name: 'POLYDOGE', address: '0x8a953cfe442c5e8855cc6c61b1293fa648bae472' },
+        { name: 'SHIB',     address: '0x6f8a06447ff6fcf75d803135a7de15ce88c1d4ec' },
+        { name: '— add 3rd', address: '' }
       ],
       link(addr){ return `https://app.uniswap.org/swap?chain=polygon&inputCurrency=${this.base}&outputCurrency=${addr}`; }
     }
