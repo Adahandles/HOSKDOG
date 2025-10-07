@@ -121,88 +121,24 @@
 <!-- COMBINED: Wallet + Converter + Swap Center -->
 <section id="trade" style="padding:2.8rem 1.1rem">
   <div class="wrap">
-    <h2 class="section-title">Trade & Converter</h2>
-    <div class="trade-grid">
-      <!-- Left: Swap iFrame + Pair Tabs -->
-      <div class="token-box" id="swapBox">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
-          <strong>Swap on Minswap</strong>
-          <div class="pair-tabs" role="tablist" aria-label="Trading pairs">
-            <button class="tab active" data-pair="ada" role="tab" aria-selected="true">HKDG ↔ ADA</button>
-            <button class="tab" data-pair="snek" role="tab" aria-selected="false">HKDG ↔ SNEK</button>
-            <button class="tab" data-pair="hosky" role="tab" aria-selected="false">HKDG ↔ HOSKY</button>
-          </div>
-        </div>
-        <div id="swapFrame" style="margin-top:.8rem">
-  <div class="panel" style="display:grid; gap:.8rem">
-    <div class="muted">Choose a pair above, then trade on your preferred DEX in a new tab.</div>
-    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
-      <div><strong>💧 Minswap</strong><br><small class="muted">Deep link to current pair</small></div>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-        <a id="openMinswap" class="btn" target="_blank" rel="noopener" href="#">Open</a>
-        <button id="copyMinswap" class="btn secondary" type="button">Copy link</button>
-      </div>
-    </div>
-    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
-      <div><strong>🪂 WingRiders</strong><br><small class="muted">Deep link to current pair</small></div>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-        <a id="openWing" class="btn" target="_blank" rel="noopener" href="#">Open</a>
-        <button id="copyWing" class="btn secondary" type="button">Copy link</button>
-      </div>
-    </div>
-    <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
-      <div><strong>🍨 SundaeSwap</strong><br><small class="muted">Deep link to current pair</small></div>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-        <a id="openSundae" class="btn" target="_blank" rel="noopener" href="#">Open</a>
-        <button id="copySundae" class="btn secondary" type="button">Copy link</button>
-      </div>
-    </div>
-    <small class="muted">If a deep link doesn’t prefill, import tokens by Policy + Asset.</small>
-  </div>
-</div>
-    <div class="muted" style="max-width:520px">Some sites disallow being loaded in an iframe (CSP/X‑Frame‑Options). Use the direct link below to trade on Minswap in a new tab.</div>
-    <div style="display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center">
-      <a id="openDexLink" class="btn" target="_blank" rel="noopener" href="https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace">Open Minswap</a>
-      <button id="copyDexLink" class="btn secondary" type="button">Copy link</button>
-    </div>
-  </div>
-  <iframe id="dexFrame" src="https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace" width="100%" height="600" style="border:2px solid #8cf;border-radius:16px" title="Swap HKDG/ADA" loading="lazy"></iframe>
-</div>
-        <div class="muted" style="margin-top:.6rem">Tip: if the token doesn’t auto‑load on the DEX, import by Policy + Asset: <code>9560f8…f0ad484F534B444F47</code></div>
-      </div>
-
-      <!-- Right: Wallet (read-only) + Converter -->
-      <div class="token-box" id="walletBox">
-        <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;justify-content:space-between">
-          <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-            <strong>Wallet:</strong>
-            <span id="walletStatus" class="muted">Not connected</span>
-          </div>
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-            <button class="btn" id="connectNami">Connect Nami</button>
-            <button class="btn secondary" id="connectEternl">Connect Eternl</button>
-          </div>
-        </div>
-        <div class="kvs" style="margin-top:.6rem">
-          <div class="kv"><strong>HKDG Balance:</strong> <span id="hkdgBal">—</span></div>
-          <div class="kv"><strong>ADA Balance:</strong> <span id="adaBal">—</span></div>
-          <div class="kv"><strong>Price (fallback):</strong> <span id="priceInfo"><span id="priceAda">0.000001</span> ADA / HKDG</span></div>
-        </div>
-        <hr style="border:0;border-top:1px solid #ffffff22;margin:.8rem 0"/>
-        <strong>HKDG ⇄ ADA Converter</strong>
-        <div style="display:grid;gap:.6rem;grid-template-columns:repeat(2,minmax(0,1fr)); align-items:end;margin-top:.5rem">
-          <label class="field">HKDG
-            <input id="inHKDG" class="input" type="number" min="0" step="any" placeholder="0" inputmode="decimal">
-          </label>
-          <label class="field">ADA
-            <input id="inADA" class="input" type="number" min="0" step="any" placeholder="0" inputmode="decimal">
-          </label>
-        </div>
-        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem">
-          <button class="btn" id="swapDir" title="Swap direction" aria-label="Swap inputs">⇄</button>
-          <small class="muted">Uses fallback price until live feed is wired.</small>
+    <h2 class="section-title">DEX Aggregator</h2>
+    <div class="token-box" id="aggBox" style="margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
+        <strong>Aggregator (alpha)</strong>
+        <div class="pair-tabs" role="tablist" aria-label="Aggregator pairs">
+          <button class="tab active" data-aggpair="ada" role="tab" aria-selected="true">HKDG → ADA</button>
+          <button class="tab" data-aggpair="snek" role="tab" aria-selected="false">HKDG → SNEK</button>
+          <button class="tab" data-aggpair="hosky" role="tab" aria-selected="false">HKDG → HOSKY</button>
         </div>
       </div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:end;margin-top:.6rem">
+        <label class="field">Amount (HKDG)
+          <input id="aggAmount" class="input" type="number" min="0" step="any" placeholder="100000" inputmode="decimal">
+        </label>
+        <button id="aggQuoteBtn" class="btn" type="button">Get Quotes</button>
+      </div>
+      <div id="aggResults" style="display:grid;gap:.6rem;margin-top:.8rem"></div>
+      <small class="muted">Notes: This alpha calls each DEX adapter in parallel. If no API is configured or CORS blocks a call, you’ll still get a fallback estimate and one‑click deep links.</small>
     </div>
   </div>
 </section>
@@ -366,123 +302,102 @@
     if (isFinite(maybe) && maybe > 0) { priceAdaPerHKDG = maybe; if (priceSpan) priceSpan.textContent = maybe.toString(); }
   } catch {}
 
-  // Swap deep links (no iframes)
-  const tabButtons = Array.from(document.querySelectorAll('.pair-tabs .tab'));
+  // Aggregator (alpha)
+  const aggTabs = Array.from(document.querySelectorAll('[data-aggpair]'));
+  const aggAmountEl = document.getElementById('aggAmount');
+  const aggBtn = document.getElementById('aggQuoteBtn');
+  const aggResults = document.getElementById('aggResults');
+  let aggPair = 'ada';
 
-  const HKDG_UNIT = UNIT;
-  const ADA_ID = 'lovelace';
-  const SNEK_UNIT = 'a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b';
-  const HOSKY_UNIT = 'c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59';
+  const TOKENS = {
+    HKDG: UNIT,
+    ADA: 'lovelace',
+    SNEK: 'a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b',
+    HOSKY: 'c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59'
+  };
 
-  function buildUrls(pair){
-    let from = HKDG_UNIT, to = ADA_ID;
-    if (pair === 'snek') to = SNEK_UNIT; else if (pair === 'hosky') to = HOSKY_UNIT; else to = ADA_ID;
-    return {
-      minswap: `https://app.minswap.org/swap?inputCurrency=${from}&outputCurrency=${to}`,
-      wing:    `https://app.wingriders.com/swap?from=${from}&to=${to}`,
-      sundae:  `https://sundaeswap.finance/app/swap?from=${from}&to=${to}`
-    };
+  function outUnitFor(pair){ return pair==='snek'?TOKENS.SNEK : pair==='hosky'?TOKENS.HOSKY : TOKENS.ADA; }
+
+  // Adapter placeholders — supply real endpoints if available.
+  // Each adapter should return: { dex: 'Minswap'|'WingRiders'|'SundaeSwap', outAmount, price, url }
+  const Adapters = {
+    async minswap(hkIn, outUnit){
+      const url = `https://app.minswap.org/swap?inputCurrency=${TOKENS.HKDG}&outputCurrency=${outUnit}`;
+      // TODO: replace with Minswap quote endpoint if available (subject to CORS/API key)
+      const price = priceAdaPerHKDG; // fallback per‑HKDG price in ADA (or treat as unitless for non‑ADA)
+      const out = outUnit===TOKENS.ADA ? hkIn * price : hkIn * price; // naive fallback
+      return { dex:'Minswap', outAmount: out, price, url };
+    },
+    async wing(hkIn, outUnit){
+      const url = `https://app.wingriders.com/swap?from=${TOKENS.HKDG}&to=${outUnit}`;
+      // TODO: WingRiders public quote endpoint; fallback estimate:
+      const price = priceAdaPerHKDG; const out = hkIn * price; return { dex:'WingRiders', outAmount: out, price, url };
+    },
+    async sundae(hkIn, outUnit){
+      const url = `https://sundaeswap.finance/app/swap?from=${TOKENS.HKDG}&to=${outUnit}`;
+      // TODO: SundaeSwap public quote endpoint; fallback estimate:
+      const price = priceAdaPerHKDG; const out = hkIn * price; return { dex:'SundaeSwap', outAmount: out, price, url };
+    }
+  };
+
+  function fmt(num, digits=6){
+    if (!isFinite(num)) return '—';
+    return Number(num).toLocaleString(undefined, { maximumFractionDigits: digits });
   }
 
-  function setLinks(pair){
-    const u = buildUrls(pair);
-    const entries = [
-      ['openMinswap', u.minswap, 'copyMinswap'],
-      ['openWing',    u.wing,    'copyWing'],
-      ['openSundae',  u.sundae,  'copySundae']
-    ];
-    entries.forEach(([openId, url, copyId]) => {
-      const a = document.getElementById(openId); if (a) a.href = url;
-      const c = document.getElementById(copyId); if (c) c.onclick = () => { navigator.clipboard.writeText(url).then(()=>{ c.textContent='Copied!'; setTimeout(()=>c.textContent='Copy link',1000); }); };
+  function renderResults(quotes, outUnit){
+    aggResults.innerHTML = '';
+    if (!quotes.length){ aggResults.innerHTML = '<div class="mini">No quotes available.</div>'; return; }
+    // Pick best (max outAmount)
+    const best = quotes.reduce((a,b)=> (b.outAmount>a.outAmount?b:a));
+    quotes.forEach(q => {
+      const isBest = q===best;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
+          <div>
+            <strong>${isBest?'⭐ ':''}${q.dex}</strong><br>
+            <small class="muted">Est. receive: ${fmt(q.outAmount, outUnit===TOKENS.ADA?6:0)} ${outUnit===TOKENS.ADA?'ADA':(outUnit===TOKENS.SNEK?'SNEK':'HOSKY')}</small>
+          </div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <a class="btn" target="_blank" rel="noopener" href="${q.url}">Open</a>
+            <button class="btn secondary" type="button" data-copyurl="${q.url}">Copy link</button>
+          </div>
+        </div>`;
+      aggResults.appendChild(card);
+    });
+    // copy handlers
+    aggResults.querySelectorAll('[data-copyurl]').forEach(btn=>{
+      btn.onclick = ()=>{ const u = btn.getAttribute('data-copyurl'); navigator.clipboard.writeText(u).then(()=>{ btn.textContent='Copied!'; setTimeout(()=>btn.textContent='Copy link',1000); }); };
     });
   }
 
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabButtons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
-      const pair = btn.getAttribute('data-pair');
-      setLinks(pair);
-    });
-  });
-
-  // Initialize links for default pair (ADA)
-  setLinks('ada');
-
-  // Converter
-  const inHKDG = document.getElementById('inHKDG');
-  const inADA  = document.getElementById('inADA');
-  const swapDirBtn = document.getElementById('swapDir');
-  let direction = 'HKDG_TO_ADA';
-
-  function hkToAda(v){ return v * priceAdaPerHKDG; }
-  function adaToHk(v){ return v / priceAdaPerHKDG; }
-
-  function syncFromHKDG(){
-    const v = parseFloat(inHKDG.value || '');
-    if (!isFinite(v)) { inADA.value = ''; return; }
-    inADA.value = hkToAda(v).toFixed(6);
-  }
-  function syncFromADA(){
-    const v = parseFloat(inADA.value || '');
-    if (!isFinite(v)) { inHKDG.value = ''; return; }
-    inHKDG.value = Math.max(0, adaToHk(v)).toFixed(0);
-  }
-
-  inHKDG.addEventListener('input', () => {
-    if (direction === 'HKDG_TO_ADA') syncFromHKDG();
-  });
-  inADA.addEventListener('input', () => {
-    if (direction === 'ADA_TO_HKDG') syncFromADA();
-  });
-
-  swapDirBtn.addEventListener('click', () => {
-    direction = (direction === 'HKDG_TO_ADA') ? 'ADA_TO_HKDG' : 'HKDG_TO_ADA';
-    // swap current values visually
-    const tmp = inHKDG.value; inHKDG.value = inADA.value; inADA.value = tmp;
-  });
-
-  // Wallet connect (read-only status + HKDG balance lookup via Koios). Robust w/out Buffer usage.
-  const walletStatus = document.getElementById('walletStatus');
-  const hkdgBal = document.getElementById('hkdgBal');
-  const adaBal = document.getElementById('adaBal');
-
-  async function getConnector(which){
-    if (which==="nami" && window.cardano?.nami) return window.cardano.nami;
-    if (which==="eternl" && window.cardano?.eternl) return window.cardano.eternl;
-    throw new Error("Wallet not found");
-  }
-  async function enable(which){ return (await getConnector(which)).enable(); }
-
-  async function fetchHKDGForAddress(addr){
+  async function getQuotes(){
+    const amount = parseFloat(aggAmountEl.value||''); if (!isFinite(amount) || amount<=0){ aggResults.innerHTML = '<div class="mini">Enter a valid HKDG amount.</div>'; return; }
+    const out = outUnitFor(aggPair);
+    aggResults.innerHTML = '<div class="mini">Fetching quotes…</div>';
     try{
-      const r = await fetch("https://api.koios.rest/api/v1/address_assets?_address="+encodeURIComponent(addr));
-      const rows = await r.json();
-      let qty = 0n;
-      for (const row of rows){
-        if (row.policy_id===POLICY && (row.asset_name_hex||'').toUpperCase()===ASSET_HEX){ qty = BigInt(row.quantity); break; }
-      }
-      return qty.toString();
-    }catch{ return null; }
+      const [m,w,s] = await Promise.allSettled([
+        Adapters.minswap(amount, out),
+        Adapters.wing(amount, out),
+        Adapters.sundae(amount, out)
+      ]);
+      const quotes = [m,w,s].filter(x=>x.status==='fulfilled').map(x=>x.value);
+      renderResults(quotes, out);
+    }catch(err){ aggResults.innerHTML = '<div class="mini">Error fetching quotes.</div>'; console.warn(err); }
   }
 
-  async function connect(which){
-    try{
-      walletStatus.textContent = "Connecting…";
-      const api = await enable(which);
-      const net = await api.getNetworkId(); if (net !== 1) { walletStatus.textContent = "Wrong network (mainnet only)"; return; }
-      walletStatus.textContent = which.toUpperCase()+" connected";
-      // ADA balance: implementations vary, keep simple
-      adaBal.textContent = "via wallet";
-      // Use change address to query HKDG balance on Koios
-      const changeAddr = await api.getChangeAddress();
-      const hk = await fetchHKDGForAddress(changeAddr);
-      hkdgBal.textContent = (hk!==null) ? Intl.NumberFormat().format(Number(hk))+" HKDG" : "N/A";
-    }catch(e){ walletStatus.textContent = "Connection failed"; console.warn(e); }
-  }
+  aggTabs.forEach(btn=>btn.addEventListener('click',()=>{
+    aggTabs.forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+    aggPair = btn.getAttribute('data-aggpair');
+  }));
 
-  document.getElementById('connectNami').addEventListener('click', ()=>connect('nami'));
-  document.getElementById('connectEternl').addEventListener('click', ()=>connect('eternl'));
+  aggBtn.addEventListener('click', getQuotes);
+
+  // (Converter removed in this build)
+  // (Wallet connect removed in this build)
 })();
 </script>
 
