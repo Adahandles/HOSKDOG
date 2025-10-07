@@ -255,11 +255,10 @@
 
 <div class="sep"><div class="paw">🐾</div></div>
 
-<section id="memes">
-  <div class="wrap">
-    <h2 class="section-title">The Kennel — Meme Wall</h2>
-    <p class="muted">Drop your best HOSKDOG memes. Top entries featured weekly.</p>
-    <div class="meme-wall">
+    <div class="meme-wall" id="memeWall">
+      <p class="muted" id="loadingMemes">Loading memes...</p>
+    </div>
+
       <!-- Replace the sample images with your own or tweet screenshots -->
       <div class="meme"><img src="https://picsum.photos/seed/hoskdog1/600/600" alt="meme 1" /></div>
       <div class="meme"><img src="https://picsum.photos/seed/hoskdog2/600/600" alt="meme 2" /></div>
@@ -492,5 +491,37 @@
 })();
 </script>
 
+<script>
+/* ---------- Meme Wall Loader ---------- */
+(async function(){
+  const MEME_URL = "https://adahandles.github.io/HOSKDOG/data/memes.json";
+  const wall = document.getElementById("memeWall");
+  const loading = document.getElementById("loadingMemes");
+
+  try {
+    const res = await fetch(MEME_URL, {cache:"no-store"});
+    const data = await res.json();
+    loading?.remove();
+
+    if (data?.memes?.length) {
+      for (const m of data.memes) {
+        const div = document.createElement("div");
+        div.className = "meme";
+        const img = document.createElement("img");
+        img.src = m.url;
+        img.alt = m.caption || "HOSKDOG meme";
+        img.loading = "lazy";
+        div.appendChild(img);
+        wall.appendChild(div);
+      }
+    } else {
+      wall.innerHTML = "<p class='muted'>No memes found. Be the first to post one!</p>";
+    }
+  } catch (e) {
+    wall.innerHTML = "<p class='muted'>Error loading memes.</p>";
+    console.warn("Meme wall fetch failed:", e);
+  }
+})();
+</script>
 </body>
 </html>
