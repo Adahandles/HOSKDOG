@@ -1,132 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- HOSKDOG dynamic metadata & banner support -->
-<link rel="icon" href="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" />
-<meta property="og:title" content="HOSKDOG 🐕 — No leash. No limits." />
-<meta property="og:description" content="Join the pack. HOSKDOG (HKDG) — Cardano’s decentralized mascot and meme energy hub." />
-<meta property="og:image" content="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="HOSKDOG 🐕 — No leash. No limits." />
-<meta name="twitter:description" content="Born from the memes. Raised by the pack." />
-<meta name="twitter:image" content="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" />
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>HOSKDOG — No leash. No limits.</title>
-<meta name="description" content="HOSKDOG (HKDG) — decentralized mascot of Cardano. No leash. No limits. Just pure Cardano energy." />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
-<style>
-  :root{
-    --bg1:#000010; --bg2:#001a33; --bg3:#0a001a; --cyan:#6cf; --cyan2:#8cf; --violet:#9f6cff; --txt:#eaeef7; --muted:#aab3c2;
-    --card:rgba(0,0,0,.25);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-    color:var(--txt); background:linear-gradient(270deg,var(--bg1),var(--bg2),var(--bg3),var(--bg1));
-    background-size:600% 600%; animation:aurora 22s ease infinite; overflow-x:hidden; text-rendering:optimizeLegibility;
-  }
-  a{color:var(--cyan); text-decoration:none}
-  a:hover{text-decoration:underline}
-  /* Fixed star canvas behind content */
-  #stars{position:fixed; inset:0; width:100vw; height:100vh; z-index:-2; pointer-events:none}
-  /* Subtle grid overlay */
-  .grid{
-    position:fixed; inset:0; background:
+  <!-- HOSKDOG dynamic metadata & banner support -->
+  <link rel="icon" href="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" />
+  <meta property="og:title" content="HOSKDOG 🐕 — No leash. No limits." />
+  <meta property="og:description" content="Join the pack. HOSKDOG (HKDG) — Cardano’s decentralized mascot and meme energy hub." />
+  <meta property="og:image" content="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HOSKDOG 🐕 — No leash. No limits." />
+  <meta name="twitter:description" content="Born from the memes. Raised by the pack." />
+  <meta name="twitter:image" content="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HOSKDOG — No leash. No limits.</title>
+  <meta name="description" content="HOSKDOG (HKDG) — decentralized mascot of Cardano. No leash. No limits. Just pure Cardano energy." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg1:#000010; --bg2:#001a33; --bg3:#0a001a; --cyan:#6cf; --cyan2:#8cf; --violet:#9f6cff; --txt:#eaeef7; --muted:#aab3c2;
+      --card:rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--txt); background:linear-gradient(270deg,var(--bg1),var(--bg2),var(--bg3),var(--bg1));
+      background-size:600% 600%; animation:aurora 22s ease infinite; overflow-x:hidden; text-rendering:optimizeLegibility;
+    }
+    a{color:var(--cyan); text-decoration:none}
+    a:hover{text-decoration:underline}
+    #stars{position:fixed; inset:0; width:100vw; height:100vh; z-index:-2; pointer-events:none}
+    .grid{ position:fixed; inset:0; background:
       radial-gradient(circle at 50% 50%, rgba(108,207,255,.04), transparent 40%),
       linear-gradient(transparent 95%, rgba(255,255,255,.06) 95%) 0 0/ 100% 40px,
       linear-gradient(90deg, transparent 95%, rgba(255,255,255,.06) 95%) 0 0/ 40px 100%;
-    z-index:-1; pointer-events:none; opacity:.5
-  }
+      z-index:-1; pointer-events:none; opacity:.5 }
 
-  header.hero{
-    min-height:100svh; display:grid; place-items:center; text-align:center; padding:5rem 1rem 3rem;
-  }
-  .hero-inner{max-width:920px}
-  .logo{
-    width:180px; height:180px; border-radius:50%; object-fit:cover;
-    border:3px solid #fff; box-shadow:0 0 22px var(--cyan2); transition:transform .4s ease, box-shadow .4s ease;
-    animation:pulse 3.2s ease-in-out infinite;
-  }
-  .logo:hover{transform:scale(1.07) rotate(3deg); box-shadow:0 0 60px var(--cyan)}
-  h1{font-size:clamp(2.2rem,4vw,3.4rem); margin:.9rem 0 .6rem; letter-spacing:.5px}
-  .tag{color:var(--muted); font-size:1.05rem; max-width:720px; margin:0 auto 1.4rem}
-  .cta{display:flex; gap:.75rem; flex-wrap:wrap; justify-content:center; margin-top:1.1rem}
-  .btn{
-    padding:.8rem 1.1rem; border-radius:12px; border:2px solid var(--cyan2); color:#fff; background:var(--card);
-    backdrop-filter: blur(4px); box-shadow:0 0 18px rgba(108,207,255,.25);
-  }
-  .btn:hover{box-shadow:0 0 26px rgba(108,207,255,.5)}
-  .btn.secondary{border-color:#fff3; color:var(--txt)}
-  .sound{
-    position:fixed; right:14px; bottom:14px; background:var(--card); border:1px solid #ffffff33; color:#fff;
-    padding:.55rem .8rem; border-radius:10px; font-size:.9rem; z-index:15
-  }
+    header.hero{ min-height:100svh; display:grid; place-items:center; text-align:center; padding:5rem 1rem 3rem; }
+    .hero-inner{max-width:920px}
+    .logo{ width:180px; height:180px; border-radius:50%; object-fit:cover; border:3px solid #fff; box-shadow:0 0 22px var(--cyan2); transition:transform .4s ease, box-shadow .4s ease; animation:pulse 3.2s ease-in-out infinite; }
+    .logo:hover{transform:scale(1.07) rotate(3deg); box-shadow:0 0 60px var(--cyan)}
+    h1{font-size:clamp(2.2rem,4vw,3.4rem); margin:.9rem 0 .6rem; letter-spacing:.5px}
+    .tag{color:var(--muted); font-size:1.05rem; max-width:720px; margin:0 auto 1.4rem}
+    .cta{display:flex; gap:.75rem; flex-wrap:wrap; justify-content:center; margin-top:1.1rem}
+    .btn{ padding:.8rem 1.1rem; border-radius:12px; border:2px solid var(--cyan2); color:#fff; background:var(--card); backdrop-filter: blur(4px); box-shadow:0 0 18px rgba(108,207,255,.25); cursor:pointer }
+    .btn:hover{box-shadow:0 0 26px rgba(108,207,255,.5)}
+    .btn.secondary{border-color:#fff3; color:var(--txt)}
+    .sound{ position:fixed; right:14px; bottom:14px; background:var(--card); border:1px solid #ffffff33; color:#fff; padding:.55rem .8rem; border-radius:10px; font-size:.9rem; z-index:15 }
 
-  section{padding:4.5rem 1.1rem}
-  .wrap{max-width:1100px; margin:0 auto}
-  .section-title{font-size:clamp(1.6rem,2.7vw,2.2rem); margin:0 0 1rem}
-  .muted{color:var(--muted)}
+    section{padding:4.5rem 1.1rem}
+    .wrap{max-width:1100px; margin:0 auto}
+    .section-title{font-size:clamp(1.6rem,2.7vw,2.2rem); margin:0 0 1rem}
+    .muted{color:var(--muted)}
 
-  /* Lore / story */
-  .lore{display:grid; gap:1.2rem}
-  .panel{
-    background:var(--card); border:1px solid #ffffff22; border-radius:16px; padding:1.25rem 1.25rem;
-    box-shadow:0 0 20px rgba(159,108,255,.15);
-    transition:transform .5s ease, box-shadow .5s ease, border-color .5s ease;
-  }
-  .panel:hover{transform:translateY(-4px); box-shadow:0 0 26px rgba(159,108,255,.35); border-color:#ffffff44}
-  .panels{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1rem}
+    .lore{display:grid; gap:1.2rem}
+    .panel{ background:var(--card); border:1px solid #ffffff22; border-radius:16px; padding:1.25rem 1.25rem; box-shadow:0 0 20px rgba(159,108,255,.15); transition:transform .5s ease, box-shadow .5s ease, border-color .5s ease; }
+    .panel:hover{transform:translateY(-4px); box-shadow:0 0 26px rgba(159,108,255,.35); border-color:#ffffff44}
+    .panels{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1rem}
 
-  /* Utility cards */
-  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:.5rem}
-  .card{background:var(--card); border:1px solid #ffffff22; border-radius:16px; padding:1rem 1.1rem; box-shadow:0 0 18px rgba(108,207,255,.15)}
-  .card h3{margin:.2rem 0 .4rem}
-  .card p{margin:.2rem 0 .2rem}
+    .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:.5rem}
+    .card{background:var(--card); border:1px solid #ffffff22; border-radius:16px; padding:1rem 1.1rem; box-shadow:0 0 18px rgba(108,207,255,.15)}
+    .card h3{margin:.2rem 0 .4rem}
+    .card p{margin:.2rem 0 .2rem}
 
-  /* Barkboard */
-  .board{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem}
-  .mini{background:var(--card); border:1px solid #ffffff22; border-radius:14px; padding:1rem}
+    .board{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem}
+    .mini{background:var(--card); border:1px solid #ffffff22; border-radius:14px; padding:1rem}
 
-  /* Meme wall */
-  .meme-wall{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.6rem; margin-top:.8rem}
-  .meme{aspect-ratio:1/1; border-radius:12px; background:#111; border:1px solid #ffffff1a; overflow:hidden}
-  .meme img{width:100%; height:100%; object-fit:cover; transition:transform .4s ease; filter:saturate(1.2) contrast(1.05)}
-  .meme:hover img{transform:scale(1.06)}
+    .meme-wall{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.6rem; margin-top:.8rem}
+    .meme{aspect-ratio:1/1; border-radius:12px; background:#111; border:1px solid #ffffff1a; overflow:hidden}
+    .meme img{width:100%; height:100%; object-fit:cover; transition:transform .4s ease; filter:saturate(1.2) contrast(1.05)}
+    .meme:hover img{transform:scale(1.06)}
 
-  /* Token info box */
-  .info{display:grid; gap:1rem; margin-top:1rem}
-  .token-box{
-    display:grid; gap:.55rem; background:var(--card); border:2px solid var(--cyan2); border-radius:14px; padding:1rem 1.25rem;
-    box-shadow:0 0 28px rgba(108,207,255,.25); animation:glowBorder 7s infinite alternate ease-in-out;
-  }
-  .kvs{display:grid; gap:.35rem}
-  .kv{display:flex; gap:.5rem; align-items:center; flex-wrap:wrap}
-  .kv code{font-family: ui-monospace,SFMono-Regular,Consolas,Monaco,monospace; background:#00000066; padding:.25rem .4rem; border-radius:8px}
-  .cpy{padding:.25rem .45rem; border-radius:8px; border:1px solid #ffffff33; background:#ffffff1a; color:#fff; cursor:pointer}
-  .links{display:flex; gap:.5rem; flex-wrap:wrap}
+    .info{display:grid; gap:1rem; margin-top:1rem}
+    .token-box{ display:grid; gap:.55rem; background:var(--card); border:2px solid var(--cyan2); border-radius:14px; padding:1rem 1.25rem; box-shadow:0 0 28px rgba(108,207,255,.25); animation:glowBorder 7s infinite alternate ease-in-out; }
+    .kvs{display:grid; gap:.35rem}
+    .kv{display:flex; gap:.5rem; align-items:center; flex-wrap:wrap}
+    .kv code{font-family: ui-monospace,SFMono-Regular,Consolas,Monaco,monospace; background:#00000066; padding:.25rem .4rem; border-radius:8px}
+    .cpy{padding:.25rem .45rem; border-radius:8px; border:1px solid #ffffff33; background:#ffffff1a; color:#fff; cursor:pointer}
+    .links{display:flex; gap:.5rem; flex-wrap:wrap}
 
-  footer{padding:2.5rem 1.1rem; text-align:center; color:var(--muted)}
+    footer{padding:2.5rem 1.1rem; text-align:center; color:var(--muted)}
 
-  /* Animations */
-  @keyframes aurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-  @keyframes pulse{0%{transform:scale(1); box-shadow:0 0 18px var(--cyan2)}50%{transform:scale(1.05); box-shadow:0 0 36px var(--cyan)}100%{transform:scale(1); box-shadow:0 0 18px var(--cyan2)}}
-  @keyframes glowBorder{
-    0%{box-shadow:0 0 20px var(--cyan); border-color:var(--cyan)}
-    50%{box-shadow:0 0 26px var(--violet); border-color:var(--violet)}
-    100%{box-shadow:0 0 20px var(--cyan); border-color:var(--cyan)}
-  }
+    @keyframes aurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    @keyframes pulse{0%{transform:scale(1); box-shadow:0 0 18px var(--cyan2)}50%{transform:scale(1.05); box-shadow:0 0 36px var(--cyan)}100%{transform:scale(1); box-shadow:0 0 18px var(--cyan2)}}
+    @keyframes glowBorder{ 0%{box-shadow:0 0 20px var(--cyan); border-color:var(--cyan)} 50%{box-shadow:0 0 26px var(--violet); border-color:var(--violet)} 100%{box-shadow:0 0 20px var(--cyan); border-color:var(--cyan)} }
 
-  /* section separators (paws) */
-  .sep{display:flex; justify-content:center; align-items:center; margin:2.2rem 0 1.3rem}
-  .sep .paw{
-    width:60px; height:60px; border-radius:50%; border:2px solid #ffffff33; display:grid; place-items:center;
-    box-shadow:0 0 18px rgba(108,207,255,.25); background:linear-gradient(180deg, #0c1220, #080b12);
-  }
-</style>
+    .sep{display:flex; justify-content:center; align-items:center; margin:2.2rem 0 1.3rem}
+    .sep .paw{ width:60px; height:60px; border-radius:50%; border:2px solid #ffffff33; display:grid; place-items:center; box-shadow:0 0 18px rgba(108,207,255,.25); background:linear-gradient(180deg, #0c1220, #080b12); }
+
+    /* Combined Trade Panel layout tweaks */
+    .trade-grid{ display:grid; gap:1rem; grid-template-columns:1.2fr .8fr; align-items:stretch }
+    @media (max-width: 900px){ .trade-grid{ grid-template-columns:1fr} }
+    .field{display:grid; gap:.35rem}
+    .input{width:100%; padding:.7rem .8rem; border-radius:10px; border:1px solid #ffffff33; background:#0006; color:#fff}
+    .pair-tabs{display:flex; gap:.5rem; flex-wrap:wrap}
+    .tab{padding:.55rem .8rem; border-radius:10px; border:1px solid #ffffff33; background:#ffffff12; cursor:pointer}
+    .tab.active{border-color:var(--cyan2); box-shadow:0 0 14px rgba(108,207,255,.25)}
+  </style>
 </head>
 <body>
 
@@ -140,18 +112,35 @@
     <p class="tag">No leash. No limits. Just pure Cardano energy.</p>
     <div class="cta">
       <a class="btn" href="#lore">Read the Lore</a>
-      <a class="btn" href="#trade">Trade / Pools</a>
+      <a class="btn" href="#trade">Trade / Converter</a>
       <a class="btn secondary" href="#info">Token Info</a>
     </div>
   </div>
 </header>
-<!-- WALLET + CONVERTER -->
-<section id="wallet" style="padding:2rem 1.1rem">
-  <div class="wrap" style="max-width:1100px;margin:0 auto">
-    <h2 class="section-title">Wallet & Converter</h2>
 
-    <div id="walletPanel" style="display:grid;gap:1rem;grid-template-columns:1fr;align-items:start">
-      <div class="token-box" style="margin:0">
+<!-- COMBINED: Wallet + Converter + Swap Center -->
+<section id="trade" style="padding:2.8rem 1.1rem">
+  <div class="wrap">
+    <h2 class="section-title">Trade & Converter</h2>
+    <div class="trade-grid">
+      <!-- Left: Swap iFrame + Pair Tabs -->
+      <div class="token-box" id="swapBox">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
+          <strong>Swap on Minswap</strong>
+          <div class="pair-tabs" role="tablist" aria-label="Trading pairs">
+            <button class="tab active" data-pair="ada" role="tab" aria-selected="true">HKDG ↔ ADA</button>
+            <button class="tab" data-pair="snek" role="tab" aria-selected="false">HKDG ↔ SNEK</button>
+            <button class="tab" data-pair="hosky" role="tab" aria-selected="false">HKDG ↔ HOSKY</button>
+          </div>
+        </div>
+        <div id="swapFrame" style="margin-top:.8rem">
+          <iframe id="dexFrame" src="https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace" width="100%" height="600" style="border:2px solid #8cf;border-radius:16px" title="Swap HKDG/ADA" loading="lazy"></iframe>
+        </div>
+        <div class="muted" style="margin-top:.6rem">Tip: if the token doesn’t auto‑load on the DEX, import by Policy + Asset: <code>9560f8…f0ad484F534B444F47</code></div>
+      </div>
+
+      <!-- Right: Wallet (read-only) + Converter -->
+      <div class="token-box" id="walletBox">
         <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;justify-content:space-between">
           <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
             <strong>Wallet:</strong>
@@ -165,64 +154,26 @@
         <div class="kvs" style="margin-top:.6rem">
           <div class="kv"><strong>HKDG Balance:</strong> <span id="hkdgBal">—</span></div>
           <div class="kv"><strong>ADA Balance:</strong> <span id="adaBal">—</span></div>
+          <div class="kv"><strong>Price (fallback):</strong> <span id="priceInfo"><span id="priceAda">0.000001</span> ADA / HKDG</span></div>
         </div>
-      </div>
-
-      <div class="token-box" style="margin:0">
+        <hr style="border:0;border-top:1px solid #ffffff22;margin:.8rem 0"/>
         <strong>HKDG ⇄ ADA Converter</strong>
-        <div style="display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); align-items:end;margin-top:.5rem">
-          <label>HKDG
-            <input id="inHKDG" type="number" min="0" step="any" placeholder="0" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid #ffffff33;background:#0006;color:#fff">
+        <div style="display:grid;gap:.6rem;grid-template-columns:repeat(2,minmax(0,1fr)); align-items:end;margin-top:.5rem">
+          <label class="field">HKDG
+            <input id="inHKDG" class="input" type="number" min="0" step="any" placeholder="0" inputmode="decimal">
           </label>
-          <label>ADA
-            <input id="inADA" type="number" min="0" step="any" placeholder="0" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid #ffffff33;background:#0006;color:#fff">
+          <label class="field">ADA
+            <input id="inADA" class="input" type="number" min="0" step="any" placeholder="0" inputmode="decimal">
           </label>
-          <div>
-            <button class="btn" id="swapDir" title="Swap direction">⇄</button>
-          </div>
         </div>
-        <div class="muted" style="margin-top:.4rem">Uses the same price feed as the live banner (manual fallback until API is wired).</div>
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem">
+          <button class="btn" id="swapDir" title="Swap direction" aria-label="Swap inputs">⇄</button>
+          <small class="muted">Uses fallback price until live feed is wired.</small>
+        </div>
       </div>
     </div>
   </div>
 </section>
-<section id="swapcenter" style="padding:3rem 1.1rem;text-align:center">
-  <h2 class="section-title">Swap Center</h2>
-  <p class="muted">Trade HKDG instantly through Minswap</p>
-
-  <!-- toggle buttons -->
-  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1rem 0">
-    <button class="btn" onclick="showSwap('ada')">HKDG ↔ ADA</button>
-    <button class="btn" onclick="showSwap('snek')">HKDG ↔ SNEK</button>
-    <button class="btn secondary" onclick="showSwap('hosky')">HKDG ↔ HOSKY</button>
-  </div>
-
-  <!-- iframe container -->
-  <div id="swapFrame" style="max-width:1100px;margin:0 auto">
-    <!-- default view loads HKDG/ADA -->
-    <iframe
-      src="https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace"
-      width="100%" height="600"
-      style="border:2px solid #8cf;border-radius:16px"
-      title="Swap HKDG/ADA"></iframe>
-  </div>
-</section>
-
-<script>
-const frame = document.getElementById("swapFrame");
-function showSwap(which){
-  const urls = {
-    ada:   "https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace",
-    snek:  "https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b",
-    hosky: "https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59"
-  };
-  frame.innerHTML =
-    `<iframe src="${urls[which]}"
-       width="100%" height="600"
-       style="border:2px solid #8cf;border-radius:16px"
-       title="Swap HKDG/${which.toUpperCase()}"></iframe>`;
-}
-</script>
 
 <section id="lore">
   <div class="wrap">
@@ -242,29 +193,17 @@ function showSwap(which){
   <div class="wrap">
     <h2 class="section-title">What the Dog Does</h2>
     <div class="cards">
-      <div class="card">
-        <h3>Community Bounties</h3>
-        <p>Meme contests, raids, spotlight threads. Create → earn clout → get noticed.</p>
-      </div>
-      <div class="card">
-        <h3>Collab & Culture</h3>
-        <p>Cross-token spaces, art collabs, and on-chain events that keep the chain alive.</p>
-      </div>
-      <div class="card">
-        <h3>Givebacks</h3>
-        <p>Community-voted giveaways, highlights for builders and artists, and IRL activations.</p>
-      </div>
-      <div class="card">
-        <h3>Open Registry</h3>
-        <p>Clean CIP-26 metadata, verified listing path, and transparent links for dApps.</p>
-      </div>
+      <div class="card"><h3>Community Bounties</h3><p>Meme contests, raids, spotlight threads. Create → earn clout → get noticed.</p></div>
+      <div class="card"><h3>Collab & Culture</h3><p>Cross-token spaces, art collabs, and on-chain events that keep the chain alive.</p></div>
+      <div class="card"><h3>Givebacks</h3><p>Community-voted giveaways, highlights for builders and artists, and IRL activations.</p></div>
+      <div class="card"><h3>Open Registry</h3><p>Clean CIP-26 metadata, verified listing path, and transparent links for dApps.</p></div>
     </div>
   </div>
 </section>
 
 <div class="sep"><div class="paw">🐾</div></div>
 
-<section id="trade">
+<section id="barkboard">
   <div class="wrap">
     <h2 class="section-title">Barkboard</h2>
     <p class="muted">Swap, explore, and follow HOSKDOG across the Cardano stack.</p>
@@ -292,17 +231,12 @@ function showSwap(which){
 
 <div class="sep"><div class="paw">🐾</div></div>
 
+<section id="memes">
+  <div class="wrap">
+    <h2 class="section-title">The Kennel — Meme Wall</h2>
+    <p class="muted">Drop your best HOSKDOG memes. Top entries featured weekly.</p>
     <div class="meme-wall" id="memeWall">
       <p class="muted" id="loadingMemes">Loading memes...</p>
-    </div>
-
-      <!-- Replace the sample images with your own or tweet screenshots -->
-      <div class="meme"><img src="https://picsum.photos/seed/hoskdog1/600/600" alt="meme 1" /></div>
-      <div class="meme"><img src="https://picsum.photos/seed/hoskdog2/600/600" alt="meme 2" /></div>
-      <div class="meme"><img src="https://picsum.photos/seed/hoskdog3/600/600" alt="meme 3" /></div>
-      <div class="meme"><img src="https://picsum.photos/seed/hoskdog4/600/600" alt="meme 4" /></div>
-      <div class="meme"><img src="https://picsum.photos/seed/hoskdog5/600/600" alt="meme 5" /></div>
-      <div class="meme"><img src="https://picsum.photos/seed/hoskdog6/600/600" alt="meme 6" /></div>
     </div>
   </div>
 </section>
@@ -329,235 +263,191 @@ function showSwap(which){
   </div>
 </section>
 
-<footer>
-  © 2025 HOSKDOG — Born from the memes. Raised by the pack.
-</footer>
+<footer>© 2025 HOSKDOG — Born from the memes. Raised by the pack.</footer>
 
 <button class="sound" id="soundToggle">🔊 Audio</button>
-<audio id="bgAudio" loop preload="none">
-  <!-- Add your own loop here if you like -->
-  <!-- <source src="your-audio.mp3" type="audio/mpeg" /> -->
-</audio>
+<audio id="bgAudio" loop preload="none"></audio>
 
 <script>
   // Stars / particles background
-  (function () {
+  (() => {
     const c = document.getElementById('stars');
     const ctx = c.getContext('2d');
     let w, h, stars;
     function resize() {
-      w = c.width = window.innerWidth;
-      h = c.height = window.innerHeight;
+      w = c.width = window.innerWidth; h = c.height = window.innerHeight;
       const count = Math.floor((w*h)/18000) + 50;
-      stars = Array.from({length: count}, () => ({
-        x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.4+0.4, v: Math.random()*0.25+0.05
-      }));
+      stars = Array.from({length: count}, () => ({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.4+0.4, v: Math.random()*0.25+0.05 }));
     }
     function draw() {
-      ctx.clearRect(0,0,w,h);
-      ctx.fillStyle = 'rgba(140,204,255,0.9)';
-      for (const s of stars) {
-        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
-        s.y += s.v; if (s.y - s.r > h) { s.y = -s.r; s.x = Math.random() * w; }
-      }
+      ctx.clearRect(0,0,w,h); ctx.fillStyle = 'rgba(140,204,255,0.9)';
+      for (const s of stars) { ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill(); s.y += s.v; if (s.y - s.r > h) { s.y = -s.r; s.x = Math.random() * w; } }
       requestAnimationFrame(draw);
     }
-    window.addEventListener('resize', resize);
-    resize(); draw();
+    window.addEventListener('resize', resize); resize(); draw();
   })();
 
-  // Copy to clipboard for Policy / Hex / Unit
+  // Copy to clipboard
   document.querySelectorAll('.cpy').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const id = btn.getAttribute('data-copy');
       const text = document.getElementById(id).textContent.trim();
-      navigator.clipboard.writeText(text).then(()=>{
-        btn.textContent = 'Copied!';
-        setTimeout(()=>btn.textContent='Copy', 1200);
-      });
+      navigator.clipboard.writeText(text).then(()=>{ btn.textContent = 'Copied!'; setTimeout(()=>btn.textContent='Copy', 1200); });
     });
   });
 
-  // Smooth scroll for internal anchors
+  // Smooth scroll anchors
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener('click', e=>{
-      const href = a.getAttribute('href');
-      const el = document.querySelector(href);
-      if (!el) return;
-      e.preventDefault();
-      el.scrollIntoView({behavior:'smooth', block:'start'});
+      const el = document.querySelector(a.getAttribute('href')); if (!el) return; e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'});
     });
   });
 
-  // Simple scroll reveal
-  const reveal = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if (e.isIntersecting) e.target.style.transform='translateY(0)';
-    });
-  }, {threshold:.15});
-  document.querySelectorAll('.panel,.card,.mini,.token-box,.meme').forEach(el=>{
-    el.style.transform='translateY(12px)'; el.style.transition='transform .6s ease';
-    reveal.observe(el);
-  });
+  // Reveal
+  const reveal = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if (e.isIntersecting) e.target.style.transform='translateY(0)'; }); }, {threshold:.15});
+  document.querySelectorAll('.panel,.card,.mini,.token-box,.meme').forEach(el=>{ el.style.transform='translateY(12px)'; el.style.transition='transform .6s ease'; reveal.observe(el); });
 
-  // Audio toggle (optional – add a source to #bgAudio to enable)
+  // Audio toggle (add a source to #bgAudio to enable)
   const audio = document.getElementById('bgAudio');
   document.getElementById('soundToggle').addEventListener('click', ()=>{
     if (!audio.src) { alert('Add a loop to <audio> to enable sound.'); return; }
     if (audio.paused) { audio.play(); } else { audio.pause(); }
   });
-</script><script>
-/* ---------- Wallet + Converter (read-only) ---------- */
-(function(){
+</script>
+
+<script>
+/* ---------- Combined Swap + Converter (read-only) ---------- */
+(() => {
   const POLICY = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad";
   const ASSET_HEX = "484F534B444F47"; // HOSKDOG
   const UNIT = POLICY + ASSET_HEX;
-  const MANUAL_PRICE = 0.000001; // ADA per HKDG (fallback)
-  let priceAdaPerHKDG = MANUAL_PRICE;
 
-  // If you already set a live price in the live banner script, reuse it
+  // Fallback price (ADA per HKDG). You can overwrite this from a live banner elsewhere.
+  let priceAdaPerHKDG = 0.000001;
+  const priceSpan = document.getElementById('priceAda');
+  if (priceSpan) priceSpan.textContent = priceAdaPerHKDG.toString();
+
+  // Try to reuse an existing on-page price (if you render one in a banner)
   try {
-    const live = document.getElementById("hkdgPrice")?.textContent || "";
+    const live = document.getElementById('hkdgPrice')?.textContent || "";
     const maybe = parseFloat(live);
-    if (isFinite(maybe) && maybe > 0) priceAdaPerHKDG = maybe;
-  } catch(e){}
+    if (isFinite(maybe) && maybe > 0) { priceAdaPerHKDG = maybe; if (priceSpan) priceSpan.textContent = maybe.toString(); }
+  } catch {}
 
-  // Elements
-  const el = (id)=>document.getElementById(id);
-  const walletStatus = el("walletStatus");
-  const hkdgBal = el("hkdgBal");
-  const adaBal = el("adaBal");
-  const inHKDG = el("inHKDG");
-  const inADA  = el("inADA");
-  const swapBtn= el("swapDir");
+  // Swap iFrame pair switching
+  const frame = document.getElementById('dexFrame');
+  const tabButtons = Array.from(document.querySelectorAll('.pair-tabs .tab'));
+  const urls = {
+    ada:   "https://app.minswap.org/swap?inputCurrency=" + POLICY + "&outputCurrency=lovelace",
+    snek:  "https://app.minswap.org/swap?inputCurrency=" + POLICY + "&outputCurrency=a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b",
+    hosky: "https://app.minswap.org/swap?inputCurrency=" + POLICY + "&outputCurrency=c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59"
+  };
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabButtons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      const pair = btn.getAttribute('data-pair');
+      if (urls[pair]) { frame.src = urls[pair]; frame.title = `Swap HKDG/${pair.toUpperCase()}`; }
+    });
+  });
 
-  // Converter bindings
+  // Converter
+  const inHKDG = document.getElementById('inHKDG');
+  const inADA  = document.getElementById('inADA');
+  const swapDirBtn = document.getElementById('swapDir');
+  let direction = 'HKDG_TO_ADA';
+
   function hkToAda(v){ return v * priceAdaPerHKDG; }
   function adaToHk(v){ return v / priceAdaPerHKDG; }
 
-  inHKDG.addEventListener("input", ()=>{
-    const v = parseFloat(inHKDG.value||"0");
-    inADA.value = isFinite(v) ? hkToAda(v).toFixed(6) : "";
+  function syncFromHKDG(){
+    const v = parseFloat(inHKDG.value || '');
+    if (!isFinite(v)) { inADA.value = ''; return; }
+    inADA.value = hkToAda(v).toFixed(6);
+  }
+  function syncFromADA(){
+    const v = parseFloat(inADA.value || '');
+    if (!isFinite(v)) { inHKDG.value = ''; return; }
+    inHKDG.value = Math.max(0, adaToHk(v)).toFixed(0);
+  }
+
+  inHKDG.addEventListener('input', () => {
+    if (direction === 'HKDG_TO_ADA') syncFromHKDG();
   });
-  inADA.addEventListener("input", ()=>{
-    const v = parseFloat(inADA.value||"0");
-    inHKDG.value = isFinite(v) ? adaToHk(v).toFixed(0) : "";
-  });
-  swapBtn.addEventListener("click", ()=>{
-    const a = inHKDG.value; inHKDG.value = inADA.value; inADA.value = a;
+  inADA.addEventListener('input', () => {
+    if (direction === 'ADA_TO_HKDG') syncFromADA();
   });
 
-  // Helpers to read wallet state via Cardano dApp connector
+  swapDirBtn.addEventListener('click', () => {
+    direction = (direction === 'HKDG_TO_ADA') ? 'ADA_TO_HKDG' : 'HKDG_TO_ADA';
+    // swap current values visually
+    const tmp = inHKDG.value; inHKDG.value = inADA.value; inADA.value = tmp;
+  });
+
+  // Wallet connect (read-only status + HKDG balance lookup via Koios). Robust w/out Buffer usage.
+  const walletStatus = document.getElementById('walletStatus');
+  const hkdgBal = document.getElementById('hkdgBal');
+  const adaBal = document.getElementById('adaBal');
+
   async function getConnector(which){
     if (which==="nami" && window.cardano?.nami) return window.cardano.nami;
     if (which==="eternl" && window.cardano?.eternl) return window.cardano.eternl;
     throw new Error("Wallet not found");
   }
-  async function enable(which){
-    const api = await (await getConnector(which)).enable();
-    return api;
-  }
-  async function getUtxosValue(api){
-    const rawUtxos = await api.getUtxos();
-    // Sum ADA from UTxOs (in lovelace)
-    let lovelace = 0n;
-    let hkdg = 0n;
-    for (const hex of rawUtxos){
-      // decode minimal fields using CIP-30 simple parser
-      const bytes = Uint8Array.from(hex.match(/.{1,2}/g).map(h=>parseInt(h,16)));
-      // Extremely light CBOR peek: search for policy+asset hex string in bytes (quick-and-dirty)
-      const asHex = Buffer.from(bytes).toString ? Buffer.from(bytes).toString("hex") : Array.from(bytes).map(b=>b.toString(16).padStart(2,"0")).join("");
-      // lovelace total extraction is heavy in-browser; show ADA via getBalance instead
-      if (asHex.includes(UNIT.toLowerCase())) {
-        // naive count (doesn't parse quantity precisely), we will fallback to getBalance for accuracy
-      }
-    }
-    // Use wallet's balance for ADA; many wallets implement it
-    try{
-      const balHex = await api.getBalance();
-      const balBytes = Uint8Array.from(balHex.match(/.{1,2}/g).map(h=>parseInt(h,16)));
-      // Minimal decode: look for 0x01 (lovelace) — for simplicity, use Koios or skip to display "via wallet"
-      // To keep things simple and robust across wallets, just display "via wallet" note and skip complex CBOR parsing here.
-    }catch(e){}
-    return { ada: null, hkdg: hkdg }; // we will fetch precise balances via a public API below
-  }
+  async function enable(which){ return (await getConnector(which)).enable(); }
 
-  async function fetchBalances(address){
-    // Query Koios or Blockfrost for balances (no API key variant via Koios public)
-    // Koios example (simple): https://api.koios.rest/api/v1/address_assets?&_address=<addr>
+  async function fetchHKDGForAddress(addr){
     try{
-      const r = await fetch("https://api.koios.rest/api/v1/address_assets?_address="+encodeURIComponent(address));
-      const data = await r.json();
-      let hkdgQty = 0n;
-      for (const row of data){
-        if ((row.policy_id===POLICY) && (row.asset_name_hex?.toUpperCase()===ASSET_HEX)){
-          hkdgQty = BigInt(row.quantity);
-        }
+      const r = await fetch("https://api.koios.rest/api/v1/address_assets?_address="+encodeURIComponent(addr));
+      const rows = await r.json();
+      let qty = 0n;
+      for (const row of rows){
+        if (row.policy_id===POLICY && (row.asset_name_hex||'').toUpperCase()===ASSET_HEX){ qty = BigInt(row.quantity); break; }
       }
-      return { hkdg: hkdgQty.toString() };
-    }catch(e){
-      return { hkdg: null };
-    }
+      return qty.toString();
+    }catch{ return null; }
   }
 
   async function connect(which){
     try{
       walletStatus.textContent = "Connecting…";
       const api = await enable(which);
-      const net = await api.getNetworkId(); // 1 = mainnet
-      if (net !== 1) { walletStatus.textContent = "Wrong network (switch to mainnet)"; return; }
-      const addrs = await api.getUsedAddresses();
-      const raw = addrs?.[0];
-      if (!raw){ walletStatus.textContent = "No address found"; return; }
+      const net = await api.getNetworkId(); if (net !== 1) { walletStatus.textContent = "Wrong network (mainnet only)"; return; }
       walletStatus.textContent = which.toUpperCase()+" connected";
-      // Display balances
-      // ADA balance: show via wallet label (precise parsing omitted)
+      // ADA balance: implementations vary, keep simple
       adaBal.textContent = "via wallet";
-      // HKDG balance via Koios
-      const bech32 = await api.getChangeAddress(); // change addr is fine for Koios lookup
-      const { hkdg } = await fetchBalances(bech32);
-      hkdgBal.textContent = (hkdg!==null) ? Intl.NumberFormat().format(Number(hkdg))+" HKDG" : "N/A";
-    }catch(e){
-      walletStatus.textContent = "Connection failed";
-      console.warn(e);
-    }
+      // Use change address to query HKDG balance on Koios
+      const changeAddr = await api.getChangeAddress();
+      const hk = await fetchHKDGForAddress(changeAddr);
+      hkdgBal.textContent = (hk!==null) ? Intl.NumberFormat().format(Number(hk))+" HKDG" : "N/A";
+    }catch(e){ walletStatus.textContent = "Connection failed"; console.warn(e); }
   }
 
-  document.getElementById("connectNami").onclick   = ()=>connect("nami");
-  document.getElementById("connectEternl").onclick = ()=>connect("eternl");
+  document.getElementById('connectNami').addEventListener('click', ()=>connect('nami'));
+  document.getElementById('connectEternl').addEventListener('click', ()=>connect('eternl'));
 })();
 </script>
 
 <script>
 /* ---------- Meme Wall Loader ---------- */
-(async function(){
+(async () => {
   const MEME_URL = "https://adahandles.github.io/HOSKDOG/data/memes.json";
   const wall = document.getElementById("memeWall");
   const loading = document.getElementById("loadingMemes");
-
   try {
     const res = await fetch(MEME_URL, {cache:"no-store"});
     const data = await res.json();
     loading?.remove();
-
     if (data?.memes?.length) {
       for (const m of data.memes) {
         const div = document.createElement("div");
         div.className = "meme";
         const img = document.createElement("img");
-        img.src = m.url;
-        img.alt = m.caption || "HOSKDOG meme";
-        img.loading = "lazy";
-        div.appendChild(img);
-        wall.appendChild(div);
+        img.src = m.url; img.alt = m.caption || "HOSKDOG meme"; img.loading = "lazy";
+        div.appendChild(img); wall.appendChild(div);
       }
-    } else {
-      wall.innerHTML = "<p class='muted'>No memes found. Be the first to post one!</p>";
-    }
-  } catch (e) {
-    wall.innerHTML = "<p class='muted'>Error loading memes.</p>";
-    console.warn("Meme wall fetch failed:", e);
-  }
+    } else { wall.innerHTML = "<p class='muted'>No memes found. Be the first to post one!</p>"; }
+  } catch (e) { wall.innerHTML = "<p class='muted'>Error loading memes.</p>"; console.warn("Meme wall fetch failed:", e); }
 })();
 </script>
 </body>
