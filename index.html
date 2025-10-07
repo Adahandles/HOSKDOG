@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOSKDOG 🐕</title>
+  <style>
+    /* Floating particle canvas */
+    #stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: -1; /* stays behind your content */
+    }
+
+    /* Global page styling */
+    body {
+      font-family: Arial, sans-serif;
+      color: #eee;
+      text-align: center;
+      margin: 0;
+      background: linear-gradient(270deg, #000010, #001a33, #0a001a, #000010);
+      background-size: 600% 600%;
+      animation: aurora 20s ease infinite;
+    }
+
+    header {
+      padding: 3rem 1rem;
+      background: radial-gradient(circle, #333, #000);
+    }
+
+    img {
+      width: 180px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 0 20px #8cf;
+      transition: all 0.4s ease-in-out;
+    }
+
+    img:hover {
+      transform: scale(1.1) rotate(3deg);
+      box-shadow: 0 0 60px #6ff;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 1rem 0;
+    }
+
+    p {
+      max-width: 600px;
+      margin: 1rem auto;
+      line-height: 1.6;
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    a {
+      color: #6cf;
+    }
+
+    /* Token info box */
+    #token-info {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      border: 2px solid #8cf;
+      border-radius: 12px;
+      box-shadow: 0 0 25px #6cf;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.2);
+      animation: glowBorder 6s infinite alternate;
+    }
+
+    #token-info h2 {
+      color: #8cf;
+      text-align: center;
+    }
+
+    #token-info a {
+      color: #6cf;
+      text-decoration: none;
+    }
+
+    #token-info a:hover {
+      text-decoration: underline;
+    }
+
+    /* Glowing border animation */
+    @keyframes glowBorder {
+      0%   { box-shadow: 0 0 25px #6cf; border-color: #6cf; }
+      50%  { box-shadow: 0 0 35px #9f6cff; border-color: #9f6cff; }
+      100% { box-shadow: 0 0 25px #6cf; border-color: #6cf; }
+    }
+
+    /* Aurora background animation */
+    @keyframes aurora {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- floating particle canvas -->
+  <canvas id="stars"></canvas>
+
+  <header>
+    <img 
+      src="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD"
+      alt="HOSKDOG logo"
+    />
+    <h1>HOSKDOG (HKDG)</h1>
+    <p>The decentralized mascot of Cardano’s meme culture.</p>
+  </header>
+
+  <main>
+    <p>
+      HOSKDOG is the alpha energy of the Cardano memeverse—leading the pack through
+      creativity, humor, and pure community power. Built to inspire, unite, and entertain.
+    </p>
+    <p>
+      🔗 <a href="metadata/hoskdog_metadata.json" target="_blank">View Metadata</a><br>
+      🐾 <a href="ipfs://QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" target="_blank">View Logo on IPFS</a>
+    </p>
+  </main>
+
+  <footer>© 2025 HOSKDOG | Part of the Cardano Party Network</footer>
+
+  <!-- Particle background script -->
+  <script>
+    (function () {
+      const c = document.getElementById('stars');
+      const ctx = c.getContext('2d');
+      let w, h, stars;
+
+      function resize() {
+        w = c.width = window.innerWidth;
+        h = c.height = window.innerHeight;
+        stars = Array.from({ length: Math.floor((w * h) / 18000) + 40 }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.4 + 0.4,
+          v: Math.random() * 0.2 + 0.05
+        }));
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = 'rgba(140, 204, 255, 0.9)';
+        stars.forEach(s => {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+          s.y += s.v;
+          if (s.y - s.r > h) { s.y = -s.r; s.x = Math.random() * w; }
+        });
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    })();
+  </script>
+</body>
+</html>
