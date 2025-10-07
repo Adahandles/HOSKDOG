@@ -1,176 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HOSKDOG 🐕</title>
-  <style>
-    /* Floating particle canvas */
-    #stars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: -1; /* stays behind your content */
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HOSKDOG — No leash. No limits.</title>
+<meta name="description" content="HOSKDOG (HKDG) — decentralized mascot of Cardano. No leash. No limits. Just pure Cardano energy." />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg1:#000010; --bg2:#001a33; --bg3:#0a001a; --cyan:#6cf; --cyan2:#8cf; --violet:#9f6cff; --txt:#eaeef7; --muted:#aab3c2;
+    --card:rgba(0,0,0,.25);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--txt); background:linear-gradient(270deg,var(--bg1),var(--bg2),var(--bg3),var(--bg1));
+    background-size:600% 600%; animation:aurora 22s ease infinite; overflow-x:hidden; text-rendering:optimizeLegibility;
+  }
+  a{color:var(--cyan); text-decoration:none}
+  a:hover{text-decoration:underline}
+  /* Fixed star canvas behind content */
+  #stars{position:fixed; inset:0; width:100vw; height:100vh; z-index:-2; pointer-events:none}
+  /* Subtle grid overlay */
+  .grid{
+    position:fixed; inset:0; background:
+      radial-gradient(circle at 50% 50%, rgba(108,207,255,.04), transparent 40%),
+      linear-gradient(transparent 95%, rgba(255,255,255,.06) 95%) 0 0/ 100% 40px,
+      linear-gradient(90deg, transparent 95%, rgba(255,255,255,.06) 95%) 0 0/ 40px 100%;
+    z-index:-1; pointer-events:none; opacity:.5
+  }
 
-    /* Global page styling */
-    body {
-      font-family: Arial, sans-serif;
-      color: #eee;
-      text-align: center;
-      margin: 0;
-      background: linear-gradient(270deg, #000010, #001a33, #0a001a, #000010);
-      background-size: 600% 600%;
-      animation: aurora 20s ease infinite;
-    }
+  header.hero{
+    min-height:100svh; display:grid; place-items:center; text-align:center; padding:5rem 1rem 3rem;
+  }
+  .hero-inner{max-width:920px}
+  .logo{
+    width:180px; height:180px; border-radius:50%; object-fit:cover;
+    border:3px solid #fff; box-shadow:0 0 22px var(--cyan2); transition:transform .4s ease, box-shadow .4s ease;
+    animation:pulse 3.2s ease-in-out infinite;
+  }
+  .logo:hover{transform:scale(1.07) rotate(3deg); box-shadow:0 0 60px var(--cyan)}
+  h1{font-size:clamp(2.2rem,4vw,3.4rem); margin:.9rem 0 .6rem; letter-spacing:.5px}
+  .tag{color:var(--muted); font-size:1.05rem; max-width:720px; margin:0 auto 1.4rem}
+  .cta{display:flex; gap:.75rem; flex-wrap:wrap; justify-content:center; margin-top:1.1rem}
+  .btn{
+    padding:.8rem 1.1rem; border-radius:12px; border:2px solid var(--cyan2); color:#fff; background:var(--card);
+    backdrop-filter: blur(4px); box-shadow:0 0 18px rgba(108,207,255,.25);
+  }
+  .btn:hover{box-shadow:0 0 26px rgba(108,207,255,.5)}
+  .btn.secondary{border-color:#fff3; color:var(--txt)}
+  .sound{
+    position:fixed; right:14px; bottom:14px; background:var(--card); border:1px solid #ffffff33; color:#fff;
+    padding:.55rem .8rem; border-radius:10px; font-size:.9rem; z-index:15
+  }
 
-    header {
-      padding: 3rem 1rem;
-      background: radial-gradient(circle, #333, #000);
-    }
+  section{padding:4.5rem 1.1rem}
+  .wrap{max-width:1100px; margin:0 auto}
+  .section-title{font-size:clamp(1.6rem,2.7vw,2.2rem); margin:0 0 1rem}
+  .muted{color:var(--muted)}
 
-    img {
-      width: 180px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      box-shadow: 0 0 20px #8cf;
-      transition: all 0.4s ease-in-out;
-    }
+  /* Lore / story */
+  .lore{display:grid; gap:1.2rem}
+  .panel{
+    background:var(--card); border:1px solid #ffffff22; border-radius:16px; padding:1.25rem 1.25rem;
+    box-shadow:0 0 20px rgba(159,108,255,.15);
+    transition:transform .5s ease, box-shadow .5s ease, border-color .5s ease;
+  }
+  .panel:hover{transform:translateY(-4px); box-shadow:0 0 26px rgba(159,108,255,.35); border-color:#ffffff44}
+  .panels{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1rem}
 
-    img:hover {
-      transform: scale(1.1) rotate(3deg);
-      box-shadow: 0 0 60px #6ff;
-    }
+  /* Utility cards */
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:.5rem}
+  .card{background:var(--card); border:1px solid #ffffff22; border-radius:16px; padding:1rem 1.1rem; box-shadow:0 0 18px rgba(108,207,255,.15)}
+  .card h3{margin:.2rem 0 .4rem}
+  .card p{margin:.2rem 0 .2rem}
 
-    h1 {
-      font-size: 2.5rem;
-      margin: 1rem 0;
-    }
+  /* Barkboard */
+  .board{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem}
+  .mini{background:var(--card); border:1px solid #ffffff22; border-radius:14px; padding:1rem}
 
-    p {
-      max-width: 600px;
-      margin: 1rem auto;
-      line-height: 1.6;
-    }
+  /* Meme wall */
+  .meme-wall{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.6rem; margin-top:.8rem}
+  .meme{aspect-ratio:1/1; border-radius:12px; background:#111; border:1px solid #ffffff1a; overflow:hidden}
+  .meme img{width:100%; height:100%; object-fit:cover; transition:transform .4s ease; filter:saturate(1.2) contrast(1.05)}
+  .meme:hover img{transform:scale(1.06)}
 
-    footer {
-      margin-top: 2rem;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #888;
-    }
+  /* Token info box */
+  .info{display:grid; gap:1rem; margin-top:1rem}
+  .token-box{
+    display:grid; gap:.55rem; background:var(--card); border:2px solid var(--cyan2); border-radius:14px; padding:1rem 1.25rem;
+    box-shadow:0 0 28px rgba(108,207,255,.25); animation:glowBorder 7s infinite alternate ease-in-out;
+  }
+  .kvs{display:grid; gap:.35rem}
+  .kv{display:flex; gap:.5rem; align-items:center; flex-wrap:wrap}
+  .kv code{font-family: ui-monospace,SFMono-Regular,Consolas,Monaco,monospace; background:#00000066; padding:.25rem .4rem; border-radius:8px}
+  .cpy{padding:.25rem .45rem; border-radius:8px; border:1px solid #ffffff33; background:#ffffff1a; color:#fff; cursor:pointer}
+  .links{display:flex; gap:.5rem; flex-wrap:wrap}
 
-    a {
-      color: #6cf;
-    }
+  footer{padding:2.5rem 1.1rem; text-align:center; color:var(--muted)}
 
-    /* Token info box */
-    #token-info {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 1rem 2rem;
-      border: 2px solid #8cf;
-      border-radius: 12px;
-      box-shadow: 0 0 25px #6cf;
-      text-align: left;
-      background: rgba(0, 0, 0, 0.2);
-      animation: glowBorder 6s infinite alternate;
-    }
+  /* Animations */
+  @keyframes aurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  @keyframes pulse{0%{transform:scale(1); box-shadow:0 0 18px var(--cyan2)}50%{transform:scale(1.05); box-shadow:0 0 36px var(--cyan)}100%{transform:scale(1); box-shadow:0 0 18px var(--cyan2)}}
+  @keyframes glowBorder{
+    0%{box-shadow:0 0 20px var(--cyan); border-color:var(--cyan)}
+    50%{box-shadow:0 0 26px var(--violet); border-color:var(--violet)}
+    100%{box-shadow:0 0 20px var(--cyan); border-color:var(--cyan)}
+  }
 
-    #token-info h2 {
-      color: #8cf;
-      text-align: center;
-    }
-
-    #token-info a {
-      color: #6cf;
-      text-decoration: none;
-    }
-
-    #token-info a:hover {
-      text-decoration: underline;
-    }
-
-    /* Glowing border animation */
-    @keyframes glowBorder {
-      0%   { box-shadow: 0 0 25px #6cf; border-color: #6cf; }
-      50%  { box-shadow: 0 0 35px #9f6cff; border-color: #9f6cff; }
-      100% { box-shadow: 0 0 25px #6cf; border-color: #6cf; }
-    }
-
-    /* Aurora background animation */
-    @keyframes aurora {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-  </style>
+  /* section separators (paws) */
+  .sep{display:flex; justify-content:center; align-items:center; margin:2.2rem 0 1.3rem}
+  .sep .paw{
+    width:60px; height:60px; border-radius:50%; border:2px solid #ffffff33; display:grid; place-items:center;
+    box-shadow:0 0 18px rgba(108,207,255,.25); background:linear-gradient(180deg, #0c1220, #080b12);
+  }
+</style>
 </head>
-
 <body>
-  <!-- floating particle canvas -->
-  <canvas id="stars"></canvas>
 
-  <header>
-    <img 
-      src="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD"
-      alt="HOSKDOG logo"
-    />
+<canvas id="stars"></canvas>
+<div class="grid" aria-hidden="true"></div>
+
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <img class="logo" src="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" alt="HOSKDOG logo" />
     <h1>HOSKDOG (HKDG)</h1>
-    <p>The decentralized mascot of Cardano’s meme culture.</p>
-  </header>
+    <p class="tag">No leash. No limits. Just pure Cardano energy.</p>
+    <div class="cta">
+      <a class="btn" href="#lore">Read the Lore</a>
+      <a class="btn" href="#trade">Trade / Pools</a>
+      <a class="btn secondary" href="#info">Token Info</a>
+    </div>
+  </div>
+</header>
 
-  <main>
-    <p>
-      HOSKDOG is the alpha energy of the Cardano memeverse—leading the pack through
-      creativity, humor, and pure community power. Built to inspire, unite, and entertain.
-    </p>
-    <p>
-      🔗 <a href="metadata/hoskdog_metadata.json" target="_blank">View Metadata</a><br>
-      🐾 <a href="ipfs://QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" target="_blank">View Logo on IPFS</a>
-    </p>
-  </main>
+<section id="lore">
+  <div class="wrap">
+    <h2 class="section-title">The Pack Story</h2>
+    <p class="muted">Born from humor, rebellion, and open-source culture, HOSKDOG runs point for Cardano’s meme spirit.</p>
+    <div class="panels">
+      <div class="panel"><strong>Origin.</strong> Forged in the chaos of crypto and the clarity of code. A mascot without a leash — loyal to decentralization, allergic to gatekeepers.</div>
+      <div class="panel"><strong>Mission.</strong> Make blockchain human again: energetic, creative, community-first. Every HKDG is a pawprint of participation.</div>
+      <div class="panel"><strong>Culture.</strong> We bark louder than bureaucracy. We bite through boredom. We meme with meaning and build with bite.</div>
+    </div>
+  </div>
+</section>
 
-  <footer>© 2025 HOSKDOG | Part of the Cardano Party Network</footer>
+<div class="sep"><div class="paw">🐾</div></div>
 
-  <!-- Particle background script -->
-  <script>
-    (function () {
-      const c = document.getElementById('stars');
-      const ctx = c.getContext('2d');
-      let w, h, stars;
+<section id="utility">
+  <div class="wrap">
+    <h2 class="section-title">What the Dog Does</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Community Bounties</h3>
+        <p>Meme contests, raids, spotlight threads. Create → earn clout → get noticed.</p>
+      </div>
+      <div class="card">
+        <h3>Collab & Culture</h3>
+        <p>Cross-token spaces, art collabs, and on-chain events that keep the chain alive.</p>
+      </div>
+      <div class="card">
+        <h3>Givebacks</h3>
+        <p>Community-voted giveaways, highlights for builders and artists, and IRL activations.</p>
+      </div>
+      <div class="card">
+        <h3>Open Registry</h3>
+        <p>Clean CIP-26 metadata, verified listing path, and transparent links for dApps.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-      function resize() {
-        w = c.width = window.innerWidth;
-        h = c.height = window.innerHeight;
-        stars = Array.from({ length: Math.floor((w * h) / 18000) + 40 }, () => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          r: Math.random() * 1.4 + 0.4,
-          v: Math.random() * 0.2 + 0.05
-        }));
+<div class="sep"><div class="paw">🐾</div></div>
+
+<section id="trade">
+  <div class="wrap">
+    <h2 class="section-title">Barkboard</h2>
+    <p class="muted">Swap, explore, and follow HOSKDOG across the Cardano stack.</p>
+    <div class="board">
+      <div class="mini">
+        <h3>DEX Links</h3>
+        <p>💧 <a target="_blank" href="https://app.minswap.org/swap?currencySymbol=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&tokenName=484F534B444F47">Minswap (import unit)</a></p>
+        <p>🍨 <a target="_blank" href="https://sundaeswap.finance/app">SundaeSwap</a> (import by policy)</p>
+        <p>🪂 <a target="_blank" href="https://app.wingriders.com/">WingRiders</a></p>
+      </div>
+      <div class="mini">
+        <h3>Explorers</h3>
+        <p>🔍 <a target="_blank" href="https://cardanoscan.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad">Cardanoscan</a></p>
+        <p>📈 <a target="_blank" href="https://taptools.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad">TapTools</a></p>
+        <p>🖼️ <a target="_blank" href="https://pool.pm/asset1lyd3mys2su5uzgnkvf4z3k4u7kf9tvkqjc4fc4">pool.pm (asset)</a></p>
+      </div>
+      <div class="mini">
+        <h3>Registry</h3>
+        <p>📄 <a target="_blank" href="https://adahandles.github.io/cardano-token-registry/mappings/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484f534b444f47.json">Hosted JSON (CIP-26)</a></p>
+        <p>🧭 <a target="_blank" href="https://github.com/cardano-foundation/cardano-token-registry/pulls">CF PR Status</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"><div class="paw">🐾</div></div>
+
+<section id="memes">
+  <div class="wrap">
+    <h2 class="section-title">The Kennel — Meme Wall</h2>
+    <p class="muted">Drop your best HOSKDOG memes. Top entries featured weekly.</p>
+    <div class="meme-wall">
+      <!-- Replace the sample images with your own or tweet screenshots -->
+      <div class="meme"><img src="https://picsum.photos/seed/hoskdog1/600/600" alt="meme 1" /></div>
+      <div class="meme"><img src="https://picsum.photos/seed/hoskdog2/600/600" alt="meme 2" /></div>
+      <div class="meme"><img src="https://picsum.photos/seed/hoskdog3/600/600" alt="meme 3" /></div>
+      <div class="meme"><img src="https://picsum.photos/seed/hoskdog4/600/600" alt="meme 4" /></div>
+      <div class="meme"><img src="https://picsum.photos/seed/hoskdog5/600/600" alt="meme 5" /></div>
+      <div class="meme"><img src="https://picsum.photos/seed/hoskdog6/600/600" alt="meme 6" /></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"><div class="paw">🐾</div></div>
+
+<section id="info">
+  <div class="wrap">
+    <h2 class="section-title">Token Info</h2>
+    <div class="token-box">
+      <div class="kvs">
+        <div class="kv"><strong>Ticker:</strong> HKDG</div>
+        <div class="kv"><strong>Policy ID:</strong> <code id="policy">9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad</code> <button class="cpy" data-copy="policy">Copy</button></div>
+        <div class="kv"><strong>Asset Hex:</strong> <code id="hex">484F534B444F47</code> <button class="cpy" data-copy="hex">Copy</button></div>
+        <div class="kv"><strong>Unit:</strong> <code id="unit">9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484F534B444F47</code> <button class="cpy" data-copy="unit">Copy</button></div>
+        <div class="kv"><strong>Decimals:</strong> 6</div>
+      </div>
+      <div class="links">
+        <a class="btn" target="_blank" href="https://cardanoscan.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad">Cardanoscan</a>
+        <a class="btn" target="_blank" href="https://taptools.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad">TapTools</a>
+        <a class="btn" target="_blank" href="https://app.minswap.org/swap?currencySymbol=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&tokenName=484F534B444F47">Minswap</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 HOSKDOG — Born from the memes. Raised by the pack.
+</footer>
+
+<button class="sound" id="soundToggle">🔊 Audio</button>
+<audio id="bgAudio" loop preload="none">
+  <!-- Add your own loop here if you like -->
+  <!-- <source src="your-audio.mp3" type="audio/mpeg" /> -->
+</audio>
+
+<script>
+  // Stars / particles background
+  (function () {
+    const c = document.getElementById('stars');
+    const ctx = c.getContext('2d');
+    let w, h, stars;
+    function resize() {
+      w = c.width = window.innerWidth;
+      h = c.height = window.innerHeight;
+      const count = Math.floor((w*h)/18000) + 50;
+      stars = Array.from({length: count}, () => ({
+        x: Math.random()*w, y: Math.random()*h, r: Math.random()*1.4+0.4, v: Math.random()*0.25+0.05
+      }));
+    }
+    function draw() {
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = 'rgba(140,204,255,0.9)';
+      for (const s of stars) {
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill();
+        s.y += s.v; if (s.y - s.r > h) { s.y = -s.r; s.x = Math.random() * w; }
       }
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', resize);
+    resize(); draw();
+  })();
 
-      function draw() {
-        ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = 'rgba(140, 204, 255, 0.9)';
-        stars.forEach(s => {
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fill();
-          s.y += s.v;
-          if (s.y - s.r > h) { s.y = -s.r; s.x = Math.random() * w; }
-        });
-        requestAnimationFrame(draw);
-      }
+  // Copy to clipboard for Policy / Hex / Unit
+  document.querySelectorAll('.cpy').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-copy');
+      const text = document.getElementById(id).textContent.trim();
+      navigator.clipboard.writeText(text).then(()=>{
+        btn.textContent = 'Copied!';
+        setTimeout(()=>btn.textContent='Copy', 1200);
+      });
+    });
+  });
 
-      window.addEventListener('resize', resize);
-      resize();
-      draw();
-    })();
-  </script>
+  // Smooth scroll for internal anchors
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const href = a.getAttribute('href');
+      const el = document.querySelector(href);
+      if (!el) return;
+      e.preventDefault();
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  // Simple scroll reveal
+  const reveal = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting) e.target.style.transform='translateY(0)';
+    });
+  }, {threshold:.15});
+  document.querySelectorAll('.panel,.card,.mini,.token-box,.meme').forEach(el=>{
+    el.style.transform='translateY(12px)'; el.style.transition='transform .6s ease';
+    reveal.observe(el);
+  });
+
+  // Audio toggle (optional – add a source to #bgAudio to enable)
+  const audio = document.getElementById('bgAudio');
+  document.getElementById('soundToggle').addEventListener('click', ()=>{
+    if (!audio.src) { alert('Add a loop to <audio> to enable sound.'); return; }
+    if (audio.paused) { audio.play(); } else { audio.pause(); }
+  });
+</script>
 </body>
 </html>
