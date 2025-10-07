@@ -145,6 +145,47 @@
     </div>
   </div>
 </header>
+<!-- WALLET + CONVERTER -->
+<section id="wallet" style="padding:2rem 1.1rem">
+  <div class="wrap" style="max-width:1100px;margin:0 auto">
+    <h2 class="section-title">Wallet & Converter</h2>
+
+    <div id="walletPanel" style="display:grid;gap:1rem;grid-template-columns:1fr;align-items:start">
+      <div class="token-box" style="margin:0">
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;justify-content:space-between">
+          <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+            <strong>Wallet:</strong>
+            <span id="walletStatus" class="muted">Not connected</span>
+          </div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <button class="btn" id="connectNami">Connect Nami</button>
+            <button class="btn secondary" id="connectEternl">Connect Eternl</button>
+          </div>
+        </div>
+        <div class="kvs" style="margin-top:.6rem">
+          <div class="kv"><strong>HKDG Balance:</strong> <span id="hkdgBal">—</span></div>
+          <div class="kv"><strong>ADA Balance:</strong> <span id="adaBal">—</span></div>
+        </div>
+      </div>
+
+      <div class="token-box" style="margin:0">
+        <strong>HKDG ⇄ ADA Converter</strong>
+        <div style="display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); align-items:end;margin-top:.5rem">
+          <label>HKDG
+            <input id="inHKDG" type="number" min="0" step="any" placeholder="0" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid #ffffff33;background:#0006;color:#fff">
+          </label>
+          <label>ADA
+            <input id="inADA" type="number" min="0" step="any" placeholder="0" style="width:100%;padding:.6rem;border-radius:10px;border:1px solid #ffffff33;background:#0006;color:#fff">
+          </label>
+          <div>
+            <button class="btn" id="swapDir" title="Swap direction">⇄</button>
+          </div>
+        </div>
+        <div class="muted" style="margin-top:.4rem">Uses the same price feed as the live banner (manual fallback until API is wired).</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section id="lore">
   <div class="wrap">
@@ -329,6 +370,127 @@
     if (!audio.src) { alert('Add a loop to <audio> to enable sound.'); return; }
     if (audio.paused) { audio.play(); } else { audio.pause(); }
   });
+</script><script>
+/* ---------- Wallet + Converter (read-only) ---------- */
+(function(){
+  const POLICY = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad";
+  const ASSET_HEX = "484F534B444F47"; // HOSKDOG
+  const UNIT = POLICY + ASSET_HEX;
+  const MANUAL_PRICE = 0.000001; // ADA per HKDG (fallback)
+  let priceAdaPerHKDG = MANUAL_PRICE;
+
+  // If you already set a live price in the live banner script, reuse it
+  try {
+    const live = document.getElementById("hkdgPrice")?.textContent || "";
+    const maybe = parseFloat(live);
+    if (isFinite(maybe) && maybe > 0) priceAdaPerHKDG = maybe;
+  } catch(e){}
+
+  // Elements
+  const el = (id)=>document.getElementById(id);
+  const walletStatus = el("walletStatus");
+  const hkdgBal = el("hkdgBal");
+  const adaBal = el("adaBal");
+  const inHKDG = el("inHKDG");
+  const inADA  = el("inADA");
+  const swapBtn= el("swapDir");
+
+  // Converter bindings
+  function hkToAda(v){ return v * priceAdaPerHKDG; }
+  function adaToHk(v){ return v / priceAdaPerHKDG; }
+
+  inHKDG.addEventListener("input", ()=>{
+    const v = parseFloat(inHKDG.value||"0");
+    inADA.value = isFinite(v) ? hkToAda(v).toFixed(6) : "";
+  });
+  inADA.addEventListener("input", ()=>{
+    const v = parseFloat(inADA.value||"0");
+    inHKDG.value = isFinite(v) ? adaToHk(v).toFixed(0) : "";
+  });
+  swapBtn.addEventListener("click", ()=>{
+    const a = inHKDG.value; inHKDG.value = inADA.value; inADA.value = a;
+  });
+
+  // Helpers to read wallet state via Cardano dApp connector
+  async function getConnector(which){
+    if (which==="nami" && window.cardano?.nami) return window.cardano.nami;
+    if (which==="eternl" && window.cardano?.eternl) return window.cardano.eternl;
+    throw new Error("Wallet not found");
+  }
+  async function enable(which){
+    const api = await (await getConnector(which)).enable();
+    return api;
+  }
+  async function getUtxosValue(api){
+    const rawUtxos = await api.getUtxos();
+    // Sum ADA from UTxOs (in lovelace)
+    let lovelace = 0n;
+    let hkdg = 0n;
+    for (const hex of rawUtxos){
+      // decode minimal fields using CIP-30 simple parser
+      const bytes = Uint8Array.from(hex.match(/.{1,2}/g).map(h=>parseInt(h,16)));
+      // Extremely light CBOR peek: search for policy+asset hex string in bytes (quick-and-dirty)
+      const asHex = Buffer.from(bytes).toString ? Buffer.from(bytes).toString("hex") : Array.from(bytes).map(b=>b.toString(16).padStart(2,"0")).join("");
+      // lovelace total extraction is heavy in-browser; show ADA via getBalance instead
+      if (asHex.includes(UNIT.toLowerCase())) {
+        // naive count (doesn't parse quantity precisely), we will fallback to getBalance for accuracy
+      }
+    }
+    // Use wallet's balance for ADA; many wallets implement it
+    try{
+      const balHex = await api.getBalance();
+      const balBytes = Uint8Array.from(balHex.match(/.{1,2}/g).map(h=>parseInt(h,16)));
+      // Minimal decode: look for 0x01 (lovelace) — for simplicity, use Koios or skip to display "via wallet"
+      // To keep things simple and robust across wallets, just display "via wallet" note and skip complex CBOR parsing here.
+    }catch(e){}
+    return { ada: null, hkdg: hkdg }; // we will fetch precise balances via a public API below
+  }
+
+  async function fetchBalances(address){
+    // Query Koios or Blockfrost for balances (no API key variant via Koios public)
+    // Koios example (simple): https://api.koios.rest/api/v1/address_assets?&_address=<addr>
+    try{
+      const r = await fetch("https://api.koios.rest/api/v1/address_assets?_address="+encodeURIComponent(address));
+      const data = await r.json();
+      let hkdgQty = 0n;
+      for (const row of data){
+        if ((row.policy_id===POLICY) && (row.asset_name_hex?.toUpperCase()===ASSET_HEX)){
+          hkdgQty = BigInt(row.quantity);
+        }
+      }
+      return { hkdg: hkdgQty.toString() };
+    }catch(e){
+      return { hkdg: null };
+    }
+  }
+
+  async function connect(which){
+    try{
+      walletStatus.textContent = "Connecting…";
+      const api = await enable(which);
+      const net = await api.getNetworkId(); // 1 = mainnet
+      if (net !== 1) { walletStatus.textContent = "Wrong network (switch to mainnet)"; return; }
+      const addrs = await api.getUsedAddresses();
+      const raw = addrs?.[0];
+      if (!raw){ walletStatus.textContent = "No address found"; return; }
+      walletStatus.textContent = which.toUpperCase()+" connected";
+      // Display balances
+      // ADA balance: show via wallet label (precise parsing omitted)
+      adaBal.textContent = "via wallet";
+      // HKDG balance via Koios
+      const bech32 = await api.getChangeAddress(); // change addr is fine for Koios lookup
+      const { hkdg } = await fetchBalances(bech32);
+      hkdgBal.textContent = (hkdg!==null) ? Intl.NumberFormat().format(Number(hkdg))+" HKDG" : "N/A";
+    }catch(e){
+      walletStatus.textContent = "Connection failed";
+      console.warn(e);
+    }
+  }
+
+  document.getElementById("connectNami").onclick   = ()=>connect("nami");
+  document.getElementById("connectEternl").onclick = ()=>connect("eternl");
+})();
 </script>
+
 </body>
 </html>
