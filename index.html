@@ -3,106 +3,246 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HOSKDOG 🐕 — Cross-Chain Meme Swap Hub</title>
+<title>HOSKDOG (HKDG) — No leash. No limits.</title>
+
+<!-- Social preview -->
+<meta property="og:title" content="HOSKDOG (HKDG) — No leash. No limits." />
+<meta property="og:description" content="Cross-chain meme swap hub + token info for HKDG on Cardano." />
+<meta property="og:image" content="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="HOSKDOG (HKDG) — No leash. No limits." />
+<meta name="twitter:description" content="Cross-chain meme swap hub + token info for HKDG on Cardano." />
+<meta name="twitter:image" content="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" />
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+
 <style>
 :root{--bg1:#000010;--bg2:#001a33;--bg3:#0a001a;--cyan:#6cf;--cyan2:#8cf;--violet:#9f6cff;--txt:#eaeef7;--muted:#aab3c2;--card:rgba(0,0,0,.25)}
-body{margin:0;font-family:Inter,sans-serif;color:var(--txt);background:linear-gradient(270deg,var(--bg1),var(--bg2),var(--bg3),var(--bg1));background-size:600% 600%;animation:aurora 22s ease infinite;overflow-x:hidden;text-rendering:optimizeLegibility}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--txt);background:linear-gradient(270deg,var(--bg1),var(--bg2),var(--bg3),var(--bg1));background-size:600% 600%;animation:aurora 22s ease infinite;overflow-x:hidden;text-rendering:optimizeLegibility}
 @keyframes aurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .wrap{max-width:1100px;margin:0 auto;padding:2rem 1rem}
 .section-title{font-size:clamp(1.8rem,2.8vw,2.4rem);margin:0 0 1rem}
+.muted{color:var(--muted)}
+.token-box{background:var(--card);border:1px solid #ffffff22;border-radius:16px;padding:1rem;margin-bottom:1rem;box-shadow:0 0 18px rgba(108,207,255,.15)}
+.card{background:var(--card);border:1px solid #ffffff22;border-radius:14px;padding:1rem;box-shadow:0 0 18px rgba(108,207,255,.15)}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.meme-wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.6rem}
+.meme{aspect-ratio:1/1;border-radius:12px;background:#111;border:1px solid #ffffff1a;overflow:hidden}
+.meme img{width:100%;height:100%;object-fit:cover;filter:saturate(1.1);transition:transform .35s ease}
+.meme:hover img{transform:scale(1.05)}
+.sep{display:flex;justify-content:center;margin:2rem 0 1rem}
+.paw{width:60px;height:60px;border-radius:50%;border:2px solid #ffffff33;display:grid;place-items:center;box-shadow:0 0 18px rgba(108,207,255,.25);background:linear-gradient(180deg,#0c1220,#080b12)}
+
+/* Buttons & tabs — big modern, white letters */
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:1rem 1.5rem;border-radius:14px;border:2px solid var(--cyan2);background:linear-gradient(180deg,rgba(108,207,255,.25),rgba(108,207,255,.1));color:#fff;font-weight:600;font-size:1rem;letter-spacing:.4px;box-shadow:0 0 22px rgba(108,207,255,.35);cursor:pointer;transition:all .25s ease}
 .btn:hover{background:linear-gradient(180deg,rgba(108,207,255,.4),rgba(108,207,255,.2));box-shadow:0 0 32px rgba(108,207,255,.55);transform:translateY(-1px)}
 .btn.secondary{border-color:#fff4;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.05));color:#fff}
 .btn.secondary:hover{box-shadow:0 0 26px rgba(255,255,255,.35)}
 .tab{color:#fff;font-weight:600;background:rgba(255,255,255,.08);border-radius:12px;border:1px solid #ffffff33;padding:.6rem 1rem;cursor:pointer;transition:all .2s ease}
 .tab:hover,.tab.active{background:rgba(255,255,255,.18);box-shadow:0 0 18px rgba(108,207,255,.4)}
-.token-box{background:var(--card);border:1px solid #ffffff22;border-radius:16px;padding:1rem;margin-bottom:1rem;box-shadow:0 0 18px rgba(108,207,255,.15)}
-.card{background:var(--card);border:1px solid #ffffff22;border-radius:14px;padding:1rem;box-shadow:0 0 18px rgba(108,207,255,.15)}
-.muted{color:var(--muted)}
+
+/* Hero */
+header.hero{min-height:70vh;display:grid;place-items:center;text-align:center;padding:5rem 1rem 3rem}
+.hero-inner{max-width:920px}
+.coin{
+  width:260px;height:260px;border-radius:50%;object-fit:cover;border:3px solid #fff;
+  box-shadow:0 0 26px var(--cyan2);transition:transform .4s ease, box-shadow .4s ease;animation:pulse 3.2s ease-in-out infinite
+}
+.coin:hover{transform:scale(1.05) rotate(2deg);box-shadow:0 0 60px var(--cyan)}
+@keyframes pulse{0%{transform:scale(1);box-shadow:0 0 18px var(--cyan2)}50%{transform:scale(1.03);box-shadow:0 0 36px var(--cyan)}100%{transform:scale(1);box-shadow:0 0 18px var(--cyan2)}}
+h1{font-size:clamp(2.2rem,4vw,3.2rem);margin:.8rem 0 .4rem}
+.tag{color:var(--muted);font-size:1.05rem;margin:0 auto 1.1rem;max-width:720px}
+
+/* copy buttons */
+.cpy{padding:.25rem .45rem;border-radius:8px;border:1px solid #ffffff33;background:#ffffff1a;color:#fff;cursor:pointer}
+.kv{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.kvs{display:grid;gap:.35rem}
+.kv code{font-family:ui-monospace,SFMono-Regular,Consolas,Monaco,monospace;background:#0006;padding:.25rem .4rem;border-radius:8px}
 </style>
 </head>
 <body>
+
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <!-- COIN IMAGE (bigger) -->
+    <img class="coin" src="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" alt="HKDG coin" />
+    <h1>HOSKDOG (HKDG)</h1>
+    <p class="tag">No leash. No limits. Just pure Cardano energy.</p>
+    <div class="cta" style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap">
+      <a class="btn" href="#memehub">Cross-Chain Swap Hub</a>
+      <a class="btn" href="#info">Token Info</a>
+      <a class="btn secondary" href="#lore">Lore</a>
+    </div>
+  </div>
+</header>
+
 <div class="wrap">
-<h1 style="text-align:center;font-size:2.8rem;margin-bottom:0">HOSKDOG 🐕</h1>
-<p style="text-align:center;color:var(--muted);margin-top:0">Cross-Chain Meme Swap Hub</p>
+  <!-- Wallet Connections -->
+  <section id="wallet" class="token-box">
+    <h2 class="section-title" style="font-size:1.6rem">Wallet Connections</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.6rem">
+      <div>
+        <strong>Cardano</strong><br />
+        <button class="btn" id="btnCardanoNami">Connect Nami</button>
+        <button class="btn secondary" id="btnCardanoEternl">Connect Eternl</button>
+        <div class="muted" id="statusCardano">Not connected</div>
+      </div>
+      <div>
+        <strong>EVM (ETH/Base/BSC/Polygon)</strong><br />
+        <button class="btn" id="btnEVM">Connect EVM Wallet</button>
+        <div class="muted" id="statusEVM">Not connected</div>
+      </div>
+      <div>
+        <strong>Solana</strong><br />
+        <button class="btn" id="btnSolana">Connect Phantom</button>
+        <div class="muted" id="statusSolana">Not connected</div>
+      </div>
+    </div>
+  </section>
 
-<div class="token-box" id="walletHub">
-  <h2 class="section-title" style="font-size:1.6rem">Wallet Connections</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.6rem">
-    <div><strong>Cardano Wallets</strong><br>
-      <button class="btn" id="btnCardanoNami">Connect Nami</button>
-      <button class="btn secondary" id="btnCardanoEternl">Connect Eternl</button>
-      <div class="muted" id="statusCardano">Not connected</div>
+  <!-- Cross-Chain Meme Swap Hub -->
+  <section id="memehub" class="token-box">
+    <h2 class="section-title">Cross-Chain Meme Swap Hub</h2>
+    <div role="tablist" class="pair-tabs" style="display:flex;gap:.6rem;flex-wrap:wrap">
+      <button class="tab active" data-chain="cardano">Cardano</button>
+      <button class="tab" data-chain="ethereum">Ethereum</button>
+      <button class="tab" data-chain="solana">Solana</button>
+      <button class="tab" data-chain="bsc">BSC</button>
+      <button class="tab" data-chain="base">Base</button>
+      <button class="tab" data-chain="polygon">Polygon</button>
     </div>
-    <div><strong>EVM Wallets</strong><br>
-      <button class="btn" id="btnEVM">Connect EVM Wallet</button>
-      <div class="muted" id="statusEVM">Not connected</div>
-    </div>
-    <div><strong>Solana Wallets</strong><br>
-      <button class="btn" id="btnSolana">Connect Phantom</button>
-      <div class="muted" id="statusSolana">Not connected</div>
-    </div>
-  </div>
-</div>
+    <div id="memeSwapResults" style="display:grid;gap:.8rem;margin-top:1rem"></div>
+  </section>
 
-<div class="token-box" id="memeHub">
-  <h2 class="section-title">Cross-Chain Meme Swap</h2>
-  <div class="pair-tabs" role="tablist" aria-label="Chains" style="display:flex;gap:.6rem;flex-wrap:wrap">
-    <button class="tab active" data-chain="cardano">Cardano</button>
-    <button class="tab" data-chain="ethereum">Ethereum</button>
-    <button class="tab" data-chain="solana">Solana</button>
-    <button class="tab" data-chain="bsc">BSC</button>
-    <button class="tab" data-chain="base">Base</button>
-    <button class="tab" data-chain="polygon">Polygon</button>
-  </div>
-  <div id="memeSwapResults" style="display:grid;gap:.8rem;margin-top:1rem"></div>
-</div>
+  <!-- Lore / Story -->
+  <div class="sep"><div class="paw">🐾</div></div>
+  <section id="lore">
+    <h2 class="section-title">The Pack Story</h2>
+    <div class="panels">
+      <div class="card"><strong>Origin.</strong> Forged in the chaos of crypto and the clarity of code. A mascot without a leash — loyal to decentralization, allergic to gatekeepers.</div>
+      <div class="card"><strong>Mission.</strong> Make blockchain human again: energetic, creative, community-first. Every HKDG is a pawprint of participation.</div>
+      <div class="card"><strong>Culture.</strong> We bark louder than bureaucracy. We bite through boredom. We meme with meaning and build with bite.</div>
+    </div>
+  </section>
+
+  <!-- Utilities -->
+  <div class="sep"><div class="paw">🐾</div></div>
+  <section id="utility">
+    <h2 class="section-title">What the Dog Does</h2>
+    <div class="cards">
+      <div class="card"><h3>Community Bounties</h3><p>Meme contests, raids, spotlight threads. Create → earn clout → get noticed.</p></div>
+      <div class="card"><h3>Collab & Culture</h3><p>Cross-token spaces, art collabs, and on-chain events that keep the chain alive.</p></div>
+      <div class="card"><h3>Givebacks</h3><p>Community-voted giveaways, highlights for builders and artists, and IRL activations.</p></div>
+      <div class="card"><h3>Open Registry</h3><p>Clean CIP-26 metadata, verified listing path, and transparent links for dApps.</p></div>
+    </div>
+  </section>
+
+  <!-- Barkboard -->
+  <div class="sep"><div class="paw">🐾</div></div>
+  <section id="trade">
+    <h2 class="section-title">Barkboard</h2>
+    <p class="muted">Swap, explore, and follow HOSKDOG across the Cardano stack.</p>
+    <div class="board">
+      <div class="card">
+        <h3>DEX Links</h3>
+        <p>💧 <a target="_blank" href="https://app.minswap.org/swap?currencySymbol=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&tokenName=484F534B444F47">Minswap (import unit)</a></p>
+        <p>🍨 <a target="_blank" href="https://sundaeswap.finance/app">SundaeSwap</a> (import by policy)</p>
+        <p>🪂 <a target="_blank" href="https://app.wingriders.com/">WingRiders</a></p>
+      </div>
+      <div class="card">
+        <h3>Explorers</h3>
+        <p>🔍 <a target="_blank" href="https://cardanoscan.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad">Cardanoscan</a></p>
+        <p>📈 <a target="_blank" href="https://taptools.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad">TapTools</a></p>
+        <p>🖼️ <a target="_blank" href="https://pool.pm/asset1lyd3mys2su5uzgnkvf4z3k4u7kf9tvkqjc4fc4">pool.pm (asset)</a></p>
+      </div>
+      <div class="card">
+        <h3>Registry</h3>
+        <p>📄 <a target="_blank" href="https://adahandles.github.io/cardano-token-registry/mappings/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484F534B444F47.json">Hosted JSON (CIP-26)</a></p>
+        <p>🧭 <a target="_blank" href="https://github.com/cardano-foundation/cardano-token-registry/pulls">CF PR Status</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Meme Wall -->
+  <div class="sep"><div class="paw">🐾</div></div>
+  <section id="memes">
+    <h2 class="section-title">The Kennel — Meme Wall</h2>
+    <p class="muted">Drop your best HOSKDOG memes. Top entries featured weekly.</p>
+    <div class="meme-wall" id="memeWall">
+      <p class="muted" id="loadingMemes">Loading memes...</p>
+    </div>
+  </section>
+
+  <!-- Token Info -->
+  <div class="sep"><div class="paw">🐾</div></div>
+  <section id="info">
+    <h2 class="section-title">Token Info</h2>
+    <div class="token-box">
+      <div class="kvs">
+        <div class="kv"><strong>Ticker:</strong> HKDG</div>
+        <div class="kv"><strong>Policy ID:</strong> <code id="policy">9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad</code> <button class="cpy" data-copy="policy">Copy</button></div>
+        <div class="kv"><strong>Asset Hex:</strong> <code id="hex">484F534B444F47</code> <button class="cpy" data-copy="hex">Copy</button></div>
+        <div class="kv"><strong>Unit:</strong> <code id="unit">9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484F534B444F47</code> <button class="cpy" data-copy="unit">Copy</button></div>
+        <div class="kv"><strong>Decimals:</strong> 6</div>
+      </div>
+      <div class="links" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem">
+        <a class="btn" target="_blank" href="https://cardanoscan.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad">Cardanoscan</a>
+        <a class="btn" target="_blank" href="https://taptools.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad">TapTools</a>
+        <a class="btn" target="_blank" href="https://app.minswap.org/swap?currencySymbol=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&tokenName=484F534B444F47">Minswap</a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="text-align:center;color:var(--muted);margin:2rem 0 1rem">
+    © 2025 HOSKDOG — Born from the memes. Raised by the pack.
+  </footer>
 </div>
 
 <script>
 const short=(s)=>s?(s.length>18?s.slice(0,6)+'…'+s.slice(-6):s):'';
+
+// Wallet connections (simple + reliable)
 const statusCardano=document.getElementById('statusCardano');
 const statusEVM=document.getElementById('statusEVM');
 const statusSolana=document.getElementById('statusSolana');
 
-// ----- Wallet connections -----
 async function connectCardano(which){
- try{
-   if(!(window.cardano&&window.cardano[which])){statusCardano.textContent=`${which.toUpperCase()}: not found`;return;}
-   const api=await window.cardano[which].enable();
-   const net=await api.getNetworkId();
-   if(net!==1){statusCardano.textContent=`${which.toUpperCase()}: wrong network`;return;}
-   const addr=await api.getChangeAddress();
-   statusCardano.textContent=`${which.toUpperCase()}: ${short(addr)}`;
- }catch(e){statusCardano.textContent=`${which.toUpperCase()}: failed`;console.warn(e);}
+  try{
+    if(!(window.cardano&&window.cardano[which])){statusCardano.textContent=`${which.toUpperCase()}: not found`;return;}
+    const api=await window.cardano[which].enable();
+    const net=await api.getNetworkId(); if(net!==1){statusCardano.textContent=`${which.toUpperCase()}: wrong network`;return;}
+    const addr=await api.getChangeAddress();
+    statusCardano.textContent=`${which.toUpperCase()}: ${short(addr)}`;
+  }catch(e){statusCardano.textContent=`${which.toUpperCase()}: failed`;console.warn(e);}
 }
 document.getElementById('btnCardanoNami').onclick=()=>connectCardano('nami');
 document.getElementById('btnCardanoEternl').onclick=()=>connectCardano('eternl');
 
 async function connectEVM(){
- try{
-   const eth=window.ethereum;
-   if(!eth){statusEVM.textContent='No EVM wallet found';return;}
-   const acc=await eth.request({method:'eth_requestAccounts'});
-   const net=await eth.request({method:'eth_chainId'});
-   const name={'0x1':'Ethereum','0x38':'BSC','0x89':'Polygon','0x2105':'Base'}[net]||net;
-   statusEVM.textContent=`${name}: ${short(acc[0])}`;
- }catch(e){statusEVM.textContent='EVM failed';console.warn(e);}
+  try{
+    const eth=window.ethereum; if(!eth){statusEVM.textContent='No EVM wallet found';return;}
+    const acc=await eth.request({method:'eth_requestAccounts'});
+    const net=await eth.request({method:'eth_chainId'});
+    const name={'0x1':'Ethereum','0x38':'BSC','0x89':'Polygon','0x2105':'Base'}[net]||net;
+    statusEVM.textContent=`${name}: ${short(acc?.[0]||'')}`;
+  }catch(e){statusEVM.textContent='EVM failed';console.warn(e);}
 }
 document.getElementById('btnEVM').onclick=connectEVM;
 
 async function connectSolana(){
- try{
-   const s=window.solana;
-   if(!s||!s.isPhantom){statusSolana.textContent='Phantom not found';return;}
-   const r=await s.connect();
-   statusSolana.textContent=short(r.publicKey.toString());
- }catch(e){statusSolana.textContent='Solana failed';console.warn(e);}
+  try{
+    const s=window.solana; if(!s||!s.isPhantom){statusSolana.textContent='Phantom not found';return;}
+    const r=await s.connect(); statusSolana.textContent=short(r?.publicKey?.toString()||'');
+  }catch(e){statusSolana.textContent='Solana failed';console.warn(e);}
 }
 document.getElementById('btnSolana').onclick=connectSolana;
 
-// ----- Cross-chain meme swap -----
+// Cross-chain meme swap hub (deep links only — fast & robust)
 const CROSS={
   cardano:{
     dex:'Cardano DEXes',base:'ADA',
@@ -112,7 +252,7 @@ const CROSS={
       {name:'HOSKY',address:'c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59'}
     ],
     links:[
-      {name:'Minswap',build:(u)=>`https://app.minswap.org/swap?inputCurrency=${u}&outputCurrency=lovelace`},
+      {name:'Minswap',   build:(u)=>`https://app.minswap.org/swap?inputCurrency=${u}&outputCurrency=lovelace`},
       {name:'WingRiders',build:(u)=>`https://app.wingriders.com/swap?from=${u}&to=lovelace`},
       {name:'SundaeSwap',build:(u)=>`https://sundaeswap.finance/app/swap?from=${u}&to=lovelace`}
     ]
@@ -163,27 +303,53 @@ const CROSS={
     link:(a)=>`https://app.uniswap.org/swap?chain=polygon&inputCurrency=MATIC&outputCurrency=${a}`
   }
 };
+
 const results=document.getElementById('memeSwapResults');
 const tabs=document.querySelectorAll('[data-chain]');
 function render(chain){
- const c=CROSS[chain];
- results.innerHTML='';
- if(!c)return;
- c.tokens.forEach(t=>{
-   const div=document.createElement('div');
-   div.className='card';
-   if(chain==='cardano'){
-     const btns=c.links.map(l=>`<a class=\"btn\" target=\"_blank\" rel=\"noopener\" href=\"${l.build(t.address)}\">${l.name}</a>`).join('');
-     div.innerHTML=`<div><strong>${t.name}</strong><br><small class=\"muted\">${c.dex}</small><div style=\"margin-top:.4rem;display:flex;gap:.5rem;flex-wrap:wrap\">${btns}</div></div>`;
-   } else {
-     const u=c.link(t.address);
-     div.innerHTML=`<div><strong>${t.name}</strong><br><small class=\"muted\">${c.dex}</small><div style=\"margin-top:.4rem\"><a class=\"btn\" target=\"_blank\" rel=\"noopener\" href=\"${u}\">Trade</a></div></div>`;
-   }
-   results.appendChild(div);
- });
+  const c=CROSS[chain]; results.innerHTML=''; if(!c) return;
+  c.tokens.forEach(t=>{
+    const box=document.createElement('div'); box.className='card';
+    if(chain==='cardano'){
+      const btns=c.links.map(L=>`<a class="btn" target="_blank" rel="noopener" href="${L.build(t.address)}">${L.name}</a>`).join('');
+      box.innerHTML = `<div><strong>${t.name}</strong><br><small class="muted">${c.dex} • Pair: ${t.name}/ADA</small>
+      <div style="margin-top:.5rem;display:flex;gap:.5rem;flex-wrap:wrap">${btns}</div></div>`;
+    } else {
+      const u=c.link(t.address);
+      box.innerHTML = `<div><strong>${t.name}</strong><br><small class="muted">${c.dex}</small>
+      <div style="margin-top:.5rem"><a class="btn" target="_blank" rel="noopener" href="${u}">Trade</a></div></div>`;
+    }
+    results.appendChild(box);
+  });
 }
 tabs.forEach(b=>b.onclick=()=>{tabs.forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.chain)});
 render('cardano');
+
+// Copy buttons for token info
+document.querySelectorAll('.cpy').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const id=btn.getAttribute('data-copy');
+    const text=document.getElementById(id).textContent.trim();
+    navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copied!'; setTimeout(()=>btn.textContent='Copy',1000);});
+  });
+});
+
+// Meme wall (optional JSON feed; safe to remove if not used)
+(async function(){
+  const wall=document.getElementById("memeWall");
+  const loading=document.getElementById("loadingMemes");
+  try{
+    const res=await fetch("https://adahandles.github.io/HOSKDOG/data/memes.json",{cache:"no-store"});
+    const data=await res.json(); loading?.remove();
+    if(data?.memes?.length){
+      for(const m of data.memes){
+        const d=document.createElement("div"); d.className="meme";
+        const img=new Image(); img.src=m.url; img.alt=m.caption||"HOSKDOG meme"; img.loading="lazy";
+        d.appendChild(img); wall.appendChild(d);
+      }
+    } else { wall.innerHTML="<p class='muted'>No memes found. Be the first to post one!</p>"; }
+  }catch(e){ wall.innerHTML="<p class='muted'>Error loading memes.</p>"; }
+})();
 </script>
 </body>
 </html>
