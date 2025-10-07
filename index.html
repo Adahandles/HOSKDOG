@@ -186,6 +186,43 @@
     </div>
   </div>
 </section>
+<section id="swapcenter" style="padding:3rem 1.1rem;text-align:center">
+  <h2 class="section-title">Swap Center</h2>
+  <p class="muted">Trade HKDG instantly through Minswap</p>
+
+  <!-- toggle buttons -->
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1rem 0">
+    <button class="btn" onclick="showSwap('ada')">HKDG ↔ ADA</button>
+    <button class="btn" onclick="showSwap('snek')">HKDG ↔ SNEK</button>
+    <button class="btn secondary" onclick="showSwap('hosky')">HKDG ↔ HOSKY</button>
+  </div>
+
+  <!-- iframe container -->
+  <div id="swapFrame" style="max-width:1100px;margin:0 auto">
+    <!-- default view loads HKDG/ADA -->
+    <iframe
+      src="https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace"
+      width="100%" height="600"
+      style="border:2px solid #8cf;border-radius:16px"
+      title="Swap HKDG/ADA"></iframe>
+  </div>
+</section>
+
+<script>
+const frame = document.getElementById("swapFrame");
+function showSwap(which){
+  const urls = {
+    ada:   "https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=lovelace",
+    snek:  "https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b",
+    hosky: "https://app.minswap.org/swap?inputCurrency=9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad&outputCurrency=c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59"
+  };
+  frame.innerHTML =
+    `<iframe src="${urls[which]}"
+       width="100%" height="600"
+       style="border:2px solid #8cf;border-radius:16px"
+       title="Swap HKDG/${which.toUpperCase()}"></iframe>`;
+}
+</script>
 
 <section id="lore">
   <div class="wrap">
