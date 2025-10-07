@@ -119,29 +119,7 @@
 </header>
 
 <!-- COMBINED: Wallet + Converter + Swap Center -->
-<section id="trade" style="padding:2.8rem 1.1rem">
-  <div class="wrap">
-    <h2 class="section-title">DEX Aggregator</h2>
-    <div class="token-box" id="aggBox" style="margin-bottom:1rem">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
-        <strong>Aggregator (alpha)</strong>
-        <div class="pair-tabs" role="tablist" aria-label="Aggregator pairs">
-          <button class="tab active" data-aggpair="ada" role="tab" aria-selected="true">HKDG → ADA</button>
-          <button class="tab" data-aggpair="snek" role="tab" aria-selected="false">HKDG → SNEK</button>
-          <button class="tab" data-aggpair="hosky" role="tab" aria-selected="false">HKDG → HOSKY</button>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:end;margin-top:.6rem">
-        <label class="field">Amount (HKDG)
-          <input id="aggAmount" class="input" type="number" min="0" step="any" placeholder="100000" inputmode="decimal">
-        </label>
-        <button id="aggQuoteBtn" class="btn" type="button">Get Quotes</button>
-      </div>
-      <div id="aggResults" style="display:grid;gap:.6rem;margin-top:.8rem"></div>
-      <small class="muted">Notes: This alpha calls each DEX adapter in parallel. If no API is configured or CORS blocks a call, you’ll still get a fallback estimate and one‑click deep links.</small>
-    </div>
-  </div>
-</section>
+
 
 <!-- Cross-Chain Meme Swap Hub -->
 <section id="memeswap" style="padding:2.8rem 1.1rem">
@@ -355,6 +333,20 @@
 
   // Admin-configurable list (fill addresses/mints). Examples provided as comments.
   const CROSS = {
+    cardano: {
+      dex: 'Cardano DEXes', base: 'ADA',
+      tokens: [
+        { name: 'HKDG', address: '9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484F534B444F47' },
+        { name: 'SNEK', address: 'a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b' },
+        { name: 'HOSKY', address: 'c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59' }
+      ],
+      // Multiple DEX link builders (treat as cross-chain aggregator style for Cardano)
+      links: [
+        { name:'Minswap',    build: (unit)=>`https://app.minswap.org/swap?inputCurrency=${unit}&outputCurrency=lovelace` },
+        { name:'WingRiders', build: (unit)=>`https://app.wingriders.com/swap?from=${unit}&to=lovelace` },
+        { name:'SundaeSwap', build: (unit)=>`https://sundaeswap.finance/app/swap?from=${unit}&to=lovelace` }
+      ]
+    },
     ethereum: {
       dex: 'Uniswap', base: 'ETH',
       tokens: [
@@ -413,20 +405,33 @@
     }
     conf.tokens.slice(0,3).forEach(tok => {
       const card = document.createElement('div'); card.className='card';
-      if (!tok.address){
-        card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
-          <div><strong>${tok.name}</strong><br><small class="muted">Add contract/mint in config</small></div>
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn secondary" disabled>Open</button></div>
+      // Cardano: render multi‑DEX buttons per token
+      if (chainKey === 'cardano' && conf.links && conf.links.length){
+        const btns = conf.links.map(L => {
+          const url = L.build(tok.address);
+          return `<a class="btn" target="_blank" rel="noopener" href="${url}">${L.name}</a>`;
+        }).join('');
+        card.innerHTML = `<div style=\"display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap\">
+          <div><strong>${tok.name}</strong><br><small class=\"muted\">${conf.dex} • Pair: ${tok.name}/ADA</small></div>
+          <div style=\"display:flex;gap:.5rem;flex-wrap:wrap\">${btns}</div>
         </div>`;
       } else {
-        const url = conf.link(tok.address);
-        card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
-          <div><strong>${tok.name}</strong><br><small class="muted">${conf.dex} • Pair: ${conf.base}/${tok.name}</small></div>
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-            <a class="btn" target="_blank" rel="noopener" href="${url}">Open</a>
-            <button class="btn secondary" type="button" data-copyurl="${url}">Copy link</button>
-          </div>
-        </div>`;
+        // Other chains: single DEX deep link
+        if (!tok.address){
+          card.innerHTML = `<div style=\"display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap\">
+            <div><strong>${tok.name}</strong><br><small class=\"muted\">Add contract/mint in config</small></div>
+            <div style=\"display:flex;gap:.5rem;flex-wrap:wrap\"><button class=\"btn secondary\" disabled>Open</button></div>
+          </div>`;
+        } else {
+          const url = conf.link(tok.address);
+          card.innerHTML = `<div style=\"display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap\">
+            <div><strong>${tok.name}</strong><br><small class=\"muted\">${conf.dex} • Pair: ${conf.base}/${tok.name}</small></div>
+            <div style=\"display:flex;gap:.5rem;flex-wrap:wrap\">
+              <a class=\"btn\" target=\"_blank\" rel=\"noopener\" href=\"${url}\">Open</a>
+              <button class=\"btn secondary\" type=\"button\" data-copyurl=\"${url}\">Copy link</button>
+            </div>
+          </div>`;
+        }
       }
       memeSwapResults.appendChild(card);
     });
