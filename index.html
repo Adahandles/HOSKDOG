@@ -124,7 +124,34 @@
 <!-- Cross-Chain Meme Swap Hub -->
 <section id="memeswap" style="padding:2.8rem 1.1rem">
   <div class="wrap">
-    <h2 class="section-title">Cross‑Chain Meme Swap Hub</h2>
+    <h2 class=\"section-title\">Cross‑Chain Meme Swap Hub<\/h2>
+    <!-- Wallet Connections -->
+    <div class=\"token-box\" id=\"walletHub\" style=\"margin-bottom:1rem\">
+      <div style=\"display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:.6rem\">
+        <div class=\"mini\">
+          <strong>Cardano Wallets</strong>
+          <div style=\"display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.4rem\">
+            <button class=\"btn\" id=\"btnCardanoNami\" type=\"button\">Connect Nami<\/button>
+            <button class=\"btn secondary\" id=\"btnCardanoEternl\" type=\"button\">Connect Eternl<\/button>
+          </div>
+          <div class=\"muted\" id=\"statusCardano\">Not connected<\/div>
+        <\/div>
+        <div class=\"mini\">
+          <strong>EVM Wallets (ETH\/Base\/BSC\/Polygon)</strong>
+          <div style=\"display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.4rem\">
+            <button class=\"btn\" id=\"btnEVM\" type=\"button\">Connect EVM Wallet<\/button>
+          </div>
+          <div class=\"muted\" id=\"statusEVM\">Not connected<\/div>
+        <\/div>
+        <div class=\"mini\">
+          <strong>Solana Wallets</strong>
+          <div style=\"display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.4rem\">
+            <button class=\"btn\" id=\"btnSolana\" type=\"button\">Connect Phantom<\/button>
+          </div>
+          <div class=\"muted\" id=\"statusSolana\">Not connected<\/div>
+        <\/div>
+      <\/div>
+    <\/div>
     <p class="muted">Pick a chain, then one of its top meme coins. Links open the right DEX for that chain. <em>Admin: edit the addresses in the config below.</em></p>
     <div class=\"pair-tabs\" role=\"tablist\" aria-label=\"Chains\">
       <button class=\"tab\" data-chain=\"cardano\" aria-selected=\"false\">Cardano</button>
@@ -389,7 +416,7 @@
       tokens: [
         { name: 'POLYDOGE', address: '0x8a953cfe442c5e8855cc6c61b1293fa648bae472' },
         { name: 'SHIB',     address: '0x6f8a06447ff6fcf75d803135a7de15ce88c1d4ec' },
-        { name: 'PEPE (Polygon – verify)', address: '' }
+        { name: 'WDOGE',    address: '0xc9b89f6b1b1b7a7a5d28a8e0a7d3a3b4a06c97e1' }
       ],
       link(addr){ return `https://app.uniswap.org/swap?chain=polygon&inputCurrency=${this.base}&outputCurrency=${addr}`; }
     }
@@ -402,7 +429,13 @@
     if (!conf.tokens || conf.tokens.length===0){
       const card = document.createElement('div'); card.className='card';
       card.innerHTML = `<strong>${conf.dex} on ${chainKey.toUpperCase()}</strong><br><span class="muted">Add 3 tokens in the CROSS config to show quick links here.</span>`;
-      memeSwapResults.appendChild(card); return;
+      memeSwapResults.appendChild(card);
+      // live data container for price/liquidity
+      const live = document.createElement('div');
+      live.className='muted';
+      live.dataset.live = `${chainKey}:${tok.address||''}`;
+      live.style.marginTop = '.4rem';
+      card.appendChild(live); return;
     }
     conf.tokens.slice(0,3).forEach(tok => {
       const card = document.createElement('div'); card.className='card';
@@ -435,6 +468,12 @@
         }
       }
       memeSwapResults.appendChild(card);
+      // live data container for price/liquidity
+      const live = document.createElement('div');
+      live.className='muted';
+      live.dataset.live = `${chainKey}:${tok.address||''}`;
+      live.style.marginTop = '.4rem';
+      card.appendChild(live);
     });
     // Copy handlers
     memeSwapResults.querySelectorAll('[data-copyurl]').forEach(btn=>{
@@ -448,8 +487,114 @@
     renderChain(btn.getAttribute('data-chain'));
   }));
 
+  // Live price/liquidity fetch using Dexscreener for EVM/Solana chains
+  async function fetchDexscreener(addr){
+    try{
+      const r = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${addr}`);
+      if (!r.ok) throw new Error('HTTP '+r.status);
+      const json = await r.json();
+      const pair = json?.pairs?.[0];
+      if (!pair) return null;
+      return {
+        dex: pair.dexId,
+        priceUsd: Number(pair.priceUsd||pair.priceUsd0||pair.priceUsd1||0),
+        fdv: Number(pair.fdv||0),
+        liqUsd: Number(pair.liquidity?.usd||0),
+        pairUrl: pair.url||pair.pairUrl||''
+      };
+    }catch(e){ return null; }
+  }
+  function fmtUSD(n){ if(!isFinite(n)||n<=0) return '—'; return n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:6}); }
+
+  async function hydrateLive(){
+    const nodes = Array.from(memeSwapResults.querySelectorAll('[data-live]'));
+    for (const n of nodes){
+      const [chain, addr] = (n.dataset.live||'').split(':');
+      if (!addr) { n.textContent = 'Add token address to enable live data.'; continue; }
+      if (chain==='cardano'){ n.textContent = 'Live data: add proxy for Minswap/WingRiders APIs.'; continue; }
+      const data = await fetchDexscreener(addr);
+      if (!data){ n.textContent = 'Live data unavailable.'; continue; }
+      n.innerHTML = `Price: <strong>${fmtUSD(data.priceUsd)}</strong> • Liquidity: <strong>${fmtUSD(data.liqUsd)}</strong> ${data.pairUrl?` • <a class="btn secondary" style="padding:.25rem .5rem;border-width:1px" target="_blank" rel="noopener" href="${data.pairUrl}">View pair</a>`:''}`;
+    }
+  }
+
   // initial render
   renderChain('cardano');
+  hydrateLive();
+
+  /* ---------------- Wallet Connections ---------------- */
+  const statusCardano = document.getElementById('statusCardano');
+  const statusEVM = document.getElementById('statusEVM');
+  const statusSolana = document.getElementById('statusSolana');
+  const short = (s)=>{ if(!s) return ''; return s.length>18 ? s.slice(0,6)+'…'+s.slice(-6) : s; };
+
+  // Cardano (CIP-30)
+  async function connectCardano(which){
+    try{
+      if(!(window.cardano && window.cardano[which])){ statusCardano.textContent = which.toUpperCase()+': not found'; return; }
+      const api = await window.cardano[which].enable();
+      const net = await api.getNetworkId(); if (net!==1){ statusCardano.textContent = which.toUpperCase()+': wrong network (switch to mainnet)'; return; }
+      const addr = await api.getChangeAddress();
+      statusCardano.textContent = which.toUpperCase()+': '+short(addr);
+    }catch(e){ statusCardano.textContent = which.toUpperCase()+': connect failed'; console.warn(e); }
+  }
+  document.getElementById('btnCardanoNami').onclick = ()=>connectCardano('nami');
+  document.getElementById('btnCardanoEternl').onclick = ()=>connectCardano('eternl');
+
+  // EVM (EIP-1193)
+  async function connectEVM(){
+    try{
+      const eth = window.ethereum;
+      if(!eth){ statusEVM.textContent = 'No EVM provider (install MetaMask or Coinbase Wallet).'; return; }
+      const accounts = await eth.request({ method:'eth_requestAccounts' });
+      const chainId = await eth.request({ method:'eth_chainId' });
+      const label = ({
+        '0x1':'Ethereum','0x38':'BSC','0x89':'Polygon','0x2105':'Base'
+      })[chainId] || chainId;
+      statusEVM.textContent = `${label}: ${short(accounts?.[0]||'')}`;
+    }catch(e){ statusEVM.textContent = 'EVM connect failed'; console.warn(e); }
+  }
+  // Try Web3Modal (WalletConnect v2) when no injected provider
+  const WC_PROJECT_ID = 'a1b2c3d4e5f6078901234567890abcde'; // TODO: replace with your real projectId
+  let web3modal;
+  try {
+    if (window.Web3Modal && WC_PROJECT_ID && WC_PROJECT_ID.length > 20) {
+      // Basic EVM mainnets: Ethereum(1), BSC(56), Polygon(137), Base(8453)
+      web3modal = new window.Web3Modal.default({
+        projectId: WC_PROJECT_ID,
+        walletImages: {},
+        themeMode: 'dark',
+        explorerRecommendedWalletIds: 'NONE',
+      });
+    }
+  } catch (e) { console.warn('Web3Modal not available', e); }
+
+  async function connectEVMModal(){
+    if (!web3modal) { return connectEVM(); }
+    try {
+      const session = await web3modal.openModal();
+      // If provider is exposed, show a generic message; full tx flow can use the returned provider
+      statusEVM.textContent = 'WalletConnect session started';
+    } catch (e) {
+      statusEVM.textContent = 'WalletConnect cancelled';
+    }
+  }
+
+  document.getElementById('btnEVM').onclick = () => {
+    if (window.ethereum) return connectEVM();
+    return connectEVMModal();
+  };
+
+  // Solana (Phantom)
+  async function connectSolana(){
+    try{
+      const sol = window.solana;
+      if(!sol || !sol.isPhantom){ statusSolana.textContent = 'Phantom not found'; return; }
+      const resp = await sol.connect();
+      statusSolana.textContent = short(resp?.publicKey?.toString()||'');
+    }catch(e){ statusSolana.textContent = 'Solana connect failed'; console.warn(e); }
+  }
+  document.getElementById('btnSolana').onclick = connectSolana;
   const btcIn = document.getElementById('btc_hkdg_in');
   const outAda = document.getElementById('btc_out_ada');
   const outBtc = document.getElementById('btc_out_btc');
@@ -597,5 +742,6 @@
   } catch (e) { wall.innerHTML = "<p class='muted'>Error loading memes.</p>"; console.warn("Meme wall fetch failed:", e); }
 })();
 </script>
+<script src="https://unpkg.com/@walletconnect/web3modal@2/dist/index.umd.min.js"></script>
 </body>
 </html>
