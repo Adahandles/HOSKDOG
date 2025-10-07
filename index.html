@@ -143,6 +143,49 @@
   </div>
 </section>
 
+<!-- Cross-Chain Meme Swap Hub -->
+<section id="memeswap" style="padding:2.8rem 1.1rem">
+  <div class="wrap">
+    <h2 class="section-title">Cross‑Chain Meme Swap Hub</h2>
+    <p class="muted">Pick a chain, then one of its top meme coins. Links open the right DEX for that chain. <em>Admin: edit the addresses in the config below.</em></p>
+    <div class="pair-tabs" role="tablist" aria-label="Chains">
+      <button class="tab active" data-chain="ethereum" aria-selected="true">Ethereum</button>
+      <button class="tab" data-chain="solana" aria-selected="false">Solana</button>
+      <button class="tab" data-chain="bsc" aria-selected="false">BSC</button>
+      <button class="tab" data-chain="base" aria-selected="false">Base</button>
+      <button class="tab" data-chain="polygon" aria-selected="false">Polygon</button>
+    </div>
+    <div id="memeSwapResults" style="display:grid; gap:.8rem; margin-top:1rem"></div>
+    <small class="muted">Note: Some DEXes require the exact token contract/mint to prefill. If a token doesn’t load, paste the address once—most wallets remember it after the first import.</small>
+  </div>
+</section>
+
+<!-- BTC Converter Section -->
+<section id="btcconv" style="padding:2.8rem 1.1rem">
+  <div class="wrap">
+    <h2 class="section-title">HKDG → BTC Converter</h2>
+    <div class="token-box">
+      <p class="muted" style="margin-top:0">Quickly estimate BTC from HKDG using a fallback price. You can paste a live ADA↔BTC rate below, or we can wire an API later.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;align-items:end">
+        <label class="field">Amount (HKDG)
+          <input id="btc_hkdg_in" class="input" type="number" min="0" step="any" placeholder="100000" inputmode="decimal">
+        </label>
+        <div class="mini" style="display:grid;gap:.35rem">
+          <div><strong>Rates in use</strong></div>
+          <div class="muted">ADA / HKDG: <span id="rate_ada_per_hkdg">0.000001</span></div>
+          <div class="muted">BTC / ADA: <input id="rate_btc_per_ada" class="input" type="number" step="any" placeholder="e.g., 0.000005" style="padding:.4rem"/></div>
+          <small class="muted">Tip: enter current BTC/ADA rate (e.g., ADA price in BTC). Leave blank to use default.</small>
+        </div>
+      </div>
+      <div class="cards" style="margin-top:.8rem">
+        <div class="card"><h3>Estimated ADA</h3><div id="btc_out_ada" class="muted">—</div></div>
+        <div class="card"><h3>Estimated BTC</h3><div id="btc_out_btc" class="muted">—</div></div>
+      </div>
+      <small class="muted">Estimates only. Actual execution depends on pool depth, slippage, and fees.</small>
+    </div>
+  </div>
+</section>
+
 <section id="lore">
   <div class="wrap">
     <h2 class="section-title">The Pack Story</h2>
@@ -303,6 +346,131 @@
   } catch {}
 
   // Aggregator (alpha)
+
+  // ----- BTC Converter -----
+
+  // ----- Cross-Chain Meme Swap Hub -----
+  const memeSwapResults = document.getElementById('memeSwapResults');
+  const chainTabs = Array.from(document.querySelectorAll('[data-chain]'));
+
+  // Admin-configurable list (fill addresses/mints). Examples provided as comments.
+  const CROSS = {
+    ethereum: {
+      dex: 'Uniswap', base: 'ETH',
+      tokens: [
+        // { name: 'SHIB', address: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE' },
+        // { name: 'PEPE', address: '0x6982508145454Ce325dDbE47a25d4ec3d2311933' },
+        // { name: 'FLOKI', address: '0x5fE4B...REPLACE' },
+      ],
+      link(addr){ return `https://app.uniswap.org/swap?inputCurrency=${this.base}&outputCurrency=${addr}`; }
+    },
+    solana: {
+      dex: 'Jupiter', base: 'SOL',
+      tokens: [
+        // { name: 'BONK', address: 'DezXz...REPLACE' },
+        // { name: 'WIF', address: '9n4nbM...REPLACE' },
+        // { name: 'POPCAT', address: '7a5x...REPLACE' },
+      ],
+      link(mint){ return `https://jup.ag/swap/${this.base}-${mint}`; }
+    },
+    bsc: {
+      dex: 'PancakeSwap', base: 'BNB',
+      tokens: [
+        // { name: 'BABYDOGE', address: '0xc748...REPLACE' },
+        // { name: 'FLOKI', address: '0xfb5b...REPLACE' },
+        // { name: 'PEPE', address: '0xe0a2...REPLACE (BSC bridge)'}
+      ],
+      link(addr){ return `https://pancakeswap.finance/swap?outputCurrency=${addr}`; }
+    },
+    base: {
+      dex: 'Uniswap', base: 'ETH',
+      tokens: [
+        // { name: 'BRETT', address: '0x532f...REPLACE' },
+        // { name: 'TOSHI', address: '0xCA32...REPLACE' },
+        // { name: 'DEGEN', address: '0xD9aE...REPLACE' },
+      ],
+      link(addr){ return `https://app.uniswap.org/swap?chain=base&inputCurrency=${this.base}&outputCurrency=${addr}`; }
+    },
+    polygon: {
+      dex: 'Uniswap', base: 'MATIC',
+      tokens: [
+        // { name: 'DOGI', address: '0xC4Bf...REPLACE' },
+        // { name: 'PEPE', address: '0xD1Ba...REPLACE (Polygon bridge)' },
+        // { name: 'SHIB', address: '0x6f8a...REPLACE (Polygon bridge)'}
+      ],
+      link(addr){ return `https://app.uniswap.org/swap?chain=polygon&inputCurrency=${this.base}&outputCurrency=${addr}`; }
+    }
+  };
+
+  function renderChain(chainKey){
+    const conf = CROSS[chainKey];
+    memeSwapResults.innerHTML = '';
+    if (!conf) { memeSwapResults.innerHTML = '<div class="mini">Unknown chain.</div>'; return; }
+    if (!conf.tokens || conf.tokens.length===0){
+      const card = document.createElement('div'); card.className='card';
+      card.innerHTML = `<strong>${conf.dex} on ${chainKey.toUpperCase()}</strong><br><span class="muted">Add 3 tokens in the CROSS config to show quick links here.</span>`;
+      memeSwapResults.appendChild(card); return;
+    }
+    conf.tokens.slice(0,3).forEach(tok => {
+      const card = document.createElement('div'); card.className='card';
+      if (!tok.address){
+        card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
+          <div><strong>${tok.name}</strong><br><small class="muted">Add contract/mint in config</small></div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn secondary" disabled>Open</button></div>
+        </div>`;
+      } else {
+        const url = conf.link(tok.address);
+        card.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:.8rem;flex-wrap:wrap">
+          <div><strong>${tok.name}</strong><br><small class="muted">${conf.dex} • Pair: ${conf.base}/${tok.name}</small></div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <a class="btn" target="_blank" rel="noopener" href="${url}">Open</a>
+            <button class="btn secondary" type="button" data-copyurl="${url}">Copy link</button>
+          </div>
+        </div>`;
+      }
+      memeSwapResults.appendChild(card);
+    });
+    // Copy handlers
+    memeSwapResults.querySelectorAll('[data-copyurl]').forEach(btn=>{
+      btn.onclick = ()=>{ const u = btn.getAttribute('data-copyurl'); navigator.clipboard.writeText(u).then(()=>{ btn.textContent='Copied!'; setTimeout(()=>btn.textContent='Copy link',1000); }); };
+    });
+  }
+
+  chainTabs.forEach(btn=>btn.addEventListener('click',()=>{
+    chainTabs.forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+    renderChain(btn.getAttribute('data-chain'));
+  }));
+
+  // initial render
+  renderChain('ethereum');
+  const btcIn = document.getElementById('btc_hkdg_in');
+  const outAda = document.getElementById('btc_out_ada');
+  const outBtc = document.getElementById('btc_out_btc');
+  const rateAdaSpan = document.getElementById('rate_ada_per_hkdg');
+  const rateBtcPerAdaInput = document.getElementById('rate_btc_per_ada');
+
+  // Defaults: re-use priceAdaPerHKDG from earlier (ADA per HKDG). For BTC/ADA, use a conservative placeholder.
+  let btcPerAda = 0.000005; // placeholder; user can override
+  if (rateAdaSpan) rateAdaSpan.textContent = String(priceAdaPerHKDG);
+
+  function recalcBTC(){
+    const hkIn = parseFloat(btcIn.value||'');
+    const adaPerHk = priceAdaPerHKDG || 0.000001;
+    const btcPerAdaNow = parseFloat(rateBtcPerAdaInput.value||'');
+    const effBtcPerAda = isFinite(btcPerAdaNow) && btcPerAdaNow>0 ? btcPerAdaNow : btcPerAda;
+
+    if (!isFinite(hkIn) || hkIn<=0){ outAda.textContent='—'; outBtc.textContent='—'; return; }
+    const ada = hkIn * adaPerHk;
+    const btc = ada * effBtcPerAda;
+    outAda.textContent = ada.toLocaleString(undefined,{maximumFractionDigits:6});
+    outBtc.textContent = btc.toLocaleString(undefined,{maximumFractionDigits:10});
+  }
+
+  if (btcIn) btcIn.addEventListener('input', recalcBTC);
+  if (rateBtcPerAdaInput) rateBtcPerAdaInput.addEventListener('input', recalcBTC);
+  // initial paint
+  recalcBTC();
   const aggTabs = Array.from(document.querySelectorAll('[data-aggpair]'));
   const aggAmountEl = document.getElementById('aggAmount');
   const aggBtn = document.getElementById('aggQuoteBtn');
