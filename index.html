@@ -1,45 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HOSKDOG 🐕 — Cross-Chain Meme Swap Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
 <style>
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem 1.5rem;
-    border-radius: 14px;
-    border: 2px solid var(--cyan2);
-    background: linear-gradient(180deg, rgba(108,207,255,0.25), rgba(108,207,255,0.1));
-    color: #fff;
-    font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: 0.4px;
-    box-shadow: 0 0 22px rgba(108,207,255,0.35);
-    cursor: pointer;
-    transition: all 0.25s ease;
-  }
-  .btn:hover {
-    background: linear-gradient(180deg, rgba(108,207,255,0.4), rgba(108,207,255,0.2));
-    box-shadow: 0 0 32px rgba(108,207,255,0.55);
-    transform: translateY(-1px);
-  }
-  .btn.secondary {
-    border-color: #fff4;
-    background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    color: #fff;
-  }
-  .btn.secondary:hover {
-    box-shadow: 0 0 26px rgba(255,255,255,0.35);
-  }
-  .tab {
-    color: #fff;
-    font-weight: 600;
-    background: rgba(255,255,255,0.08);
-    border-radius: 12px;
-    border: 1px solid #ffffff33;
-    padding: 0.6rem 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .tab:hover, .tab.active {
-    background: rgba(255,255,255,0.18);
-    box-shadow: 0 0 18px rgba(108,207,255,0.4);
-  }
+:root{--bg1:#000010;--bg2:#001a33;--bg3:#0a001a;--cyan:#6cf;--cyan2:#8cf;--violet:#9f6cff;--txt:#eaeef7;--muted:#aab3c2;--card:rgba(0,0,0,.25)}
+body{margin:0;font-family:Inter,sans-serif;color:var(--txt);background:linear-gradient(270deg,var(--bg1),var(--bg2),var(--bg3),var(--bg1));background-size:600% 600%;animation:aurora 22s ease infinite;overflow-x:hidden;text-rendering:optimizeLegibility}
+@keyframes aurora{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1rem}
+.section-title{font-size:clamp(1.8rem,2.8vw,2.4rem);margin:0 0 1rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:1rem 1.5rem;border-radius:14px;border:2px solid var(--cyan2);background:linear-gradient(180deg,rgba(108,207,255,.25),rgba(108,207,255,.1));color:#fff;font-weight:600;font-size:1rem;letter-spacing:.4px;box-shadow:0 0 22px rgba(108,207,255,.35);cursor:pointer;transition:all .25s ease}
+.btn:hover{background:linear-gradient(180deg,rgba(108,207,255,.4),rgba(108,207,255,.2));box-shadow:0 0 32px rgba(108,207,255,.55);transform:translateY(-1px)}
+.btn.secondary{border-color:#fff4;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.05));color:#fff}
+.btn.secondary:hover{box-shadow:0 0 26px rgba(255,255,255,.35)}
+.tab{color:#fff;font-weight:600;background:rgba(255,255,255,.08);border-radius:12px;border:1px solid #ffffff33;padding:.6rem 1rem;cursor:pointer;transition:all .2s ease}
+.tab:hover,.tab.active{background:rgba(255,255,255,.18);box-shadow:0 0 18px rgba(108,207,255,.4)}
+.token-box{background:var(--card);border:1px solid #ffffff22;border-radius:16px;padding:1rem;margin-bottom:1rem;box-shadow:0 0 18px rgba(108,207,255,.15)}
+.card{background:var(--card);border:1px solid #ffffff22;border-radius:14px;padding:1rem;box-shadow:0 0 18px rgba(108,207,255,.15)}
+.muted{color:var(--muted)}
 </style>
+</head>
+<body>
+<div class="wrap">
+<h1 style="text-align:center;font-size:2.8rem;margin-bottom:0">HOSKDOG 🐕</h1>
+<p style="text-align:center;color:var(--muted);margin-top:0">Cross-Chain Meme Swap Hub</p>
+
+<div class="token-box" id="walletHub">
+  <h2 class="section-title" style="font-size:1.6rem">Wallet Connections</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.6rem">
+    <div><strong>Cardano Wallets</strong><br>
+      <button class="btn" id="btnCardanoNami">Connect Nami</button>
+      <button class="btn secondary" id="btnCardanoEternl">Connect Eternl</button>
+      <div class="muted" id="statusCardano">Not connected</div>
+    </div>
+    <div><strong>EVM Wallets</strong><br>
+      <button class="btn" id="btnEVM">Connect EVM Wallet</button>
+      <div class="muted" id="statusEVM">Not connected</div>
+    </div>
+    <div><strong>Solana Wallets</strong><br>
+      <button class="btn" id="btnSolana">Connect Phantom</button>
+      <div class="muted" id="statusSolana">Not connected</div>
+    </div>
+  </div>
+</div>
+
+<div class="token-box" id="memeHub">
+  <h2 class="section-title">Cross-Chain Meme Swap</h2>
+  <div class="pair-tabs" role="tablist" aria-label="Chains" style="display:flex;gap:.6rem;flex-wrap:wrap">
+    <button class="tab active" data-chain="cardano">Cardano</button>
+    <button class="tab" data-chain="ethereum">Ethereum</button>
+    <button class="tab" data-chain="solana">Solana</button>
+    <button class="tab" data-chain="bsc">BSC</button>
+    <button class="tab" data-chain="base">Base</button>
+    <button class="tab" data-chain="polygon">Polygon</button>
+  </div>
+  <div id="memeSwapResults" style="display:grid;gap:.8rem;margin-top:1rem"></div>
+</div>
+</div>
+
+<script>
+const short=(s)=>s?(s.length>18?s.slice(0,6)+'…'+s.slice(-6):s):'';
+const statusCardano=document.getElementById('statusCardano');
+const statusEVM=document.getElementById('statusEVM');
+const statusSolana=document.getElementById('statusSolana');
+
+// ----- Wallet connections -----
+async function connectCardano(which){
+ try{
+   if(!(window.cardano&&window.cardano[which])){statusCardano.textContent=`${which.toUpperCase()}: not found`;return;}
+   const api=await window.cardano[which].enable();
+   const net=await api.getNetworkId();
+   if(net!==1){statusCardano.textContent=`${which.toUpperCase()}: wrong network`;return;}
+   const addr=await api.getChangeAddress();
+   statusCardano.textContent=`${which.toUpperCase()}: ${short(addr)}`;
+ }catch(e){statusCardano.textContent=`${which.toUpperCase()}: failed`;console.warn(e);}
+}
+document.getElementById('btnCardanoNami').onclick=()=>connectCardano('nami');
+document.getElementById('btnCardanoEternl').onclick=()=>connectCardano('eternl');
+
+async function connectEVM(){
+ try{
+   const eth=window.ethereum;
+   if(!eth){statusEVM.textContent='No EVM wallet found';return;}
+   const acc=await eth.request({method:'eth_requestAccounts'});
+   const net=await eth.request({method:'eth_chainId'});
+   const name={'0x1':'Ethereum','0x38':'BSC','0x89':'Polygon','0x2105':'Base'}[net]||net;
+   statusEVM.textContent=`${name}: ${short(acc[0])}`;
+ }catch(e){statusEVM.textContent='EVM failed';console.warn(e);}
+}
+document.getElementById('btnEVM').onclick=connectEVM;
+
+async function connectSolana(){
+ try{
+   const s=window.solana;
+   if(!s||!s.isPhantom){statusSolana.textContent='Phantom not found';return;}
+   const r=await s.connect();
+   statusSolana.textContent=short(r.publicKey.toString());
+ }catch(e){statusSolana.textContent='Solana failed';console.warn(e);}
+}
+document.getElementById('btnSolana').onclick=connectSolana;
+
+// ----- Cross-chain meme swap -----
+const CROSS={
+  cardano:{
+    dex:'Cardano DEXes',base:'ADA',
+    tokens:[
+      {name:'HKDG',address:'9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484F534B444F47'},
+      {name:'SNEK',address:'a0028fa8b5a9e01cda28068c282bccafa19682a7c04beed52c89a7a4534e454b'},
+      {name:'HOSKY',address:'c0f80f3f9fa0b2b1f7b8b8dfb50407ee8e9e02d42cd23293e06b2f2f484f534b59'}
+    ],
+    links:[
+      {name:'Minswap',build:(u)=>`https://app.minswap.org/swap?inputCurrency=${u}&outputCurrency=lovelace`},
+      {name:'WingRiders',build:(u)=>`https://app.wingriders.com/swap?from=${u}&to=lovelace`},
+      {name:'SundaeSwap',build:(u)=>`https://sundaeswap.finance/app/swap?from=${u}&to=lovelace`}
+    ]
+  },
+  ethereum:{
+    dex:'Uniswap',base:'ETH',
+    tokens:[
+      {name:'SHIB',address:'0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE'},
+      {name:'PEPE',address:'0x6982508145454Ce325dDbE47a25d4ec3d2311933'},
+      {name:'FLOKI',address:'0xcf0c122c6b73ff809c693db761e7baebe62b6a2e'}
+    ],
+    link:(a)=>`https://app.uniswap.org/swap?inputCurrency=ETH&outputCurrency=${a}`
+  },
+  solana:{
+    dex:'Jupiter',base:'SOL',
+    tokens:[
+      {name:'BONK',address:'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263'},
+      {name:'WIF',address:'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm'},
+      {name:'POPCAT',address:'7GCihgDB8fe6KNjn2MYtkzZcRjQy3t9GHdC8uHYmW2hr'}
+    ],
+    link:(m)=>`https://jup.ag/swap/SOL-${m}`
+  },
+  bsc:{
+    dex:'PancakeSwap',base:'BNB',
+    tokens:[
+      {name:'BabyDoge',address:'0xc748673057861A797275CD8A068AbB95A902e8de'},
+      {name:'FLOKI',address:'0xfb5b838b6cfeedc2873ab27866079ac55363d37e'},
+      {name:'PEPE',address:'0x25d887ce7a35172c62febfd67a1856f20faebb00'}
+    ],
+    link:(a)=>`https://pancakeswap.finance/swap?outputCurrency=${a}`
+  },
+  base:{
+    dex:'Uniswap',base:'ETH',
+    tokens:[
+      {name:'BRETT',address:'0x532f27101965dd16442E59d40670FaF5eBB142E4'},
+      {name:'TOSHI',address:'0xAC1Bd2486aAf3B5C0fc3Fd868558b082a531B2B4'},
+      {name:'DEGEN',address:'0x4ed4e862860bed51a9570b96d89af5e1b0efefed'}
+    ],
+    link:(a)=>`https://app.uniswap.org/swap?chain=base&inputCurrency=ETH&outputCurrency=${a}`
+  },
+  polygon:{
+    dex:'Uniswap',base:'MATIC',
+    tokens:[
+      {name:'POLYDOGE',address:'0x8a953cfe442c5e8855cc6c61b1293fa648bae472'},
+      {name:'SHIB',address:'0x6f8a06447ff6fcf75d803135a7de15ce88c1d4ec'},
+      {name:'WDOGE',address:'0xc9b89f6b1b1b7a7a5d28a8e0a7d3a3b4a06c97e1'}
+    ],
+    link:(a)=>`https://app.uniswap.org/swap?chain=polygon&inputCurrency=MATIC&outputCurrency=${a}`
+  }
+};
+const results=document.getElementById('memeSwapResults');
+const tabs=document.querySelectorAll('[data-chain]');
+function render(chain){
+ const c=CROSS[chain];
+ results.innerHTML='';
+ if(!c)return;
+ c.tokens.forEach(t=>{
+   const div=document.createElement('div');
+   div.className='card';
+   if(chain==='cardano'){
+     const btns=c.links.map(l=>`<a class=\"btn\" target=\"_blank\" rel=\"noopener\" href=\"${l.build(t.address)}\">${l.name}</a>`).join('');
+     div.innerHTML=`<div><strong>${t.name}</strong><br><small class=\"muted\">${c.dex}</small><div style=\"margin-top:.4rem;display:flex;gap:.5rem;flex-wrap:wrap\">${btns}</div></div>`;
+   } else {
+     const u=c.link(t.address);
+     div.innerHTML=`<div><strong>${t.name}</strong><br><small class=\"muted\">${c.dex}</small><div style=\"margin-top:.4rem\"><a class=\"btn\" target=\"_blank\" rel=\"noopener\" href=\"${u}\">Trade</a></div></div>`;
+   }
+   results.appendChild(div);
+ });
+}
+tabs.forEach(b=>b.onclick=()=>{tabs.forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.chain)});
+render('cardano');
+</script>
+</body>
+</html>
