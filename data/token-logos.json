@@ -1,0 +1,24 @@
+{
+  "tokens": {
+    "HKDG": "https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD",
+    "SNEK": "https://cdn.jsdelivr.net/gh/snek-network/assets/logo.png",
+    "HOSKY": "https://raw.githubusercontent.com/hoskytoken/assets/main/logo.png",
+    "SHIB": "https://assets.coingecko.com/coins/images/11939/small/shiba.png",
+    "PEPE": "https://assets.coingecko.com/coins/images/29850/small/pepe-token.jpeg",
+    "FLOKI": "https://assets.coingecko.com/coins/images/16746/small/floki.png",
+    "BONK": "https://assets.coingecko.com/coins/images/28600/small/bonk.jpg",
+    "WIF": "https://assets.coingecko.com/coins/images/33566/small/dogwifhat.jpg",
+    "POPCAT": "https://assets.coingecko.com/coins/images/30955/small/popcat.png",
+    "BabyDoge": "https://assets.coingecko.com/coins/images/16125/small/babydoge.jpg",
+    "BRETT": "https://assets.coingecko.com/coins/images/35755/small/brett.jpg",
+    "TOSHI": "https://assets.coingecko.com/coins/images/33530/small/toshi.png",
+    "DEGEN": "https://assets.coingecko.com/coins/images/34515/small/degen.png",
+    "POLYDOGE": "https://assets.coingecko.com/coins/images/15786/small/polydoge.png",
+    "WDOGE": "https://assets.coingecko.com/coins/images/5/small/dogecoin.png",
+    "ADA": "https://assets.coingecko.com/coins/images/975/small/cardano.png",
+    "ETH": "https://assets.coingecko.com/coins/images/279/small/ethereum.png",
+    "SOL": "https://assets.coingecko.com/coins/images/4128/small/solana.png",
+    "BNB": "https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png",
+    "MATIC": "https://assets.coingecko.com/coins/images/4713/small/matic-token-icon.png"
+  }
+}
