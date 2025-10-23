@@ -369,7 +369,7 @@ document.querySelectorAll('.cpy').forEach(btn=>{
   const wall=document.getElementById("memeWall");
   const loading=document.getElementById("loadingMemes");
   try{
-    const res=await fetch("https://adahandles.github.io/HOSKDOG/data/memes.json",{cache:"no-store"});
+    const res=await fetch("./data/memes.json",{cache:"no-store"});
     const data=await res.json(); loading?.remove();
     if(data?.memes?.length){
       for(const m of data.memes){
