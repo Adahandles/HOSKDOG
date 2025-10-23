@@ -63,6 +63,11 @@ h1{font-size:clamp(2.2rem,4vw,3.2rem);margin:.8rem 0 .4rem}
 .kv{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
 .kvs{display:grid;gap:.35rem}
 .kv code{font-family:ui-monospace,SFMono-Regular,Consolas,Monaco,monospace;background:#0006;padding:.25rem .4rem;border-radius:8px}
+
+/* Ticker logo styles */
+.ticker-inline{display:inline-flex;align-items:center;gap:.4rem}
+.ticker-logo{width:20px;height:20px;border-radius:50%;object-fit:cover;background:#fff;border:1px solid #ffffff33;box-shadow:0 0 4px rgba(108,207,255,.2)}
+.title-logo{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#fff;border:1px solid #ffffff44;box-shadow:0 0 8px rgba(108,207,255,.3)}
 </style>
 </head>
 <body>
@@ -71,7 +76,7 @@ h1{font-size:clamp(2.2rem,4vw,3.2rem);margin:.8rem 0 .4rem}
   <div class="hero-inner">
     <!-- COIN IMAGE (bigger) -->
     <img class="coin" src="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" alt="HKDG coin" />
-    <h1>HOSKDOG (HKDG)</h1>
+    <h1><span class="ticker-inline"><img src="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" alt="HKDG" class="title-logo" onerror="this.style.display='none'" />HOSKDOG (HKDG)</span></h1>
     <p class="tag">No leash. No limits. Just pure Cardano energy.</p>
     <div class="cta" style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap">
       <a class="btn" href="#memehub">Cross-Chain Swap Hub</a>
@@ -206,6 +211,31 @@ h1{font-size:clamp(2.2rem,4vw,3.2rem);margin:.8rem 0 .4rem}
 <script>
 const short=(s)=>s?(s.length>18?s.slice(0,6)+'…'+s.slice(-6):s):'';
 
+// Token logo configuration
+let TOKEN_LOGOS = {};
+
+// Load token logos config
+(async function(){
+  try{
+    const res = await fetch("./data/token-logos.json", {cache: "no-store"});
+    const data = await res.json();
+    TOKEN_LOGOS = data.tokens || {};
+  } catch(e) {
+    console.warn("Failed to load token logos:", e);
+  }
+})();
+
+// Helper function to create ticker HTML with logo
+function tickerHTML(name, size='small') {
+  const logoUrl = TOKEN_LOGOS[name];
+  const className = size === 'large' ? 'title-logo' : 'ticker-logo';
+  if (logoUrl) {
+    return `<span class="ticker-inline"><img src="${logoUrl}" alt="${name}" class="${className}" onerror="this.style.display='none'" />${name}</span>`;
+  }
+  return name;
+}
+
+
 // Wallet connections (simple + reliable)
 const statusCardano=document.getElementById('statusCardano');
 const statusEVM=document.getElementById('statusEVM');
@@ -312,11 +342,11 @@ function render(chain){
     const box=document.createElement('div'); box.className='card';
     if(chain==='cardano'){
       const btns=c.links.map(L=>`<a class="btn" target="_blank" rel="noopener" href="${L.build(t.address)}">${L.name}</a>`).join('');
-      box.innerHTML = `<div><strong>${t.name}</strong><br><small class="muted">${c.dex} • Pair: ${t.name}/ADA</small>
+      box.innerHTML = `<div><strong>${tickerHTML(t.name)}</strong><br><small class="muted">${c.dex} • Pair: ${tickerHTML(t.name)}/${tickerHTML('ADA')}</small>
       <div style="margin-top:.5rem;display:flex;gap:.5rem;flex-wrap:wrap">${btns}</div></div>`;
     } else {
       const u=c.link(t.address);
-      box.innerHTML = `<div><strong>${t.name}</strong><br><small class="muted">${c.dex}</small>
+      box.innerHTML = `<div><strong>${tickerHTML(t.name)}</strong><br><small class="muted">${c.dex}</small>
       <div style="margin-top:.5rem"><a class="btn" target="_blank" rel="noopener" href="${u}">Trade</a></div></div>`;
     }
     results.appendChild(box);
