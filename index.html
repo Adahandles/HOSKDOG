@@ -212,7 +212,7 @@ h1{font-size:clamp(2.2rem,4vw,3.2rem);margin:.8rem 0 .4rem}
 const short=(s)=>s?(s.length>18?s.slice(0,6)+'…'+s.slice(-6):s):'';
 
 // Token logo configuration
-let TOKEN_LOGOS = {};
+let  = {};
 
 // Load token logos config
 (async function(){
@@ -220,6 +220,9 @@ let TOKEN_LOGOS = {};
     const res = await fetch("./data/token-logos.json", {cache: "no-store"});
     const data = await res.json();
     TOKEN_LOGOS = data.tokens || {};
+            updateTabsWithLogos();
+        updateWalletLabels();
+        updateWalletButtons();
   } catch(e) {
     console.warn("Failed to load token logos:", e);
   }
@@ -233,7 +236,36 @@ function tickerHTML(name, size='small') {
     return `<span class="ticker-inline"><img src="${logoUrl}" alt="${name}" class="${className}" onerror="this.style.display='none'" />${name}</span>`;
   }
   return name;
-}
+}  // Update functions to inject logos into UI once logos are loaded
+  function updateTabsWithLogos() {
+    const tabButtons = document.querySelectorAll('[data-chain]');
+    tabButtons.forEach(btn => {
+      const label = btn.textContent.trim();
+      btn.innerHTML = tickerHTML(label);
+    });
+  }
+  function updateWalletLabels() {
+    const walletSection = document.getElementById('wallet');
+    if (!walletSection) return;
+    walletSection.querySelectorAll('strong').forEach(strong => {
+      const raw = strong.textContent.trim();
+      const parts = raw.split('(');
+      const name = parts[0].trim();
+      const rest = raw.slice(name.length);
+      strong.innerHTML = tickerHTML(name) + rest;
+    });
+  }
+  function updateWalletButtons() {
+    const btnNami = document.getElementById('btnCardanoNami');
+    if (btnNami) btnNami.innerHTML = 'Connect ' + tickerHTML('Nami');
+    const btnEternl = document.getElementById('btnCardanoEternl');
+    if (btnEternl) btnEternl.innerHTML = 'Connect ' + tickerHTML('Eternl');
+    const btnEVM = document.getElementById('btnEVM');
+    if (btnEVM) btnEVM.innerHTML = 'Connect ' + tickerHTML('EVM');
+    const btnSolana = document.getElementById('btnSolana');
+    if (btnSolana) btnSolana.innerHTML = 'Connect ' + tickerHTML('Phantom');
+  }
+
 
 
 // Wallet connections (simple + reliable)
