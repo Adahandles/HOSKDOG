@@ -191,6 +191,9 @@
       <a href="https://t.me/YOUR_TELEGRAM" target="_blank">Telegram</a>
       <a href="https://discord.gg/YOUR_INVITE" target="_blank">Discord</a>
       <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">AdaStat</a>
+      <a href="https://cexplorer.io/asset/asset1jv9rph2w5xwa5fyh6cfyt2lg0ecltr7kxv3a53" target="_blank">Cexplorer</a>
+      <a href="https://cardanoscan.io/token/asset1jv9rph2w5xwa5fyh6cfyt2lg0ecltr7kxv3a53" target="_blank">CardanoScan</a>
+      <a href="https://pool.pm/asset1jv9rph2w5xwa5fyh6cfyt2lg0ecltr7kxv3a53" target="_blank">Pool.pm</a>
     </div>
   </main>
 
@@ -205,15 +208,14 @@
       document.getElementById('formattedOutput').innerText = 'Formatted: ' + formatted + ' HOSKDOG';
     }
 
-    // Basic particle background (static for simplicity in this version)
+    // Light animated background stars
     const canvas = document.getElementById("backgroundCanvas");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     let stars = [];
-
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 100; i++) {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -221,18 +223,18 @@
       });
     }
 
-    function animateBackground() {
+    function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      stars.forEach(s => {
+      for (let s of stars) {
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fillStyle = "#08fdd8";
         ctx.fill();
-      });
-      requestAnimationFrame(animateBackground);
+      }
+      requestAnimationFrame(animate);
     }
 
-    animateBackground();
+    animate();
 
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
