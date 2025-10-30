@@ -67,6 +67,7 @@ header.hero::before {
 }
 
 .hero .logo {
+  /* The old logo class is no longer used; styles retained for fallback */
   width: 80px;
   height: 80px;
   margin-bottom: 1rem;
@@ -226,4 +227,32 @@ header.hero {
   text-align: center;
   color: var(--text-muted);
   font-size: 0.875rem;
+}
+
+/* Enlarged token graphic with rotation */
+.token-graphic {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  animation: spin 24s linear infinite;
+  box-shadow: 0 0 20px var(--accent1), 0 0 40px var(--accent2);
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Animated tagline */
+.tagline {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  animation: pulse 5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.8; transform: translateY(0); color: var(--text-light); }
+  50% { opacity: 1; transform: translateY(-5px); color: var(--accent2); }
+  100% { opacity: 0.8; transform: translateY(0); color: var(--text-light); }
 }
