@@ -1,29 +1,39 @@
-# HOSKDOG
 
-HOSKDOG is the **super meme dog of Cardano**, combining the best aspects of Snek (community‑first, deflationary ethos) and Hosky (fun, open, accessible) into a single project.  This repository hosts the source code for the HOSKDOG website and associated documentation.  The project is designed to be **cleanly structured** and easy to navigate for contributors.
+# 🐶 HOSKDOG
 
-## Project Structure
+HOSKDOG is a meme-powered native token built on the Cardano blockchain. It combines community-driven energy with on-chain meme utility to bring fun, engagement, and decentralization to the Cardano ecosystem.
 
-```
-hoskdog/
-├── index.html             # Main website entry point
-├── assets/
-│   ├── css/style.css      # Site‑wide stylesheet
-│   └── js/script.js       # JavaScript for interactive features
-├── images/                # Logos and media assets
-├── data/
-│   └── token-logos.json   # Mapping of token tickers to logo filenames
-├── docs/                  # Project documentation
-│   ├── TICKER_LOGOS.md    # How to add new token logos
-│   └── HOSKDOG_Manifesto.md # The HOSKDOG manifesto
-└── metadata/
-    └── hoskdog_metadata.json # On‑chain metadata for the HOSKDOG token
-```
+---
 
-## Development
+## 💠 Decimal Convention
 
-This is a static site.  You can serve it locally with any static file server (for example `python3 -m http.server`).  To deploy on GitHub Pages, simply push the contents of the `hoskdog` folder to the `main` branch of this repository.  All external assets are stored in the `images/` directory, and token logos are configured via `data/token-logos.json`.
+HOSKDOG uses **6 decimal places** for user-facing displays.
 
-## Token Supply
+- 🪙 **1,000,000 raw HOSKDOG** = **1.000000 HOSKDOG** (displayed)
+- All transactions, wallets, and on-chain records use **raw integers**
+- This convention is purely for UI/UX readability
 
-HOSKDOG is a non‑inflationary token with a fixed supply of **1,000 tokens**, minted under policy ID `9560f81458…f0ad`【695069577218189†L115-L128】.  Distribution is transparent: 60 % for community rewards, 25 % to the treasury, 10 % for ecosystem development and partnerships, and 5 % reserved for liquidity provision.
+**Example:**
+If your wallet shows a balance of `2500000`, your actual HOSKDOG is `2.500000`.
+
+---
+
+## 📄 Token Info
+
+- **Token Name:** HOSKDOG
+- **Policy ID:** [Add your policy ID here]
+- **Total Supply:** 1,000,000,000,000,000 (1 Quadrillion)
+- **Decimals:** 6 (simulated, not enforced on-chain)
+
+---
+
+## 🔗 Useful Links
+
+- Token on AdaStat: [View Token](https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447)
+- GitHub Repo: [https://github.com/Adahandles/HOSKDOG](https://github.com/Adahandles/HOSKDOG)
+
+---
+
+## 🧠 License & Contribution
+
+Open to contributions! Meme responsibly. 🐕✨
