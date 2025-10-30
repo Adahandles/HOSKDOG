@@ -1,90 +1,107 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HOSKDOG: the super meme dog of Cardano, combining the spirit of Snek and Hosky into one epic community.">
-  <title>HOSKDOG | Super Meme Dog of Cardano</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOSKDOG - Meme Tech on Cardano</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/formatHOSKDOG.js"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1e1e1e;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #2ecc71;
+        }
+        header img {
+            width: 80px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        header h1 {
+            font-size: 2.5em;
+            color: #2ecc71;
+            margin: 0;
+        }
+        main {
+            padding: 40px;
+            text-align: center;
+        }
+        .info {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #1b1b1b;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #2ecc71;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: none;
+            margin-top: 15px;
+        }
+        input {
+            width: 200px;
+        }
+        button {
+            background-color: #2ecc71;
+            color: #000;
+            cursor: pointer;
+        }
+        .output {
+            margin-top: 20px;
+            font-size: 1.3em;
+            color: #2ecc71;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="container">
-      <a href="#top" class="nav-logo">HOSKDOG</a>
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#tokenomics">Tokenomics</a></li>
-        <li><a href="#community">Community</a></li>
-      </ul>
-    </div>
-  </nav>
-  <header class="hero">
-    <div class="hero-content">
-      <!-- Use the on‑chain image hosted on IPFS for the HOSKDOG token -->
-      <div class="token-ring">
-        <img src="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" alt="HOSKDOG Logo" class="token-graphic">
-      </div>
-      <h1>HOSKDOG</h1>
-      <p class="tagline">The super meme dog of Cardano<br>Bridging communities across chains</p>
-      <a href="#tokenomics" class="btn primary">Learn More</a>
-      <a href="#community" class="btn secondary">Join the Pack</a>
-    </div>
-  </header>
-
-  <section id="about" class="section about">
-    <div class="container panel">
-      <h2>About HOSKDOG</h2>
-      <p>HOSKDOG is the ultimate meme token for the Cardano ecosystem, inspired by the playful energy of Snek and the community power of Hosky. We’re building a cross‑chain community with fun, utility and purpose.</p>
-    </div>
-  </section>
-
-  <section id="features" class="section features">
-    <div class="container panel">
-      <h2>Features</h2>
-      <div class="cards">
-        <div class="card">
-          <img src="images/snek.png" alt="Snek Icon">
-          <h3>Snek Spirit</h3>
-          <p>We embrace Snek’s deflationary model and community‑first approach.</p>
+    <header>
+        <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
+        <h1>HOSKDOG</h1>
+        <p>The techiest meme token on Cardano</p>
+    </header>
+    <main>
+        <div class="info">
+            <h2>Token Information</h2>
+            <p><strong>Policy ID:</strong> 9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad</p>
+            <p><strong>Total Supply:</strong> 1,000,000,000,000,000 raw units</p>
+            <p><strong>Decimals:</strong> 6 (display: 1.000000 HOSKDOG = 1,000,000 raw units)</p>
+            <p><strong>Explorer:</strong> <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank" style="color:#2ecc71;">View on AdaStat</a></p>
+            <hr>
+            <h3>Convert Raw HOSKDOG to Display Format</h3>
+            <input type="number" id="rawInput" placeholder="Enter raw amount">
+            <button onclick="convertBalance()">Convert</button>
+            <div class="output" id="formattedOutput">Formatted: 0.000000</div>
         </div>
-        <div class="card">
-          <img src="images/hosky.png" alt="Hosky Icon">
-          <h3>Hosky Heart</h3>
-          <p>We promote fun and games, with a fair distribution and open IP like Hosky.</p>
-        </div>
-        <div class="card">
-          <img src="images/cardano.png" alt="Cardano Icon">
-          <h3>Cardano Roots</h3>
-          <p>We’re built on Cardano, leveraging its security and sustainable technology.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </main>
+    <footer>
+        &copy; 2025 HOSKDOG — Built with 🧠 and 🐶 on Cardano.
+    </footer>
 
-  <section id="tokenomics" class="section tokenomics">
-    <div class="container panel">
-      <h2>Tokenomics</h2>
-      <p>HOSKDOG has a fixed supply of 1,000 tokens minted under policy ID <code>9560f814…f0ad</code>【695069577218189†L115-L128】. There is no inflation. Distribution is transparent: 60 % for community rewards, 25 % to the treasury, 10 % for ecosystem development, and 5 % for liquidity provision.</p>
-    </div>
-  </section>
-
-  <section id="community" class="section community">
-    <div class="container panel">
-      <h2>Join Our Community</h2>
-      <p>Get involved in our meme contests, staking pools, and governance proposals. Hold HOSKDOG to access exclusive NFTs, airdrops, and more.</p>
-      <a href="https://discord.gg" class="btn primary" target="_blank" rel="noopener noreferrer">Discord</a>
-      <a href="https://twitter.com" class="btn secondary" target="_blank" rel="noopener noreferrer">Twitter</a>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; 2025 HOSKDOG. Inspired by Snek and Hosky.</p>
-    </div>
-  </footer>
-
-  <script src="assets/js/script.js"></script>
+    <script>
+        function convertBalance() {
+            const raw = parseInt(document.getElementById('rawInput').value);
+            const formatted = formatHOSKDOG(raw);
+            document.getElementById('formattedOutput').innerText = 'Formatted: ' + formatted + ' HOSKDOG';
+        }
+    </script>
 </body>
 </html>
