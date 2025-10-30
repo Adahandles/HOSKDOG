@@ -21,20 +21,21 @@ If your wallet shows a balance of `2500000`, your actual HOSKDOG is `2.500000`.
 ## 📄 Token Info
 
 - **Token Name:** HOSKDOG
-- **Policy ID:** [Add your policy ID here]
-- **Total Supply:** 1,000,000,000,000,000 (1 Quadrillion)
+- **Policy ID:** 9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad
+- **Total Supply:** 1,000,000,000,000,000 raw units  
+  → **1,000,000.000000 HOSKDOG** (display format)
 - **Decimals:** 6 (simulated, not enforced on-chain)
 
 ---
 
 ## 🔗 Useful Links
 
-- Token on AdaStat: [View Token](https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447)
-- GitHub Repo: [https://github.com/Adahandles/HOSKDOG](https://github.com/Adahandles/HOSKDOG)
+- 🧾 [Token Metadata for DEXs & Integrators](./docs/TOKEN_METADATA.md)
+- 🔍 Token on AdaStat: [View Token](https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447)
+- 💻 GitHub Repo: [https://github.com/Adahandles/HOSKDOG](https://github.com/Adahandles/HOSKDOG)
 
 ---
 
 ## 🧠 License & Contribution
-📄 [Token Metadata for DEXs & Integrators](./docs/TOKEN_METADATA.md)
 
 Open to contributions! Meme responsibly. 🐕✨
