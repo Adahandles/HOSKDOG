@@ -2,46 +2,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HOSKDOG - Meme Tech on Cardano</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <title>HOSKDOG - Cardano Meme Tech</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <script src="assets/js/formatHOSKDOG.js"></script>
   <style>
     body {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(135deg, #0a0f1c, #001f3f);
-      color: #e0e0e0;
+      background: linear-gradient(to right, #0d0d0d, #1b1f29);
+      color: #e6faff;
     }
 
     header {
       text-align: center;
-      padding: 30px 10px;
-      background: #0c0c0c;
-      border-bottom: 2px solid #00ffc3;
+      padding: 50px 20px 20px;
+      background-color: #0f0f0f;
+      border-bottom: 3px solid #08fdd8;
     }
 
-    header img {
-      width: 100px;
-      height: auto;
-      margin-bottom: 10px;
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      box-shadow: 0 0 25px #08fdd8;
       transition: transform 0.4s ease-in-out;
     }
 
-    header img:hover {
-      transform: rotate(10deg) scale(1.05);
+    .logo-container img:hover {
+      transform: scale(1.1) rotate(2deg);
     }
 
     header h1 {
-      color: #00ffc3;
+      color: #08fdd8;
       font-size: 3rem;
-      margin: 0;
+      margin: 10px 0 0;
     }
 
     header p {
-      color: #cccccc;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      color: #b0eaff;
     }
 
     main {
@@ -49,89 +56,93 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      padding: 40px 20px;
+      padding: 50px 20px;
     }
 
     .info-box {
-      background: rgba(20, 20, 20, 0.8);
-      border: 2px solid #00ffc3;
+      background-color: #111927;
+      border: 2px solid #08fdd8;
       border-radius: 15px;
-      padding: 30px;
-      max-width: 700px;
+      padding: 40px;
+      max-width: 800px;
       text-align: center;
-      box-shadow: 0 0 20px #00ffc370;
+      box-shadow: 0 0 30px #08fdd830;
     }
 
     .info-box h2 {
-      color: #ffffff;
       margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: #ffffff;
     }
 
     .info-box p {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       margin: 10px 0;
     }
 
     .info-box a {
-      color: #00ffc3;
+      color: #08fdd8;
       text-decoration: none;
-      font-weight: bold;
     }
 
     .info-box hr {
-      border-color: #00ffc3;
       margin: 30px 0;
+      border: none;
+      border-top: 1px solid #08fdd8;
     }
 
     input, button {
-      padding: 10px;
+      padding: 12px;
       font-size: 1rem;
-      border-radius: 5px;
+      border-radius: 6px;
       margin-top: 10px;
     }
 
     input {
-      width: 200px;
-      border: 1px solid #444;
-      background-color: #111;
-      color: #00ffc3;
+      width: 220px;
+      border: 1px solid #08fdd8;
+      background-color: #0a0f1c;
+      color: #08fdd8;
     }
 
     button {
-      background-color: #00ffc3;
+      background-color: #08fdd8;
       color: #000;
       border: none;
-      cursor: pointer;
       margin-left: 10px;
+      cursor: pointer;
       font-weight: bold;
       transition: background 0.3s;
     }
 
     button:hover {
-      background-color: #00dab1;
+      background-color: #05e3c4;
     }
 
     .output {
-      margin-top: 20px;
+      margin-top: 25px;
       font-size: 1.4rem;
-      color: #00ffc3;
+      color: #08fdd8;
     }
 
     footer {
       text-align: center;
       padding: 20px;
-      font-size: 0.9rem;
+      background-color: #0f0f0f;
       color: #666;
-      background-color: #0c0c0c;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo" />
+    <div class="logo-container">
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Token Logo"/>
+    </div>
     <h1>HOSKDOG</h1>
     <p>Unleashing the Dogeverse on Cardano 🧠💰</p>
   </header>
+
   <main>
     <div class="info-box">
       <h2>Token Information</h2>
@@ -141,11 +152,12 @@
       <p><strong>Explorer:</strong> <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">View on AdaStat</a></p>
       <hr>
       <h3>Convert Raw HOSKDOG to Display Format</h3>
-      <input type="number" id="rawInput" placeholder="Enter raw amount" />
+      <input type="number" id="rawInput" placeholder="Enter raw amount"/>
       <button onclick="convertBalance()">Convert</button>
       <div class="output" id="formattedOutput">Formatted: 0.000000</div>
     </div>
   </main>
+
   <footer>
     &copy; 2025 HOSKDOG — Built with 🧠 and 🐕‍🦺 on Cardano.
   </footer>
