@@ -24,6 +24,23 @@
       z-index: 0;
     }
 
+    .floating-icon {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      background-image: url('images/HKDGlogo.jpg');
+      background-size: cover;
+      border-radius: 50%;
+      opacity: 0.5;
+      z-index: 1;
+      animation: float infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-120vh); }
+    }
+
     header {
       text-align: center;
       padding: 60px 20px 30px;
@@ -164,6 +181,11 @@
 <body>
   <canvas id="backgroundCanvas"></canvas>
 
+  <!-- Floating HOSKDOG Icons -->
+  <div class="floating-icon" style="top:90%; left:10%; animation-duration: 30s;"></div>
+  <div class="floating-icon" style="top:95%; left:50%; animation-duration: 40s;"></div>
+  <div class="floating-icon" style="top:92%; left:80%; animation-duration: 35s;"></div>
+
   <header>
     <div class="logo-container">
       <img src="images/HKDGlogo.jpg" alt="HOSKDOG Token Logo">
@@ -190,10 +212,10 @@
       <a href="https://twitter.com/YOUR_HANDLE" target="_blank">Twitter</a>
       <a href="https://t.me/YOUR_TELEGRAM" target="_blank">Telegram</a>
       <a href="https://discord.gg/YOUR_INVITE" target="_blank">Discord</a>
-      <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">AdaStat</a>
-      <a href="https://cexplorer.io/asset/asset1jv9rph2w5xwa5fyh6cfyt2lg0ecltr7kxv3a53" target="_blank">Cexplorer</a>
-      <a href="https://cardanoscan.io/token/asset1jv9rph2w5xwa5fyh6cfyt2lg0ecltr7kxv3a53" target="_blank">CardanoScan</a>
-      <a href="https://pool.pm/asset1jv9rph2w5xwa5fyh6cfyt2lg0ecltr7kxv3a53" target="_blank">Pool.pm</a>
+      <a href="https://adastat.net/tokens/9560f814..." target="_blank">AdaStat</a>
+      <a href="https://cexplorer.io/asset/asset1jv9r..." target="_blank">Cexplorer</a>
+      <a href="https://cardanoscan.io/token/asset1jv..." target="_blank">CardanoScan</a>
+      <a href="https://pool.pm/asset1jv9r..." target="_blank">Pool.pm</a>
     </div>
   </main>
 
@@ -208,38 +230,86 @@
       document.getElementById('formattedOutput').innerText = 'Formatted: ' + formatted + ' HOSKDOG';
     }
 
-    // Light animated background stars
+    // CONSTELLATION background
     const canvas = document.getElementById("backgroundCanvas");
     const ctx = canvas.getContext("2d");
+
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let stars = [];
-    for (let i = 0; i < 100; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2 + 1
-      });
+    let particles = [];
+
+    class Star {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = Math.random() * 0.6 - 0.3;
+        this.vy = Math.random() * 0.6 - 0.3;
+        this.radius = Math.random() * 2;
+      }
+
+      move() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#08fdd8";
+        ctx.fill();
+      }
+    }
+
+    function connect() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          let dx = particles[i].x - particles[j].x;
+          let dy = particles[i].y - particles[j].y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = "rgba(8, 253, 216," + (1 - distance / 100) + ")";
+            ctx.stroke();
+          }
+        }
+      }
     }
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let s of stars) {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = "#08fdd8";
-        ctx.fill();
-      }
+
+      particles.forEach(p => {
+        p.move();
+        p.draw();
+      });
+
+      connect();
+
       requestAnimationFrame(animate);
     }
 
-    animate();
+    function init() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Star());
+      }
+    }
 
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      init();
     });
+
+    init();
+    animate();
   </script>
 </body>
 </html>
