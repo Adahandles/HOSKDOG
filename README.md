@@ -35,5 +35,6 @@ If your wallet shows a balance of `2500000`, your actual HOSKDOG is `2.500000`.
 ---
 
 ## 🧠 License & Contribution
+📄 [Token Metadata for DEXs & Integrators](./docs/TOKEN_METADATA.md)
 
 Open to contributions! Meme responsibly. 🐕✨
