@@ -2,24 +2,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HOSKDOG - Cardano Meme Tech</title>
+  <title>HOSKDOG - Meme Tech on Cardano</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <script src="assets/js/formatHOSKDOG.js"></script>
   <style>
-    body {
+    body, html {
       margin: 0;
+      padding: 0;
       font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(to right, #0d0d0d, #1b1f29);
-      color: #e6faff;
+      overflow-x: hidden;
+      background-color: #0b0f1a;
+      color: #e0faff;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
     }
 
     header {
+      position: relative;
       text-align: center;
       padding: 50px 20px 20px;
-      background-color: #0f0f0f;
-      border-bottom: 3px solid #08fdd8;
+      z-index: 2;
     }
 
     .logo-container {
@@ -52,6 +61,8 @@
     }
 
     main {
+      position: relative;
+      z-index: 2;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -60,7 +71,7 @@
     }
 
     .info-box {
-      background-color: #111927;
+      background-color: rgba(17, 25, 39, 0.85);
       border: 2px solid #08fdd8;
       border-radius: 15px;
       padding: 40px;
@@ -126,6 +137,8 @@
     }
 
     footer {
+      position: relative;
+      z-index: 2;
       text-align: center;
       padding: 20px;
       background-color: #0f0f0f;
@@ -135,12 +148,13 @@
   </style>
 </head>
 <body>
+  <canvas id="hoskdogCanvas"></canvas>
   <header>
     <div class="logo-container">
-      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Token Logo"/>
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Token Logo" />
     </div>
     <h1>HOSKDOG</h1>
-    <p>Unleashing the Dogeverse on Cardano 🧠💰</p>
+    <p>Unleashing the Dogeverse on Cardano</p>
   </header>
 
   <main>
@@ -159,7 +173,7 @@
   </main>
 
   <footer>
-    &copy; 2025 HOSKDOG — Built with 🧠 and 🐕‍🦺 on Cardano.
+    &copy; 2025 HOSKDOG — Built on Cardano.
   </footer>
 
   <script>
@@ -168,6 +182,66 @@
       const formatted = formatHOSKDOG(raw || 0);
       document.getElementById('formattedOutput').innerText = 'Formatted: ' + formatted + ' HOSKDOG';
     }
+
+    // Background animation script
+    const canvas = document.getElementById("hoskdogCanvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+        this.color = "#08fdd8";
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      particlesArray = [];
+      for (let i = 0; i < 150; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      init();
+    });
   </script>
 </body>
 </html>
