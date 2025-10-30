@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  --bg-dark: #0b0d17;
+  --bg-light: #1f2349;
+  --primary: #6cf;
+  --secondary: #9f6cff;
+  --text-light: #eaeef7;
+  --text-muted: #aab3c2;
+  --card-bg: rgba(255,255,255,0.05);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top left, var(--bg-dark), var(--bg-light));
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+header.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 1rem;
+  background: url('../images/hero.jpg') no-repeat center / cover;
+}
+
+.hero .logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.btn.primary {
+  background: var(--primary);
+  color: #000;
+  margin-right: 0.5rem;
+}
+
+.btn.primary:hover {
+  background: #8ccfff;
+}
+
+.btn.secondary {
+  background: var(--secondary);
+  color: #000;
+}
+
+.btn.secondary:hover {
+  background: #b79fff;
+}
+
+.section {
+  padding: 3rem 1rem;
+}
+
+.section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.section p {
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.features .cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.features .card {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  width: 250px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.features .card img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 0.75rem;
+}
+
+.tokenomics code {
+  background: var(--card-bg);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.footer {
+  background: var(--bg-light);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
