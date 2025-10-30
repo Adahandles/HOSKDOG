@@ -24,12 +24,20 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  /* Layered background with subtle gradient for a high‑tech feel */
+  /* Animated gradient background for high‑tech effect */
   background:
     radial-gradient(circle at 20% 20%, rgba(255,255,255,0.02), transparent 60%),
-    linear-gradient(145deg, var(--bg-dark), var(--bg-light));
+    linear-gradient(45deg, var(--bg-dark), var(--bg-light), var(--bg-dark));
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
   color: var(--text-light);
   line-height: 1.6;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 a {
@@ -47,6 +55,30 @@ header.hero {
   background: url('../images/hero.jpg') no-repeat center / cover;
   background-blend-mode: overlay;
   overflow: hidden;
+}
+
+/* Pulsing overlay on hero */
+header.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 60%);
+  animation: pulse-bg 10s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes pulse-bg {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.3;
+  }
 }
 
 /* Dark overlay on hero for contrast */
@@ -89,18 +121,24 @@ header.hero::before {
 
 .btn {
   display: inline-block;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
   font-weight: 600;
   text-align: center;
-  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--accent1);
+  color: var(--accent1);
+  background: transparent;
+  box-shadow: inset 0 0 10px var(--accent1);
+  transition: color 0.3s;
 }
 
 .btn.primary {
-  background: linear-gradient(45deg, var(--accent1), var(--accent2));
-  color: #0b0d17;
+  border-color: var(--accent1);
+  color: var(--accent1);
   margin-right: 0.5rem;
-  box-shadow: 0 0 10px var(--accent1);
+  box-shadow: inset 0 0 10px var(--accent1);
 }
 
 .btn.primary:hover {
@@ -108,13 +146,36 @@ header.hero::before {
 }
 
 .btn.secondary {
-  background: linear-gradient(45deg, var(--accent2), var(--accent3));
-  color: #0b0d17;
-  box-shadow: 0 0 10px var(--accent3);
+  border-color: var(--accent2);
+  color: var(--accent2);
+  box-shadow: inset 0 0 10px var(--accent2);
 }
 
 .btn.secondary:hover {
-  background: #b79fff;
+  color: #0b0d17;
+}
+
+/* Gradient overlay for buttons */
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, var(--accent1), var(--accent2), var(--accent3));
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+}
+
+.btn:hover::before {
+  opacity: 1;
+}
+
+.btn:hover {
+  color: #0b0d17;
+  box-shadow: 0 0 15px var(--accent2);
 }
 
 /* Navigation bar */
@@ -157,6 +218,30 @@ header.hero::before {
 
 .nav-links li a:hover {
   color: var(--accent1);
+}
+
+/* Token ring wrapper with gradient border and glow */
+.token-ring {
+  display: inline-block;
+  padding: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2), var(--accent3));
+  box-shadow: 0 0 20px rgba(0,0,0,0.6), 0 0 30px var(--accent2);
+  margin-bottom: 1rem;
+}
+
+/* Panel style similar to Fountara cards */
+.panel {
+  background: #0f254b;
+  border: 1px solid #133466;
+  border-radius: 1.25rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.panel h2 {
+  margin-top: 0;
 }
 
 /* Adjust hero padding to account for fixed navbar */
@@ -231,17 +316,23 @@ header.hero {
 
 /* Enlarged token graphic with rotation */
 .token-graphic {
-  width: 220px;
-  height: 220px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
-  animation: spin 24s linear infinite;
-  box-shadow: 0 0 20px var(--accent1), 0 0 40px var(--accent2);
-  margin-bottom: 1rem;
+  animation: spin 24s linear infinite, float 8s ease-in-out infinite;
+  box-shadow: 0 0 30px var(--accent1), 0 0 60px var(--accent2);
+  margin-bottom: 1.5rem;
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(180deg); }
+  100% { transform: translateY(0) rotate(360deg); }
 }
 
 /* Animated tagline */
