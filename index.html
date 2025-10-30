@@ -1,320 +1,122 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HOSKDOG</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <title>HOSKDOG — Meme Token on Cardano</title>
   <style>
     body {
+      font-family: system-ui, sans-serif;
+      background-color: #f9f9f9;
+      color: #222;
+      line-height: 1.6;
       margin: 0;
-      font-family: 'Rubik', sans-serif;
-      background-color: #0b0f1a;
-      color: #e0faff;
+      padding: 0;
     }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-
-    main {
-      position: relative;
-      z-index: 2;
-      padding: 40px 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .logo-container {
+    header {
+      background-color: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 2rem 1rem;
       text-align: center;
-      margin-bottom: 20px;
     }
 
-    .logo-container img {
-      width: 140px;
-      height: auto;
-      border-radius: 50%;
-      box-shadow: 0 0 25px #08fdd8;
-    }
-
-    h1 {
-      text-align: center;
-      color: #08fdd8;
+    header h1 {
+      margin: 0;
       font-size: 2.5rem;
     }
 
-    .toilet-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-      margin: 40px auto;
-    }
-
-    .toilet-row img {
-      max-width: 360px;
-      border-radius: 10px;
-      box-shadow: 0 0 25px rgba(8, 253, 216, 0.5);
-    }
-
-    .faucet-box {
-      max-width: 400px;
-      padding: 20px;
-      background-color: rgba(12, 18, 28, 0.95);
-      border-left: 4px solid #08fdd8;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
-    }
-
-    .faucet-box h2 {
-      color: #08fdd8;
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-    }
-
-    .faucet-box p {
-      font-size: 1rem;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-
-    .faucet-box button {
-      background-color: #08fdd8;
-      color: #000;
-      font-weight: bold;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: 0.2s ease-in-out;
-      box-shadow: 0 0 12px rgba(8, 253, 216, 0.4);
-    }
-
-    .faucet-box button:hover {
-      background-color: #05e3c4;
-      transform: scale(1.05);
-    }
-
-    .flush-message {
-      margin-top: 20px;
+    header p {
+      color: #666;
       font-size: 1.1rem;
-      color: #88ffe0;
     }
 
-    .manifesto-box {
-      background-color: rgba(12, 18, 28, 0.95);
-      border-left: 4px solid #08fdd8;
-      padding: 20px 25px;
-      margin: 30px 0;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
 
-    .manifesto-box h3 {
-      color: #08fdd8;
-      font-size: 1.5rem;
-      margin-top: 0;
+    h2 {
+      color: #111;
+      margin-top: 2rem;
     }
 
-    .manifesto-box p {
-      font-size: 1rem;
-      line-height: 1.6;
+    ul {
+      padding-left: 1.2rem;
     }
 
-    .meme-section {
-      margin-top: 50px;
+    .social-links {
       text-align: center;
+      margin-top: 3rem;
     }
 
-    .meme-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .meme-grid img {
-      max-width: 280px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(8, 253, 216, 0.2);
-      transition: transform 0.2s;
-    }
-
-    .meme-grid img:hover {
-      transform: scale(1.05);
-    }
-
-    .social-section {
-      margin-top: 50px;
-      text-align: center;
-    }
-
-    .social-section a {
-      margin: 0 12px;
-      color: #08fdd8;
+    .social-links a {
+      margin: 0 10px;
       text-decoration: none;
-      font-weight: bold;
+      color: #0066cc;
     }
 
     footer {
-      margin-top: 60px;
-      padding: 20px;
       text-align: center;
+      color: #aaa;
       font-size: 0.9rem;
-      color: #888;
+      padding: 2rem 0;
     }
   </style>
 </head>
 <body>
-  <canvas id="backgroundCanvas"></canvas>
-  <main>
-    <div class="logo-container">
-      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
-    </div>
 
+  <header>
     <h1>HOSKDOG</h1>
+    <p>The no-utility, no-roadmap meme token for the Cardano community</p>
+  </header>
 
-    <div class="toilet-row">
-      <img src="images/toiletbowl.png" alt="Toilet Bowl" />
-      <div class="faucet-box">
-        <h2>🚰 HOSKDOG Faucet</h2>
-        <p>Take a drink from the Toilet Bowl.<br>One slurp per wallet. No leash, no shame.</p>
-        <button onclick="flush()">Drink from the Toilet Bowl</button>
-        <div class="flush-message" id="flushResult"></div>
-      </div>
-    </div>
-
-    <div class="manifesto-box">
-      <h3>🚀 Our Mission</h3>
+  <main>
+    <section>
+      <h2>Mission</h2>
       <p>
-        HOSKDOG isn't just another meme coin — it's a decentralized beast with no leash.<br>
-        We're not here to beg for listings or follow centralized rules.<br>
-        We're here to run wild on Cardano — transparently, irreverently, and 100% owned by the pack.
+        Our mission with HOSKDOG is to keep things wild, weird, and wonderfully unserious. We’re not here with a leash, a roadmap, or a promise of the moon — we’re here for the memes. HOSKDOG is a community-driven meme token on Cardano with no intrinsic value, no expectation of financial return, and no formal team. It’s not about utility or charts — it’s about having fun, avoiding gatekeepers, and giving people a space to be part of something that doesn’t try to be anything more than what it is. No leash, no rules, no pressure. Just vibes, jokes, and maybe a few borks.
       </p>
-    </div>
 
-    <div class="manifesto-box">
-      <h3>🌐 Our Vision</h3>
+      <h2>Vision</h2>
       <p>
-        We don't chase trends. We chase freedom — freedom from gatekeepers, pointless red tape, and VC bro handshakes.<br>
-        HOSKDOG is building real utility: token tools, meme NFTs, and gamified systems — all powered by the Cardano chain and the community that gives it life.
+        We see HOSKDOG as a decentralized hangout spot for anyone tired of the hype, tired of the grifters, and tired of the gatekeeping that too often comes with crypto. There’s no leash on this thing — no centralized control, no VC backing, and no devs holding your hand. That’s the whole point. We’re building nothing, promising even less, and having a good time doing it. The vision is to create a laid-back space in the Cardano community where people can laugh, meme, and be part of something that exists for the pure joy of it. No roadmap, no expectations — just a token that exists because it can.
       </p>
+    </section>
+
+    <section>
+      <h2>Disclaimer</h2>
+      <p>
+        HOSKDOG is a meme-powered token on the Cardano blockchain created purely for entertainment purposes.
+      </p>
+      <p style="font-weight: bold; color: #c0392b;">
+        Important Notice:
+      </p>
+      <ul>
+        <li>– HOSKDOG has no intrinsic value</li>
+        <li>– There is no expectation of financial return</li>
+        <li>– There is no formal team, roadmap, or promises</li>
+        <li>– It exists solely for entertainment and community engagement</li>
+      </ul>
+      <p>Please do your own research and use at your own discretion.</p>
+    </section>
+
+    <div class="social-links">
+      <h2>Connect with HOSKDOG</h2>
+      <a href="https://twitter.com/YOUR_TWITTER_HANDLE" target="_blank">Twitter</a>
+      <a href="https://t.me/+nl93xy-qv6RhNmVh" target="_blank">Telegram</a>
+      <a href="https://discord.gg/YOUR_DISCORD_INVITE" target="_blank">Discord</a>
+      <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">AdaStat</a>
+      <a href="https://cardanoscan.io/tokenPolicy/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad" target="_blank">CardanoScan</a>
+      <a href="https://cexplorer.io/policy/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad" target="_blank">Cexplorer</a>
+      <a href="https://pool.pm/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">Pool.pm</a>
     </div>
-
-    <div class="meme-section">
-      <h2>When the leash is off...</h2>
-      <div class="meme-grid">
-        <img src="images/meme.png" alt="Meme 1">
-        <img src="images/meme2.png" alt="Meme 2">
-        <img src="images/meme3.png" alt="Meme 3">
-      </div>
-    </div>
-
-<div class="social-links" style="text-align: center; margin-top: 2rem;">
-  <h3>Connect with HOSKDOG</h3>
-  <a href="https://twitter.com/YOUR_TWITTER_HANDLE" target="_blank">Twitter</a> &nbsp;
-  <a href="https://t.me/+nl93xy-qv6RhNmVh" target="_blank">Telegram</a> &nbsp;
-  <a href="https://discord.gg/YOUR_DISCORD_INVITE" target="_blank">Discord</a> &nbsp;
-  <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">AdaStat</a> &nbsp;
-  <a href="https://cardanoscan.io/tokenPolicy/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad" target="_blank">CardanoScan</a> &nbsp;
-  <a href="https://cexplorer.io/policy/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad" target="_blank">Cexplorer</a> &nbsp;
-  <a href="https://pool.pm/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">Pool.pm</a>
-</div>
-
-
-
   </main>
 
   <footer>
-    &copy; 2025 HOSKDOG — Built for memes, not finance.
+    &copy; 2025 HOSKDOG — All memes reserved.
   </footer>
 
-  <audio id="flushAudio" src="audio/flush.mp3" preload="auto"></audio>
-  <script>
-    function flush() {
-      const sound = document.getElementById("flushAudio");
-      const result = document.getElementById("flushResult");
-      if (sound) sound.play();
-      result.textContent = "💦 You took a drink. HOSKDOG is on the way...";
-    }
-
-    const canvas = document.getElementById("backgroundCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particles = [];
-    class Star {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = Math.random() * 0.6 - 0.3;
-        this.vy = Math.random() * 0.6 - 0.3;
-        this.radius = Math.random() * 2;
-      }
-      move() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "#08fdd8";
-        ctx.fill();
-      }
-    }
-
-    function connect() {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = "rgba(8, 253, 216," + (1 - distance / 100) + ")";
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.move();
-        p.draw();
-      });
-      connect();
-      requestAnimationFrame(animate);
-    }
-
-    function init() {
-      particles = [];
-      for (let i = 0; i < 100; i++) {
-        particles.push(new Star());
-      }
-    }
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      init();
-    });
-
-    init();
-    animate();
-  </script>
 </body>
 </html>
