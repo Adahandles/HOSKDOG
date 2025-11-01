@@ -395,45 +395,49 @@
   </script>
 <script>
 (async function(){
-  
+  const POLICY_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad";
 
+  async function updateHoskdogStats(){
+    try{
+      // Use a CORS proxy to avoid browser restrictions
+      const apiUrl = `https://api.cardanoscan.io/api/v1/tokens/${POLICY_ID}`;
+      const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(apiUrl);
+      const res = await fetch(proxyUrl);
+      const json = await res.json();
+      // allorigins returns {contents: "...", status: {...}}; parse contents as JSON
+      const data = JSON.parse(json.contents);
+      // CardanoScan's token info returns totalSupply and holders
 
-const POLICY_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad";
+      const holders = data.holders || (data.token && data.token.holders);
 
-async function updateHoskdogStats(){
-  try {
-    // Fetch token data from CardanoScan. This endpoint returns information such as holders and total supply.
-    const res = await fetch(`https://api.cardanoscan.io/api/v1/tokens/${POLICY_ID}`);
-    const data = await res.json();
+      // Update holders
+      const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
+      if (holdersEl && holders) holdersEl.textContent = holders.toLocaleString();
 
-    // Update holders (CardanoScan uses "holders" or "holderCount").
-    const holders = data.holders || data.holderCount || 0;
-    const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
-    if (holdersEl) holdersEl.textContent = holders.toLocaleString();
+      // Followers static or updating
+      const followersEl = document.querySelector('#stats .token-box:nth-child(2) h3');
+      if (followersEl) followersEl.textContent = "UPDATING";
 
-    // Followers static for now.
-    const followersEl = document.querySelector('#stats .token-box:nth-child(2) h3');
-    if (followersEl) followersEl.textContent = "UPDATING";
+      // Market Cap - not available from CardanoScan; set to N/A
+      const marketCapEl = document.querySelector('#stats .token-box:nth-child(3) h3');
+      if (marketCapEl) marketCapEl.textContent = "N/A";
 
-    // CardanoScan does not provide market cap, volume, or liquidity for tokens via this endpoint, so leave these as-is or set to N/A.
-    // Optionally set them to "N/A" if desired:
-    const marketCapEl = document.querySelector('#stats .token-box:nth-child(3) h3');
-    if (marketCapEl) marketCapEl.textContent = "N/A";
-    const volumeEl = document.querySelector('#stats .token-box:nth-child(4) h3');
-    if (volumeEl) volumeEl.textContent = "N/A";
-    const liqEl = document.querySelector('#stats .token-box:nth-child(5) h3');
-    if (liqEl) liqEl.textContent = "N/A";
+      // Volume 24h - not available; set to N/A
+      const volumeEl = document.querySelector('#stats .token-box:nth-child(4) h3');
+      if (volumeEl) volumeEl.textContent = "N/A";
 
-  } catch (e) {
-    console.warn('CardanoScan fetch failed:', e);
+      // DEX Liquidity - not available; set to N/A
+      const liqEl = document.querySelector('#stats .token-box:nth-child(5) h3');
+      if (liqEl) liqEl.textContent = "N/A";
+
+    } catch (e) {
+      console.warn("CardanoScan fetch failed:", e);
+    }
   }
-}
 
-updateHoskdogStats();
-setInterval(updateHoskdogStats, 60000);
-ats, 60000);
-
-
+  updateHoskdogStats();
+  setInterval(updateHoskdogStats, 60000); // refresh every 60 seconds
+})();
 </script>
 
 </body>
