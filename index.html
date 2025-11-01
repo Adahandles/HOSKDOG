@@ -211,29 +211,41 @@
         <div class="flush-message" id="flushResult"></div>
       </div>
     </div>
-<!-- HOSKDOG Stats Section -->
+<!-- HOSKDOG Stats Section using WingRiders metrics -->
 <section id="stats" style="padding:3rem 1.1rem;text-align:center">
-  <h2 class="section-title">HOSKDOG by the Numbers</h2>
+  <h2 class="section-title">HOSKDOG by the Numbers (WingRiders)</h2>
   <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:1.5rem">
     <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
-      <h3 style="margin:0;font-size:1.6rem">UPDATING</h3>
-      <p class="muted">Holders</p>
+      <h3 style="margin:0;font-size:1.4rem">UPDATING</h3>
+      <p class="muted">Supply</p>
     </div>
     <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
-      <h3 style="margin:0;font-size:1.6rem">UPDATING</h3>
-      <p class="muted">Followers</p>
+      <h3 style="margin:0;font-size:1.4rem">UPDATING</h3>
+      <p class="muted">Holders (accounts)</p>
     </div>
     <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
-      <h3 style="margin:0;font-size:1.6rem">UPDATING</h3>
-      <p class="muted">Market Cap</p>
+      <h3 style="margin:0;font-size:1.4rem">UPDATING</h3>
+      <p class="muted">Holders (addresses)</p>
     </div>
     <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
-      <h3 style="margin:0;font-size:1.6rem">UPDATING</h3>
-      <p class="muted">Volume 24h</p>
+      <h3 style="margin:0;font-size:1.4rem">~$0.00519</h3>
+      <p class="muted">Price (approx)</p>
     </div>
     <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
-      <h3 style="margin:0;font-size:1.6rem">UPDATING</h3>
-      <p class="muted">DEX Liquidity</p>
+      <h3 style="margin:0;font-size:1.4rem">UPDATING</h3>
+      <p class="muted">Fully Diluted MC</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">~$156.61</h3>
+      <p class="muted">TVL (approx)</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">~$0.00</h3>
+      <p class="muted">Volume 24h (approx)</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">~$0.00</h3>
+      <p class="muted">Volume 7d (approx)</p>
     </div>
   </div>
 </section>
@@ -288,7 +300,7 @@
       <a href="#">Twitter</a>
       <a href="#">Telegram</a>
       <a href="#">Discord</a>
-      <a href="#">AdaStat</a>
+      <a href="#">WingRiders</a>
       <a href="#">CardanoScan</a>
       <a href="#">Pool.pm</a>
 
@@ -302,8 +314,8 @@
           <a href="https://pool.pm/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">
             <img src="images/poolpm.png" alt="Pool.pm">
           </a>
-          <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">
-            <img src="images/adastat.jpg" alt="AdaStat">
+          <a href="https://wingriders.com" target="_blank">
+            <img src="images/wingriders.png" alt="WingRiders">
           </a>
         </div>
     </div>
@@ -393,52 +405,5 @@
     init();
     animate();
   </script>
-<script>
-(async function(){
-  const POLICY_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad";
-
-  async function updateHoskdogStats(){
-    try{
-      // Use a CORS proxy to avoid browser restrictions
-      const apiUrl = `https://api.cardanoscan.io/api/v1/tokens/${POLICY_ID}`;
-      const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(apiUrl);
-      const res = await fetch(proxyUrl);
-      const json = await res.json();
-      // allorigins returns {contents: "...", status: {...}}; parse contents as JSON
-      const data = JSON.parse(json.contents);
-      // CardanoScan's token info returns totalSupply and holders
-
-      const holders = data.holders || (data.token && data.token.holders);
-
-      // Update holders
-      const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
-      if (holdersEl && holders) holdersEl.textContent = holders.toLocaleString();
-
-      // Followers static or updating
-      const followersEl = document.querySelector('#stats .token-box:nth-child(2) h3');
-      if (followersEl) followersEl.textContent = "UPDATING";
-
-      // Market Cap - not available from CardanoScan; set to N/A
-      const marketCapEl = document.querySelector('#stats .token-box:nth-child(3) h3');
-      if (marketCapEl) marketCapEl.textContent = "N/A";
-
-      // Volume 24h - not available; set to N/A
-      const volumeEl = document.querySelector('#stats .token-box:nth-child(4) h3');
-      if (volumeEl) volumeEl.textContent = "N/A";
-
-      // DEX Liquidity - not available; set to N/A
-      const liqEl = document.querySelector('#stats .token-box:nth-child(5) h3');
-      if (liqEl) liqEl.textContent = "N/A";
-
-    } catch (e) {
-      console.warn("CardanoScan fetch failed:", e);
-    }
-  }
-
-  updateHoskdogStats();
-  setInterval(updateHoskdogStats, 60000); // refresh every 60 seconds
-})();
-</script>
-
 </body>
 </html>
