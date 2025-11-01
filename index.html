@@ -394,5 +394,48 @@
     init();
     animate();
   </script>
+<script>
+(async function(){
+  const TOKEN_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad";
+
+  async function updateHoskdogStats(){
+    try{
+      const res = await fetch(`https://api.adastat.net/api/v1/tokens/${TOKEN_ID}`);
+      const data = await res.json();
+      const t = data.token || {};
+
+      // Update holders
+      const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
+      if (holdersEl && t.holders) holdersEl.textContent = t.holders.toLocaleString();
+
+      // Followers static for now
+      const followersEl = document.querySelector('#stats .token-box:nth-child(2) h3');
+      if (followersEl) followersEl.textContent = "79,699";
+
+      // Market Cap
+      const marketCapEl = document.querySelector('#stats .token-box:nth-child(3) h3');
+      if (marketCapEl && t.market_cap)
+        marketCapEl.textContent = "$" + (t.market_cap / 1e6).toFixed(1) + "M";
+
+      // 24h Volume
+      const volumeEl = document.querySelector('#stats .token-box:nth-child(4) h3');
+      if (volumeEl && t.volume_24h)
+        volumeEl.textContent = "$" + (t.volume_24h / 1e6).toFixed(1) + "M";
+
+      // DEX Liquidity
+      const liqEl = document.querySelector('#stats .token-box:nth-child(5) h3');
+      if (liqEl && t.liquidity)
+        liqEl.textContent = "$" + (t.liquidity / 1e6).toFixed(1) + "M";
+
+    } catch (e) {
+      console.warn("Adastat fetch failed:", e);
+    }
+  }
+
+  updateHoskdogStats();
+  setInterval(updateHoskdogStats, 60000); // refresh every 60 seconds
+})();
+</script>
+
 </body>
 </html>
