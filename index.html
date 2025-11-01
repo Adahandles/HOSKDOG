@@ -400,7 +400,11 @@
 
   async function updateHoskdogStats(){
     try{
-      const res = await fetch(`https://api.adastat.net/api/v1/tokens/${TOKEN_ID}`);
+      // Use a CORS proxy to avoid browser restrictions
+const apiUrl = `https://api.adastat.net/api/v1/tokens/${TOKEN_ID}`;
+const res = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(apiUrl));
+
+
       const data = await res.json();
      const t = data.token || data || {};
 
