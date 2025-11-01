@@ -396,28 +396,25 @@
 <script>
 (async function(){
   
+
 const TOKEN_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447";
 
 async function updateHoskdogStats(){
   try{
-    // Use a CORS proxy to avoid browser restrictions. The `get` endpoint returns
-    // a JSON object with a `contents` field containing the raw response. This
-    // avoids CORS errors that can occur when loading the AdaStat API directly
-    // from a static HTML file.
+    // Use a CORS proxy to avoid browser restrictions. Corsproxy.io automatically
+    // forwards requests and sets appropriate CORS headers. This fetches the AdaStat
+    // token data, parses it, and updates the stats section.
     const apiUrl = `https://api.adastat.net/api/v1/tokens/${TOKEN_ID}`;
-    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(apiUrl);
-    const res = await fetch(proxyUrl);
-    const proxyData = await res.json();
-    // The proxy returns an object with a `contents` property containing the
-    // response body as a string. Parse it as JSON to access the token stats.
-    const remote = JSON.parse(proxyData.contents);
+    const corsProxyUrl = `https://corsproxy.io/?${apiUrl}`;
+    const res = await fetch(corsProxyUrl);
+    const remote = await res.json();
     const t = remote.token || remote || {};
 
     // Update holders
     const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
     if (holdersEl && t.holders) holdersEl.textContent = t.holders.toLocaleString();
 
-    // Followers static for now.  AdaStat does not provide a followers count.
+    // Followers static for now. AdaStat does not provide a followers count.
     const followersEl = document.querySelector('#stats .token-box:nth-child(2) h3');
     if (followersEl) followersEl.textContent = "UPDATING";
 
@@ -442,7 +439,8 @@ async function updateHoskdogStats(){
 }
 
 updateHoskdogStats();
-setInterval(updateHoskdogStats, 60000); // refresh every 60 seconds
+setInterval(updateHoskdogStats, 60000);
+
 
 </script>
 
