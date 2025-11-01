@@ -397,49 +397,41 @@
 (async function(){
   
 
-const TOKEN_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447";
+
+const POLICY_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad";
 
 async function updateHoskdogStats(){
-  try{
-    // Use a CORS proxy to avoid browser restrictions. Corsproxy.io automatically
-    // forwards requests and sets appropriate CORS headers. This fetches the AdaStat
-    // token data, parses it, and updates the stats section.
-    const apiUrl = `https://api.adastat.net/api/v1/tokens/${TOKEN_ID}`;
-    const corsProxyUrl = `https://corsproxy.io/?${apiUrl}`;
-    const res = await fetch(corsProxyUrl);
-    const remote = await res.json();
-    const t = remote.token || remote || {};
+  try {
+    // Fetch token data from CardanoScan. This endpoint returns information such as holders and total supply.
+    const res = await fetch(`https://api.cardanoscan.io/api/v1/tokens/${POLICY_ID}`);
+    const data = await res.json();
 
-    // Update holders
+    // Update holders (CardanoScan uses "holders" or "holderCount").
+    const holders = data.holders || data.holderCount || 0;
     const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
-    if (holdersEl && t.holders) holdersEl.textContent = t.holders.toLocaleString();
+    if (holdersEl) holdersEl.textContent = holders.toLocaleString();
 
-    // Followers static for now. AdaStat does not provide a followers count.
+    // Followers static for now.
     const followersEl = document.querySelector('#stats .token-box:nth-child(2) h3');
     if (followersEl) followersEl.textContent = "UPDATING";
 
-    // Market Cap
+    // CardanoScan does not provide market cap, volume, or liquidity for tokens via this endpoint, so leave these as-is or set to N/A.
+    // Optionally set them to "N/A" if desired:
     const marketCapEl = document.querySelector('#stats .token-box:nth-child(3) h3');
-    if (marketCapEl && t.market_cap)
-      marketCapEl.textContent = "$" + (t.market_cap / 1e6).toFixed(1) + "M";
-
-    // 24h Volume
+    if (marketCapEl) marketCapEl.textContent = "N/A";
     const volumeEl = document.querySelector('#stats .token-box:nth-child(4) h3');
-    if (volumeEl && t.volume_24h)
-      volumeEl.textContent = "$" + (t.volume_24h / 1e6).toFixed(1) + "M";
-
-    // DEX Liquidity
+    if (volumeEl) volumeEl.textContent = "N/A";
     const liqEl = document.querySelector('#stats .token-box:nth-child(5) h3');
-    if (liqEl && t.liquidity)
-      liqEl.textContent = "$" + (t.liquidity / 1e6).toFixed(1) + "M";
+    if (liqEl) liqEl.textContent = "N/A";
 
   } catch (e) {
-    console.warn("Adastat fetch failed:", e);
+    console.warn('CardanoScan fetch failed:', e);
   }
 }
 
 updateHoskdogStats();
 setInterval(updateHoskdogStats, 60000);
+ats, 60000);
 
 
 </script>
