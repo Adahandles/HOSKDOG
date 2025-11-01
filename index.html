@@ -395,47 +395,55 @@
   </script>
 <script>
 (async function(){
-  const TOKEN_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447";
+  
+const TOKEN_ID = "9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447";
 
-  async function updateHoskdogStats(){
-    try{
-      // Use a CORS proxy to avoid browser restrictions
-      const apiUrl = `https://api.adastat.net/api/v1/tokens/${TOKEN_ID}`;
-      const res = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(apiUrl));
-      const data = await res.json();
-      const t = data.token || data || {};
+async function updateHoskdogStats(){
+  try{
+    // Use a CORS proxy to avoid browser restrictions. The `get` endpoint returns
+    // a JSON object with a `contents` field containing the raw response. This
+    // avoids CORS errors that can occur when loading the AdaStat API directly
+    // from a static HTML file.
+    const apiUrl = `https://api.adastat.net/api/v1/tokens/${TOKEN_ID}`;
+    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(apiUrl);
+    const res = await fetch(proxyUrl);
+    const proxyData = await res.json();
+    // The proxy returns an object with a `contents` property containing the
+    // response body as a string. Parse it as JSON to access the token stats.
+    const remote = JSON.parse(proxyData.contents);
+    const t = remote.token || remote || {};
 
-      // Update holders
-      const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
-      if (holdersEl && t.holders) holdersEl.textContent = t.holders.toLocaleString();
+    // Update holders
+    const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
+    if (holdersEl && t.holders) holdersEl.textContent = t.holders.toLocaleString();
 
-      // Followers static for now
-      const followersEl = document.querySelector('#stats .token-box:nth-child(2) h3');
-      if (followersEl) followersEl.textContent = "UPDATING";
+    // Followers static for now.  AdaStat does not provide a followers count.
+    const followersEl = document.querySelector('#stats .token-box:nth-child(2) h3');
+    if (followersEl) followersEl.textContent = "UPDATING";
 
-      // Market Cap
-      const marketCapEl = document.querySelector('#stats .token-box:nth-child(3) h3');
-      if (marketCapEl && t.market_cap)
-        marketCapEl.textContent = "$" + (t.market_cap / 1e6).toFixed(1) + "M";
+    // Market Cap
+    const marketCapEl = document.querySelector('#stats .token-box:nth-child(3) h3');
+    if (marketCapEl && t.market_cap)
+      marketCapEl.textContent = "$" + (t.market_cap / 1e6).toFixed(1) + "M";
 
-      // 24h Volume
-      const volumeEl = document.querySelector('#stats .token-box:nth-child(4) h3');
-      if (volumeEl && t.volume_24h)
-        volumeEl.textContent = "$" + (t.volume_24h / 1e6).toFixed(1) + "M";
+    // 24h Volume
+    const volumeEl = document.querySelector('#stats .token-box:nth-child(4) h3');
+    if (volumeEl && t.volume_24h)
+      volumeEl.textContent = "$" + (t.volume_24h / 1e6).toFixed(1) + "M";
 
-      // DEX Liquidity
-      const liqEl = document.querySelector('#stats .token-box:nth-child(5) h3');
-      if (liqEl && t.liquidity)
-        liqEl.textContent = "$" + (t.liquidity / 1e6).toFixed(1) + "M";
+    // DEX Liquidity
+    const liqEl = document.querySelector('#stats .token-box:nth-child(5) h3');
+    if (liqEl && t.liquidity)
+      liqEl.textContent = "$" + (t.liquidity / 1e6).toFixed(1) + "M";
 
-    } catch (e) {
-      console.warn("Adastat fetch failed:", e);
-    }
+  } catch (e) {
+    console.warn("Adastat fetch failed:", e);
   }
+}
 
-  updateHoskdogStats();
-  setInterval(updateHoskdogStats, 60000); // refresh every 60 seconds
-})();
+updateHoskdogStats();
+setInterval(updateHoskdogStats, 60000); // refresh every 60 seconds
+
 </script>
 
 </body>
