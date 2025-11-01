@@ -402,7 +402,7 @@
     try{
       const res = await fetch(`https://api.adastat.net/api/v1/tokens/${TOKEN_ID}`);
       const data = await res.json();
-      const t = data.token || {};
+     const t = data.token || data || {};
 
       // Update holders
       const holdersEl = document.querySelector('#stats .token-box:nth-child(1) h3');
