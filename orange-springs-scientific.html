@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Orange Springs – Science & Ecology</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #001018;
+      --bg2: #00243a;
+      --bg3: #0b1930;
+      --cyan: #6cf;
+      --cyan2: #8cf;
+      --txt: #eaf1fb;
+      --muted: #a7b6c7;
+      --card: rgba(0,0,0,.25);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--txt);
+      background: linear-gradient(270deg, var(--bg1), var(--bg2), var(--bg3), var(--bg1));
+      background-size: 600% 600%;
+      animation: aurora 22s ease infinite;
+    }
+    @keyframes aurora {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+    }
+    nav a {
+      padding: 0.6rem 1.2rem;
+      border-radius: 14px;
+      border: 2px solid var(--cyan2);
+      background: linear-gradient(180deg, rgba(108,207,255,.25), rgba(108,207,255,.1));
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      box-shadow: 0 0 22px rgba(108,207,255,.35);
+      transition: all .25s ease;
+    }
+    nav a:hover {
+      background: linear-gradient(180deg, rgba(108,207,255,.4), rgba(108,207,255,.2));
+      box-shadow: 0 0 32px rgba(108,207,255,.55);
+      transform: translateY(-1px);
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+    p {
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+    img.section-image {
+      width: 100%;
+      border-radius: 12px;
+      margin: 1rem 0;
+      box-shadow: 0 0 12px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="good-causes.html">Overview</a>
+    <a href="orange-springs-history.html">History</a>
+    <a href="orange-springs-scientific.html">Science &amp; Ecology</a>
+    <a href="orange-springs-research.html">Research &amp; Development</a>
+  </nav>
+  <div class="wrap">
+    <h1>Scientific &amp; Ecological Aspects</h1>
+    <img class="section-image" src="assets/img/orange4.jpg" alt="Lush vegetation around Orange Springs">
+    <p>
+      Orange Springs offers a window into Florida's unique karst geology and spring ecosystems. The spring emerges from the Floridan Aquifer, pushing cool, clear groundwater up through the limestone to form a nearly circular pool roughly 85 by 100 feet across. A low concrete retaining wall added in the nineteenth century encloses the basin. Around the edges the water is only two to four feet deep, but a vent at the southern end opens among limestone ledges to more than 20 feet. The pool's water is crystal clear with a greenish tint from algae and aquatic plants, and a noticeable sulfur smell from hydrogen sulfide gas naturally present in the groundwater. Such sulfur‑rich springs are common in Florida because organic matter deep underground produces hydrogen sulfide that percolates up with spring water. As a result, Orange Springs supports sulfur‑tolerant algae and biofilms alongside typical aquatic vegetation.
+    </p>
+    <p>
+      Water from the pool spills over a small concrete flume on the east side into a short spring run. Only a few inches deep and about ten feet wide, this run joins Orange Creek after a short distance. Orange Creek, which forms the boundary between Marion and Putnam counties, carries the spring's outflow eastward before it empties into the Ocklawaha River near Orange Springs. From there the water ultimately becomes part of the St. Johns River watershed. The land around the pool is largely natural: one side has a cleared area that was once a picnic spot, but much of the immediate vicinity is hardwood and pine forest within the Orange Creek floodplain. Wading birds, turtles, fish and aquatic invertebrates live in and around the run, and because public access has been restricted for decades the spring's ecology has remained relatively undisturbed.
+    </p>
+    <p>
+      The water quality of Orange Springs is notable. Like many Florida springs, its water stays around 72 °F (22 °C) year‑round, providing a constant cool refuge. The chemistry is calcium‑rich and slightly alkaline, reflecting the limestone aquifer source, while the sulfur indicates the spring taps deep, anoxic portions of the aquifer. Despite the mineral content, Orange Springs' water has long been considered wholesome – one reason it was bottled and sold. Modern water tests focus on ensuring that contaminants are absent or remain below regulatory limits. Unlike some springs, Orange Springs has not experienced severe nitrate pollution; recent environmental assessments report no significant water‑quality issues. Classified as a third‑magnitude spring, it discharges roughly one to three cubic feet per second. Continuous monitoring tracks flow and ensures it remains a healthy spring with clear, emerald‑tinted waters and a rich aquatic life.
+    </p>
+  </div>
+</body>
+</html>
