@@ -191,6 +191,32 @@
     .explorer-buttons img:hover {
       transform: scale(1.05);
     }
+
+    /* Navigation button styling */
+    .nav-button {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+      color: #000;
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+    }
  </style>
 </head>
 <body>
@@ -201,6 +227,10 @@
     </div>
 
     <h1>HOSKDOG</h1>
+
+    <div class="button-container">
+      <a href="whitepaper.html" class="nav-button">📄 Read Whitepaper</a>
+    </div>
 
     <div class="toilet-row">
       <img src="images/toiletbowl.png" alt="Toilet Bowl" />

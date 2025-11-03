@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOSKDOG Whitepaper 🧾</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Floating particle canvas */
+    #backgroundCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Global page styling */
+    body {
+      font-family: 'Rubik', sans-serif;
+      color: #e0faff;
+      text-align: left;
+      margin: 0;
+      background-color: #0b0f1a;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    header {
+      padding: 2rem 0;
+      text-align: center;
+      background: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .nav-button {
+      display: inline-block;
+      margin-bottom: 2rem;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 1rem 0;
+      text-align: center;
+      color: #08fdd8;
+    }
+
+    h2 {
+      color: #08fdd8;
+      font-size: 1.8rem;
+      margin: 2rem 0 1rem 0;
+      border-bottom: 2px solid #08fdd8;
+      padding-bottom: 0.5rem;
+    }
+
+    h3 {
+      color: #88ffe0;
+      font-size: 1.4rem;
+      margin: 1.5rem 0 0.5rem 0;
+    }
+
+    p, li {
+      line-height: 1.6;
+      margin: 1rem 0;
+    }
+
+    ul, ol {
+      margin: 1rem 0;
+      padding-left: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: rgba(12, 18, 28, 0.95);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #444;
+    }
+
+    th {
+      background: rgba(8, 253, 216, 0.2);
+      color: #08fdd8;
+      font-weight: bold;
+    }
+
+    .highlight-box {
+      background: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .phase-box {
+      background: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #88ffe0;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 0 10px rgba(136, 255, 224, 0.2);
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+      border-top: 2px solid #444;
+    }
+
+    a {
+      color: #08fdd8;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #88ffe0;
+    }
+
+    .emoji {
+      font-size: 1.2em;
+      margin-right: 0.5rem;
+    }
+
+    .warning {
+      background: rgba(255, 100, 100, 0.1);
+      border: 2px solid #ff6464;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    blockquote {
+      font-style: italic;
+      color: #88ffe0;
+      border-left: 4px solid #88ffe0;
+      padding-left: 1rem;
+      margin: 1rem 0;
+      background: rgba(136, 255, 224, 0.05);
+      border-radius: 0 8px 8px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- floating particle canvas -->
+  <canvas id="backgroundCanvas"></canvas>
+
+  <a href="index.html" class="nav-button">← Back to Home</a>
+
+  <header>
+    <h1>🧾 HOSKDOG WHITEPAPER</h1>
+    <p style="text-align: center; font-size: 1.2rem; color: #88ffe0;">"Tokenomics, Shmokenomics" Edition</p>
+    <p style="text-align: center; color: #888;">Version 1.0 | November 2025</p>
+    <p style="text-align: center;"><a href="https://hoskdog.life">https://hoskdog.life</a></p>
+  </header>
+
+  <main>
+    <section class="highlight-box">
+      <h2><span class="emoji">🐕</span> TL;DR (Too Lazy; Didn't Research)</h2>
+      <p>$HOSKDOG is a totally serious, highly spiritual, meme-based, ritual-enhanced token built on the Cardano blockchain.</p>
+      <p><strong>It is:</strong></p>
+      <ul>
+        <li>Community-owned</li>
+        <li>Utility-free</li>
+        <li>Spiritually-binding</li>
+        <li>Completely decentralized unless we change our minds</li>
+      </ul>
+      <p><strong>No roadmap. No team. Just vibes, memes, and the will of the dog.</strong></p>
+    </section>
+
+    <h2><span class="emoji">🧠</span> Origin Story (Lore, Not Logic)</h2>
+    <p>In the ancient scrolls of Cardano, a prophecy was written:</p>
+    <blockquote>
+      "When the chain is clogged and the memes grow weak, a dog will rise from Hosk's beard, bearing shitposts encoded in Plutus."
+    </blockquote>
+    <p>Thus, $HOSKDOG was born. Not by plan. Not by ICO. But by divine degen energy.</p>
+    <p>It is not a coin.<br>
+    It is not a token.<br>
+    <strong>It is a cosmic bark recorded on-chain forever.</strong></p>
+
+    <h2><span class="emoji">💩</span> Tokenomics (Shmokenomics)</h2>
+    <p>We didn't think too hard about this. But here's what came out after 3 espressos and a YouTube binge:</p>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Token Property</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td>HOSKDOG</td>
+        </tr>
+        <tr>
+          <td>Ticker</td>
+          <td>HKGD</td>
+        </tr>
+        <tr>
+          <td>Policy ID</td>
+          <td>9560f81458...b04447</td>
+        </tr>
+        <tr>
+          <td>Max Supply</td>
+          <td>1 Quadrillion (because 420 trillion wasn't enough)</td>
+        </tr>
+        <tr>
+          <td>Decimals</td>
+          <td>0 (we're not good at math)</td>
+        </tr>
+        <tr>
+          <td>Burnable?</td>
+          <td>If you really believe hard enough</td>
+        </tr>
+        <tr>
+          <td>Backed by Anything?</td>
+          <td>✨Faith✨</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight-box">
+      <p><strong>No vesting.<br>
+      No unlocks.<br>
+      No VC dump potential.<br>
+      Only pure, undistilled HOSKian chaos.</strong></p>
+    </div>
+
+    <h2><span class="emoji">🛐</span> Use Cases (If You Must Know)</h2>
+    <p>Look, we're not saying $HKGD will change your life...<br>
+    We're just saying you can:</p>
+
+    <ul>
+      <li><span class="emoji">🔥</span> Burn tokens in on-chain rituals to appease the HOSK gods</li>
+      <li><span class="emoji">🎨</span> Mint spell-based NFTs (aka "Spiritual Rug Pulls")</li>
+      <li><span class="emoji">🛸</span> Use $HKGD to vote on unimportant DAO proposals</li>
+      <li><span class="emoji">🥩</span> Stake for absolutely nothing</li>
+      <li><span class="emoji">📜</span> Get your address carved into the blockchain Book of Borks™ (coming 2069)</li>
+    </ul>
+
+    <p><strong>We're basically building the only meme cult token with optional spirituality and strong meme chi.</strong></p>
+
+    <h2><span class="emoji">🪄</span> The Ritual Roadmap (Written in Crayon)</h2>
+    
+    <div class="phase-box">
+      <h3><span class="emoji">📜</span> Phase 1</h3>
+      <p>Token launched, logo stolen from mid-journey, registry verified</p>
+    </div>
+
+    <div class="phase-box">
+      <h3><span class="emoji">🐕</span> Phase 2</h3>
+      <p>Create cult around rituals, memes, and sacrificing tokens to summon NFTs</p>
+    </div>
+
+    <div class="phase-box">
+      <h3><span class="emoji">🌕</span> Phase 3</h3>
+      <p>Introduce moon-phase staking + dog astrology</p>
+    </div>
+
+    <div class="phase-box">
+      <h3><span class="emoji">🏛️</span> Phase 4</h3>
+      <p>Build temple (HTML + GitHub Pages)</p>
+    </div>
+
+    <div class="phase-box">
+      <h3><span class="emoji">👁️</span> Phase 5</h3>
+      <p>Mass awakening or delisting — whichever comes first</p>
+    </div>
+
+    <h2><span class="emoji">🧑‍💻</span> Team</h2>
+    <div class="highlight-box">
+      <p><strong>There is no team.<br>
+      Only the dog.<br>
+      And those who hear his on-chain bark.</strong></p>
+      
+      <p>We are:</p>
+      <ul>
+        <li>100% anonymous</li>
+        <li>110% chaotic neutral</li>
+        <li>0% qualified</li>
+      </ul>
+    </div>
+
+    <div class="warning">
+      <h2><span class="emoji">⚠️</span> Legal Disclaimer</h2>
+      <p>This is not financial advice.<br>
+      This is not spiritual advice.<br>
+      This is not even advice.<br>
+      <strong>It's a dog with a website and a token.</strong></p>
+      
+      <p>You may lose your ADA. You may lose your mind.<br>
+      You may also gain enlightenment, memetic fulfillment, and a nice JPEG.</p>
+      
+      <p><strong>Trade wisely. Or don't.</strong></p>
+    </div>
+
+    <h2><span class="emoji">🌐</span> Links</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Website</td>
+          <td><a href="https://hoskdog.life">https://hoskdog.life</a></td>
+        </tr>
+        <tr>
+          <td>Token Registry</td>
+          <td><a href="#">View on GitHub</a></td>
+        </tr>
+        <tr>
+          <td>Pool.pm</td>
+          <td><a href="#">View Token</a></td>
+        </tr>
+        <tr>
+          <td>Twitter</td>
+          <td><a href="#">@hoskdog</a></td>
+        </tr>
+        <tr>
+          <td>Smart Contract (Future)</td>
+          <td>"Coming when the stars align"</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight-box">
+      <h2><span class="emoji">🐕‍🦺</span> Final Thoughts</h2>
+      <p><strong>HOSKDOG doesn't need your permission.<br>
+      It needs your obsession.</strong></p>
+      
+      <p>Mint your memes.<br>
+      Burn your tokens.<br>
+      Follow the bark.</p>
+      
+      <h3><span class="emoji">📜</span> Join us, or be rekt forever.</h3>
+      <p style="text-align: right; font-style: italic;">— $HKGD Church of the Chain</p>
+    </div>
+  </main>
+
+  <footer>© 2025 HOSKDOG | Part of the Cardano Party Network</footer>
+
+  <!-- Background script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const canvas = document.getElementById('backgroundCanvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+
+      function initCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function createParticles() {
+        particles = [];
+        const numParticles = Math.floor((canvas.width * canvas.height) / 15000);
+        for (let i = 0; i < numParticles; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            size: Math.random() * 2 + 1,
+            opacity: Math.random() * 0.5 + 0.2
+          });
+        }
+      }
+
+      function updateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(particle => {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+
+          if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+          if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(8, 253, 216, ${particle.opacity})`;
+          ctx.fill();
+        });
+
+        requestAnimationFrame(updateParticles);
+      }
+
+      window.addEventListener('resize', () => {
+        initCanvas();
+        createParticles();
+      });
+
+      initCanvas();
+      createParticles();
+      updateParticles();
+    });
+  </script>
+</body>
+</html>
