@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Orange Springs – Research & Development</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #001018;
+      --bg2: #00243a;
+      --bg3: #0b1930;
+      --cyan: #6cf;
+      --cyan2: #8cf;
+      --txt: #eaf1fb;
+      --muted: #a7b6c7;
+      --card: rgba(0,0,0,.25);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--txt);
+      background: linear-gradient(270deg, var(--bg1), var(--bg2), var(--bg3), var(--bg1));
+      background-size: 600% 600%;
+      animation: aurora 22s ease infinite;
+    }
+    @keyframes aurora {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+    }
+    nav a {
+      padding: 0.6rem 1.2rem;
+      border-radius: 14px;
+      border: 2px solid var(--cyan2);
+      background: linear-gradient(180deg, rgba(108,207,255,.25), rgba(108,207,255,.1));
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      box-shadow: 0 0 22px rgba(108,207,255,.35);
+      transition: all .25s ease;
+    }
+    nav a:hover {
+      background: linear-gradient(180deg, rgba(108,207,255,.4), rgba(108,207,255,.2));
+      box-shadow: 0 0 32px rgba(108,207,255,.55);
+      transform: translateY(-1px);
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+    p {
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+    img.section-image {
+      width: 100%;
+      border-radius: 12px;
+      margin: 1rem 0;
+      box-shadow: 0 0 12px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="good-causes.html">Overview</a>
+    <a href="orange-springs-history.html">History</a>
+    <a href="orange-springs-scientific.html">Science &amp; Ecology</a>
+    <a href="orange-springs-research.html">Research &amp; Development</a>
+  </nav>
+  <div class="wrap">
+    <h1>Research &amp; Development</h1>
+    <p>
+      Responsible management and scientific research are central to Fountara's stewardship of Orange Springs. Because the spring water is bottled for drinking, it undergoes regular testing and treatment to meet health standards. Natural sulfur compounds are removed by aeration and filtration so that the water tastes pure. Fountara's team works closely with state regulators to monitor hydrology: water levels and discharge are measured to ensure that withdrawals remain sustainable and the spring is not degraded. A consumptive use permit currently authorizes withdrawals of up to roughly 200,000 gallons per day and extends through 2031 with potential renewal. Compliance requires reporting usage and monitoring the aquifer; to date, environmental assessments show no adverse impacts or contamination. By limiting public access and carefully controlling extraction, the spring functions like a private mini‑reserve, shielded from pollution and physical damage.
+    </p>
+    <p>
+      The spring's sulfur‑rich environment supports unusual microbial life. White, filamentous mats of bacteria (including Thiothrix species) coat submerged rocks and thrive on the dissolved sulfides. Researchers first identified <em>Thiothrix unzii</em> in Orange Springs around 2000, marking one of the earliest observations of this species in a natural aquatic setting. Scientists continue to sample the spring to study these sulfur‑oxidizing communities, which help convert sulfides and influence nutrient cycling. Ongoing microbiological and chemical analyses at Orange Springs and similar springs improve understanding of biofouling and the ecological roles of these microbes.
+    </p>
+    <p>
+      From a development perspective, Orange Springs illustrates how utilization can be balanced with conservation. Because the spring and surrounding site are historically significant, any infrastructure must respect its cultural value. Fountara's bottling operation minimizes visual and physical impact: pipes draw water from underground rather than from the pool, and the facility is set back behind trees. The old spring pool remains intact, and the century‑old concrete retaining wall is maintained to preserve its shape and water level. The company consults environmental specialists and participates in statewide springs monitoring networks; data from Orange Springs feed into studies on flow trends, water quality and the effects of groundwater withdrawal.
+    </p>
+    <p>
+      Technology also plays a role in outreach and planning. Interactive maps produced by organizations such as the Florida Springs Institute highlight Orange Springs, showing its location, water‑quality data and the extent of its springshed. Fountara intends to embed a similar map on its website, allowing users to explore how the spring connects to the Ocklawaha River system and to view real‑time monitoring results. By combining historical interpretation, scientific research and public education, the Orange Springs project demonstrates that a natural resource can be developed responsibly. Continued research and careful stewardship will ensure this remarkable spring—once a frontier resort and now a source of sustainable water—remains protected for generations.
+    </p>
+    <img class="section-image" src="assets/img/wtrcoin.png" alt="Orange Springs project branding">
+  </div>
+</body>
+</html>
