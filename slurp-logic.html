@@ -589,12 +589,47 @@
         </tr>
       </table>
       
-      <h3>✅ Development Deliverables</h3>
-      <p>• <strong>Secure backend faucet handler</strong> - Input: wallet + deposit check, Output: sends HKDG<br>
-         • <strong>Wallet eligibility checker</strong> - Validates HOSKY/SNEK holdings via policy ID<br>
-         • <strong>Database schema</strong> - Slurp history, faucet balances, donation flagging, airdrop eligibility<br>
-         • <strong>Faucet flow controller</strong> - Reward logic, gas calculation, security guards<br>
-         • <strong>Clean React + CIP-30 frontend</strong> - Lightweight, mobile-optimized</p>
+      <h3>💻 Phase 1: What We'll Deliver First</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background-color: rgba(8, 253, 216, 0.1);">
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Feature</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Status</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ Wallet connect (CIP-30)</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ All major Cardano wallets (Lace, Nami, Eternl, etc.)</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🔍 Wallet eligibility checker</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ HOSKY/SNEK OR ADA balance</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🧾 Deposit validation</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ 0.25 or 3 ADA detected</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">💧 Slurp handler</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ Sends $HKDG per tier</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🧻 Faucet logger</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ Stores slurp count, timestamps, airdrop flag</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🔐 Rate limiter (optional)</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ One slurp/day per wallet (can be toggled)</td>
+        </tr>
+      </table>
+      
+      <h3>🚀 Next Steps for Implementation:</h3>
+      <p><strong>Just provide:</strong><br>
+         • Your HKDG policy ID<br>
+         • Your faucet wallet address (or say "generate placeholder")<br>
+         • Your preferred API provider (Blockfrost or Koios — recommend Koios for free + fast dev)<br>
+         • Confirm slurp rewards + deposit amounts (if any changes needed)</p>
+      
+      <p><strong>Then we'll:</strong><br>
+         🚀 Begin building the slurp backend + wallet logic immediately</p>
       
       <p><strong>💬 All code will be:</strong> Fully typed (TS/Python), modular, production-ready, commented + auditable, easy to plug into hoskdog.com</p>
     </div>
