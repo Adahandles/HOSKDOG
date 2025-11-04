@@ -621,15 +621,77 @@
         </tr>
       </table>
       
-      <h3>🚀 Next Steps for Implementation:</h3>
-      <p><strong>Just provide:</strong><br>
-         • Your HKDG policy ID<br>
-         • Your faucet wallet address (or say "generate placeholder")<br>
-         • Your preferred API provider (Blockfrost or Koios — recommend Koios for free + fast dev)<br>
-         • Confirm slurp rewards + deposit amounts (if any changes needed)</p>
+      <h3>� PHASE 1 BUILD STARTING...</h3>
+      <p><strong>✅ Using the following assumptions and placeholders for now:</strong></p>
       
-      <p><strong>Then we'll:</strong><br>
-         🚀 Begin building the slurp backend + wallet logic immediately</p>
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background-color: rgba(8, 253, 216, 0.1);">
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Setting</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Value</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">💧 Faucet Token (HKDG)</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">FAKEPOLICYID00000000000000000000</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Faucet wallet address</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">addr_test1...placeholder</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Faucet decimals</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">6</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Backend API provider</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ Koios (no API key needed)</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Launch slurp rewards</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">• Meme holders → 690,000 HKDG<br>• ADA-only → 420,000 HKDG</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Unlock fees</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">• Meme holders = 0.25 ADA (gas only)<br>• ADA-only = 3 ADA + gas</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Max slurps per day</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ 1 per wallet (optional toggle)</td>
+        </tr>
+      </table>
+      
+      <h3>🧰 Phase 1 Modules Being Built:</h3>
+      <p>✅ CIP-30 multi-wallet connector (Lace, Nami, Eternl, Flint, Typhon, etc.)<br>
+         ✅ Policy checker (for HOSKY / SNEK detection)<br>
+         ✅ ADA balance checker<br>
+         ✅ Deposit validator (0.25 / 3 ADA)<br>
+         ✅ Slurp eligibility logic<br>
+         ✅ Token distribution handler (to send HKDG)<br>
+         ✅ Slurp logger DB schema (wallet, count, timestamps)<br>
+         ✅ Faucet result feedback screen</p>
+      
+      <h3>🔜 Deliverable Coming Soon:</h3>
+      <p>✅ Clean web interface (React or static HTML option)<br>
+         ✅ Backend API endpoints (RESTful)<br>
+         ✅ Faucet claim button (wallet-dependent)<br>
+         ✅ Slurp logging & transaction proof<br>
+         ✅ Bonus airdrop flag for HOSKmas<br>
+         ✅ Optional command-line slurp tester (for manual QA)</p>
+      
+      <h3>📦 You'll Get:</h3>
+      <p><strong>🔧 A working local test faucet</strong><br>
+         <strong>📋 A guide to plug in:</strong><br>
+         • Your real HKDG policy ID<br>
+         • Your faucet wallet<br>
+         • Your logo/meta<br>
+         <strong>� A setup that can scale securely</strong></p>
+      
+      <h3>🎯 Optional Add-ons:</h3>
+      <p>If you'd like us to also:<br>
+         • Generate a custom domain for the faucet<br>
+         • Add a Springs donation checker<br>
+         • Build a dashboard of slurps & totals<br>
+         <br>
+         Just say: <strong>"Add dashboard"</strong> or <strong>"Add Springs tracking"</strong></p>
       
       <p><strong>💬 All code will be:</strong> Fully typed (TS/Python), modular, production-ready, commented + auditable, easy to plug into hoskdog.com</p>
     </div>
