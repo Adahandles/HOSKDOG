@@ -1,0 +1,26 @@
+{
+  "name": "hoskdog-faucet",
+  "version": "1.0.0",
+  "description": "HOSKDOG Token Faucet System",
+  "main": "api/server.js",
+  "scripts": {
+    "start": "node api/server.js",
+    "dev": "nodemon api/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["cardano", "faucet", "hoskdog", "crypto"],
+  "author": "HOSKDOG Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0",
+    "fs-extra": "^11.1.1",
+    "helmet": "^7.1.0",
+    "rate-limiter-flexible": "^2.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

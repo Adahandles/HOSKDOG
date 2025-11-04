@@ -1,0 +1,45 @@
+{
+  "faucet": {
+    "name": "HOSKDOG Faucet",
+    "token": {
+      "name": "HKDG",
+      "policyId": "YOUR_HKDG_POLICY_ID_HERE",
+      "assetName": "HKDG",
+      "decimals": 6
+    },
+    "rewards": {
+      "memeHolders": 690000000000,
+      "adaOnly": 420000000000
+    },
+    "deposits": {
+      "memeHolders": 250000,
+      "adaOnly": 3000000
+    },
+    "rateLimiting": {
+      "enabled": true,
+      "slurpsPerDay": 1
+    },
+    "eligibilityTokens": [
+      {
+        "name": "HOSKY",
+        "policyId": "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235",
+        "minAmount": 1
+      },
+      {
+        "name": "SNEK", 
+        "policyId": "279c909f348e533da5808898f87f9a14bb2c3dfbbacccd631d927a3f",
+        "minAmount": 1
+      }
+    ]
+  },
+  "api": {
+    "koiosUrl": "https://api.koios.rest/api/v1",
+    "port": 3000
+  },
+  "springs": {
+    "donationAddress": "YOUR_SPRINGS_DONATION_ADDRESS",
+    "minDonation": 100000000,
+    "bonusReward": 2000000000000,
+    "boostDays": 30
+  }
+}

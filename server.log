@@ -1,0 +1,8 @@
+nohup: ignoring input
+
+> hoskdog-faucet@1.0.0 start
+> node api/server.js
+
+🚽 HOSKDOG Faucet Server running on port 3000
+🌐 Visit: http://localhost:3000
+📊 Health check: http://localhost:3000/api/health

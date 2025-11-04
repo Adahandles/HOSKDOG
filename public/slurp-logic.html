@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HOSKDOG - Slurp Logic Roadmap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background-color: #0b0f1a;
+      color: #e0faff;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 140px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 0 25px #08fdd8;
+    }
+
+    h1 {
+      text-align: center;
+      color: #08fdd8;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #88ffe0;
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    .nav-button {
+      display: inline-block;
+      margin: 20px auto;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+      color: #000;
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 20px 10px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .faucet-box {
+        padding: 15px;
+        margin: 20px auto;
+      }
+      
+      .faucet-box h2 {
+        font-size: 1.5rem;
+      }
+      
+      .phase-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+    }
+
+    .faucet-box {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 25px;
+      background-color: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .faucet-box h2 {
+      color: #08fdd8;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .faucet-box h3 {
+      color: #08fdd8;
+      font-size: 1.4rem;
+      margin: 20px 0 10px 0;
+    }
+
+    .faucet-box p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    /* Wallet Interface Styles */
+    .wallet-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .wallet-btn {
+      background: linear-gradient(135deg, #08fdd8, #09a0db);
+      border: none;
+      border-radius: 8px;
+      color: #0b0f1a;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 12px 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(8, 253, 216, 0.3);
+    }
+
+    .wallet-btn:hover {
+      background: linear-gradient(135deg, #09a0db, #08fdd8);
+      box-shadow: 0 4px 20px rgba(8, 253, 216, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .wallet-btn:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .connected-section {
+      background: rgba(8, 253, 216, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+      border: 1px solid rgba(8, 253, 216, 0.3);
+    }
+
+    .tier-info {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      border-left: 4px solid #08fdd8;
+    }
+
+    .tier-info h4 {
+      margin: 0 0 10px 0;
+      font-size: 1.2rem;
+    }
+
+    .slurp-button {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 16px 32px;
+      margin: 20px 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    .slurp-button:hover {
+      background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+      box-shadow: 0 6px 30px rgba(255, 107, 107, 0.6);
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    .slurp-button:disabled {
+      background: #444;
+      color: #888;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+      animation: none;
+    }
+
+    .disconnect-btn {
+      background: transparent;
+      border: 1px solid #666;
+      border-radius: 6px;
+      color: #888;
+      cursor: pointer;
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      transition: all 0.3s ease;
+    }
+
+    .disconnect-btn:hover {
+      border-color: #08fdd8;
+      color: #08fdd8;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4); }
+      50% { box-shadow: 0 4px 20px rgba(255, 107, 107, 0.8); }
+      100% { box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4); }
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+
+    .phase-card {
+      background-color: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .phase-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 25px rgba(8, 253, 216, 0.5);
+    }
+
+    .phase-title {
+      color: #08fdd8;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+        .phase-status {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .status-complete {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-active {
+            background: rgba(249, 115, 22, 0.2);
+            color: #f97316;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .status-upcoming {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .phase-description {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features-list li {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .features-list li::before {
+            content: "🧻";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #667eea;
+        }
+
+        .warning-box {
+            background: rgba(245, 101, 101, 0.1);
+            border: 1px solid rgba(245, 101, 101, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        .warning-title {
+            color: #f56565;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .roadmap-section {
+                padding: 1.5rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                padding-left: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+  <canvas id="backgroundCanvas"></canvas>
+  <main>
+    <div class="logo-container">
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
+    </div>
+
+    <h1>🧻 SLURP LOGIC</h1>
+    <p class="subtitle">The official roadmap and rewards guide for $HKDG — from faucet to Crypto.com</p>
+    
+    <div class="button-container">
+      <a href="index.html" class="nav-button">🚽 Back to Toilet Bowl</a>
+    </div>
+
+    <div class="faucet-box">
+      <h2>💧 PHASE 1: THE FAUCET</h2>
+      <p><strong>📅 Launch: November 2025 → Ends: Dec 23, 2025</strong></p>
+      
+      <h3>🧻 How It Works:</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background-color: rgba(8, 253, 216, 0.1);">
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Wallet Type</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">First Slurp</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Ongoing Slurps</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Reward Per Slurp</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ Meme Holder (HOSKY or SNEK, $5+)</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ Free (gas only)</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">1.5 ADA + gas per slurp</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">690,000 HKDG</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">⚠️ ADA-Only User</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">3 ADA + gas</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">3 ADA + gas</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">420,000 HKDG</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">❌ No Deposit</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">❌ No Access</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">❌ No Access</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">—</td>
+        </tr>
+      </table>
+      
+      <p><strong>💾 Must deposit gas (min 0.25 ADA) before slurping</strong><br>
+         <strong>🔁 Slurp unlimited times while faucet is live</strong><br>
+         <strong>🧠 You only need 1 slurp to qualify for the airdrop</strong></p>
+    </div>
+
+    <div class="faucet-box" style="background-color: rgba(8, 253, 216, 0.05); border-left-color: #08fdd8;">
+      <h2>🚀 EARLY LAUNCH BOWL FOR SNEK & HOSKY HOLDERS</h2>
+      <p><strong>✅ Get your $HKDG instantly</strong></p>
+      
+      <h3>🧻 Slurp Flow Summary (Early Access Phase):</h3>
+      <p>✅ User contributes 50 ADA<br>
+         ✅ You receive 50M $HKDG instantly (1 ADA = 1M HKDG)<br>
+         ✅ We reserve 0.5 ADA for future bonus delivery<br>
+         ✅ Your wallet gets logged in bonus database<br>
+         🎁 On Dec 24, you receive 1M–2M bonus HKDG per wallet</p>
+      
+      <h3>🎯 What You Get:</h3>
+      <p>🔒 We reserve a tiny portion of your ADA for gas — so your HOSKmas bonus is sent on time<br>
+         🎁 No waiting. No uncertainty. Full flush delivery.<br>
+         🗓️ Bonus drop lands on Dec 24.</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>� HOSKMAS AIRDROP</h2>
+      <p><strong>📅 December 24, 2025</strong></p>
+      
+      <p>� All slurpers who used the faucet at least once get $HKDG airdrop<br>
+         � Airdrop size depends on total slurps<br>
+         🎯 Top slurpers may receive bonus tokens</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>🌐 DOMAIN WARS</h2>
+      <p><strong>📅 January 1 – January 20, 2026</strong></p>
+      
+      <p>🏆 Top 10 $HKDG holders (by snapshot) win real .com/.io/.org domains<br>
+         🥇 First place picks domain first, then second, and so on<br>
+         💻 Each domain can be used for meme sites, tools, or bragging rights<br>
+         📢 Domains announced January 21</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>🥣 MINDSWAP LAUNCH BOWL</h2>
+      <p><strong>📅 January 22 – January 26, 2026</strong></p>
+      
+      <p>� Official HKDG token sale<br>
+         � Users contribute ADA, SNEK, or HOSKY (if approved)<br>
+         🪙 Receive $HKDG at fair launch price<br>
+         � Liquidity pool (HKDG/ADA) created automatically<br>
+         � LP tokens locked for 3 months<br>
+         ✅ Fully decentralized — community-funded</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>� SPRINGS PROJECT DONATION PERKS</h2>
+      <p><strong>📅 Live through entire faucet + sale period</strong></p>
+      
+      <h3>� Donate 100 ADA to the Springs Project wallet</h3>
+      <p><strong>🧻 Receive:</strong><br>
+         • 2,000,000 HKDG bonus<br>
+         • +50% faucet boost for 30 days<br>
+         • Listed on Wall of Water page</p>
+      
+      <p>🔐 50T $HKDG allocated to Springs cause — locked for 12 months</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>📈 POST-LAUNCH DEX EXPANSION</h2>
+      <p><strong>📅 Feb – April 2026</strong></p>
+      
+      <p>🌊 New pools: HKDG/HOSKY, HKDG/SNEK (on WingRiders)<br>
+         � Faucet boost or airdrop bonuses for LP lockers<br>
+         🎯 Target: reach $250K+ daily trading volume<br>
+         📊 $HKDG tracked on TapTools, DexHunter, and MuesliSwap</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>🧾 TOKEN LISTINGS & STATS</h2>
+      <p><strong>📅 March 2026</strong></p>
+      
+      <p>📦 Submit to CoinGecko and CoinMarketCap<br>
+         📜 Add $HKDG supply tracker and metadata<br>
+         ✅ Required step for CEX listings</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>💰 CEX LISTINGS</h2>
+      <p><strong>📅 Q2 – Q3 2026</strong></p>
+      
+      <p>✅ Target: list on MEXC, BitMart, CoinEx<br>
+         � Funded via CEX reserve (5–6% of total supply)<br>
+         🤝 May include market maker partnership<br>
+         � Full meme-to-market strategy</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>💎 CRYPTO.COM GOAL</h2>
+      <p><strong>📅 Q3 – Q4 2026</strong></p>
+      
+      <p><strong>🚀 $HKDG aims to become the second Cardano-native token on Crypto.com</strong></p>
+      
+      <h3>📈 Requirements:</h3>
+      <p>• 10,000+ holders<br>
+         • $500K+ daily trading volume<br>
+         • Multiple DEX + CEX listings<br>
+         • Fully locked LPs<br>
+         • Transparent tokenomics + compliance</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>🚽 HOSKDOG FAUCET - LIVE NOW!</h2>
+      <p><strong>Connect your Cardano wallet to start slurping $HKDG tokens!</strong></p>
+      
+      <!-- Wallet Connection Section -->
+      <div id="wallet-section">
+        <h3>🔗 Connect Your Wallet</h3>
+        <div id="wallet-buttons" class="wallet-buttons">
+          <button class="wallet-btn" onclick="connectWallet('lace')">
+            🦀 Lace
+          </button>
+          <button class="wallet-btn" onclick="connectWallet('nami')">
+            🌊 Nami  
+          </button>
+          <button class="wallet-btn" onclick="connectWallet('eternl')">
+            ♾️ Eternl
+          </button>
+          <button class="wallet-btn" onclick="connectWallet('typhon')">
+            🌪️ Typhon
+          </button>
+          <button class="wallet-btn" onclick="connectWallet('flint')">
+            🔥 Flint
+          </button>
+          <button class="wallet-btn" onclick="connectWallet('nufi')">
+            🔐 NuFi
+          </button>
+        </div>
+      </div>
+
+      <!-- Connected Wallet Display -->
+      <div id="connected-section" class="connected-section" style="display: none;">
+        <h3>✅ Wallet Connected!</h3>
+        <p><strong>Address:</strong> <span id="wallet-address"></span></p>
+        <p><strong>Status:</strong> <span id="eligibility-status">Checking eligibility...</span></p>
+        
+        <!-- Eligibility Results -->
+        <div id="eligibility-results" style="display: none;">
+          <div id="meme-holder" class="tier-info" style="display: none;">
+            <h4>🟢 Meme Holder Detected!</h4>
+            <p>You hold HOSKY or SNEK tokens!</p>
+            <p><strong>Reward:</strong> 690,000 $HKDG</p>
+            <p><strong>Deposit Required:</strong> 0.25 ADA (gas only)</p>
+          </div>
+          
+          <div id="ada-only" class="tier-info" style="display: none;">
+            <h4>🟡 ADA Holder</h4>
+            <p>3+ ADA balance detected</p>
+            <p><strong>Reward:</strong> 420,000 $HKDG</p>
+            <p><strong>Deposit Required:</strong> 3 ADA + gas</p>
+          </div>
+          
+          <div id="ineligible" class="tier-info" style="display: none;">
+            <h4>🔴 Not Eligible</h4>
+            <p>You need either:</p>
+            <p>• HOSKY or SNEK tokens, OR</p>
+            <p>• At least 3 ADA balance</p>
+          </div>
+        </div>
+
+        <!-- Slurp Button -->
+        <div id="slurp-section" style="display: none;">
+          <button id="slurp-btn" class="slurp-button" onclick="performSlurp()">
+            🚽 SLURP $HKDG NOW! 🚽
+          </button>
+          <p id="slurp-status"></p>
+        </div>
+
+        <button class="disconnect-btn" onclick="disconnectWallet()">
+          🔌 Disconnect Wallet
+        </button>
+      </div>
+    </div>
+
+
+    
+
+
+
+    </div>
+
+    <div class="faucet-box" style="background-color: rgba(245, 101, 101, 0.1); border-left-color: #f56565;">
+      <h2 style="color: #f56565;">⚠️ Important Disclaimer</h2>
+      <p>HOSKDOG ($HKDG) is a meme token created for entertainment purposes. This roadmap represents aspirational goals and should not be considered financial advice. Cryptocurrency investments carry inherent risks. Always do your own research and never invest more than you can afford to lose. All dates and features are subject to change based on community feedback and market conditions.</p>
+    </div>
+
+    <div style="text-align: center; margin: 40px 0; color: #88ffe0;">
+      <h2 style="color: #08fdd8;">🚽💎 Join the HOSKDOG Revolution! 💎🚽</h2>
+      <p style="font-size: 1.2rem;">Help us flush the competition and reach for the stars!</p>
+      <p style="font-size: 1rem;">One slurp at a time, one flush at a time, to the moon! 🌙</p>
+    </div>
+
+  </main>
+
+  <script>
+    // Wallet Management
+    let connectedWallet = null;
+    let walletAddress = null;
+    let userEligibility = null;
+
+    // API Base URL (adjust for your backend)
+    const API_BASE = 'http://localhost:3000/api';
+
+    // Wallet connection function
+    async function connectWallet(walletName) {
+      try {
+        // Update button state
+        document.querySelectorAll('.wallet-btn').forEach(btn => {
+          btn.disabled = true;
+          btn.textContent = 'Connecting...';
+        });
+
+        let walletApi = null;
+        
+        // Try to connect based on wallet type
+        switch(walletName) {
+          case 'nami':
+            if (window.cardano && window.cardano.nami) {
+              walletApi = await window.cardano.nami.enable();
+            }
+            break;
+          case 'lace':
+            if (window.cardano && window.cardano.lace) {
+              walletApi = await window.cardano.lace.enable();
+            }
+            break;
+          case 'eternl':
+            if (window.cardano && window.cardano.eternl) {
+              walletApi = await window.cardano.eternl.enable();
+            }
+            break;
+          case 'typhon':
+            if (window.cardano && window.cardano.typhon) {
+              walletApi = await window.cardano.typhon.enable();
+            }
+            break;
+          case 'flint':
+            if (window.cardano && window.cardano.flint) {
+              walletApi = await window.cardano.flint.enable();
+            }
+            break;
+          case 'nufi':
+            if (window.cardano && window.cardano.nufi) {
+              walletApi = await window.cardano.nufi.enable();
+            }
+            break;
+        }
+
+        if (!walletApi) {
+          throw new Error(`${walletName} wallet not found. Please install the ${walletName} extension.`);
+        }
+
+        // Get wallet address
+        const addresses = await walletApi.getUsedAddresses();
+        if (addresses.length === 0) {
+          const unusedAddresses = await walletApi.getUnusedAddresses();
+          if (unusedAddresses.length === 0) {
+            throw new Error('No addresses found in wallet');
+          }
+          walletAddress = unusedAddresses[0];
+        } else {
+          walletAddress = addresses[0];
+        }
+
+        // Convert hex address to bech32 if needed
+        const addressDisplay = hexToBech32(walletAddress);
+
+        connectedWallet = {
+          name: walletName,
+          api: walletApi,
+          address: addressDisplay
+        };
+
+        // Update UI
+        showConnectedWallet(addressDisplay);
+        await checkEligibility(addressDisplay);
+
+      } catch (error) {
+        console.error('Wallet connection failed:', error);
+        alert(`Failed to connect ${walletName}: ${error.message}`);
+        resetWalletButtons();
+      }
+    }
+
+    // Show connected wallet UI
+    function showConnectedWallet(address) {
+      document.getElementById('wallet-section').style.display = 'none';
+      document.getElementById('connected-section').style.display = 'block';
+      document.getElementById('wallet-address').textContent = address.substring(0, 20) + '...';
+    }
+
+    // Check user eligibility
+    async function checkEligibility(address) {
+      try {
+        document.getElementById('eligibility-status').textContent = 'Checking eligibility...';
+        
+        const response = await fetch(`${API_BASE}/check-eligibility`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ address })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to check eligibility');
+        }
+
+        const result = await response.json();
+        userEligibility = result;
+
+        // Update UI based on eligibility
+        document.getElementById('eligibility-results').style.display = 'block';
+        document.getElementById('eligibility-status').textContent = 'Eligibility checked!';
+
+        // Hide all tier info first
+        document.getElementById('meme-holder').style.display = 'none';
+        document.getElementById('ada-only').style.display = 'none';
+        document.getElementById('ineligible').style.display = 'none';
+
+        // Show appropriate tier
+        if (result.eligible) {
+          if (result.tier === 'meme') {
+            document.getElementById('meme-holder').style.display = 'block';
+          } else if (result.tier === 'ada') {
+            document.getElementById('ada-only').style.display = 'block';
+          }
+          document.getElementById('slurp-section').style.display = 'block';
+        } else {
+          document.getElementById('ineligible').style.display = 'block';
+        }
+
+      } catch (error) {
+        console.error('Eligibility check failed:', error);
+        document.getElementById('eligibility-status').textContent = 'Failed to check eligibility. Please try again.';
+      }
+    }
+
+    // Perform slurp
+    async function performSlurp() {
+      if (!connectedWallet || !userEligibility || !userEligibility.eligible) {
+        alert('Please connect wallet and check eligibility first');
+        return;
+      }
+
+      try {
+        const slurpBtn = document.getElementById('slurp-btn');
+        slurpBtn.disabled = true;
+        slurpBtn.textContent = '🚽 Processing Slurp...';
+        
+        document.getElementById('slurp-status').textContent = 'Preparing transaction...';
+
+        const response = await fetch(`${API_BASE}/slurp`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            address: connectedWallet.address,
+            tier: userEligibility.tier
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Slurp request failed');
+        }
+
+        const result = await response.json();
+        
+        if (result.success) {
+          document.getElementById('slurp-status').innerHTML = `
+            <div style="color: #08fdd8; font-weight: bold;">
+              🎉 Slurp Successful! 🎉<br>
+              TX ID: ${result.txHash}<br>
+              ${result.amount} HKDG sent to your wallet!
+            </div>
+          `;
+          slurpBtn.textContent = '✅ Slurped!';
+        } else {
+          throw new Error(result.error || 'Slurp failed');
+        }
+
+      } catch (error) {
+        console.error('Slurp failed:', error);
+        document.getElementById('slurp-status').innerHTML = `
+          <div style="color: #ff6b6b;">
+            ❌ Slurp Failed: ${error.message}
+          </div>
+        `;
+        document.getElementById('slurp-btn').disabled = false;
+        document.getElementById('slurp-btn').textContent = '🚽 SLURP $HKDG NOW! 🚽';
+      }
+    }
+
+    // Disconnect wallet
+    function disconnectWallet() {
+      connectedWallet = null;
+      walletAddress = null;
+      userEligibility = null;
+      
+      document.getElementById('wallet-section').style.display = 'block';
+      document.getElementById('connected-section').style.display = 'none';
+      resetWalletButtons();
+    }
+
+    // Reset wallet buttons
+    function resetWalletButtons() {
+      const walletNames = ['lace', 'nami', 'eternl', 'typhon', 'flint', 'nufi'];
+      const emojis = ['🦀', '🌊', '♾️', '🌪️', '🔥', '🔐'];
+      
+      document.querySelectorAll('.wallet-btn').forEach((btn, index) => {
+        btn.disabled = false;
+        btn.textContent = `${emojis[index]} ${walletNames[index].charAt(0).toUpperCase() + walletNames[index].slice(1)}`;
+      });
+    }
+
+    // Convert hex address to bech32 (simplified - you might need a proper library)
+    function hexToBech32(hexAddress) {
+      // This is a simplified version - in production you'd use a proper Cardano library
+      // For now, just return the hex address if conversion fails
+      try {
+        // If it's already bech32, return as is
+        if (typeof hexAddress === 'string' && hexAddress.startsWith('addr')) {
+          return hexAddress;
+        }
+        return hexAddress; // Return as-is for now
+      } catch (error) {
+        return hexAddress;
+      }
+    }
+
+    // Check if wallets are available on page load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const walletChecks = [
+          { name: 'lace', available: window.cardano && window.cardano.lace },
+          { name: 'nami', available: window.cardano && window.cardano.nami },
+          { name: 'eternl', available: window.cardano && window.cardano.eternl },
+          { name: 'typhon', available: window.cardano && window.cardano.typhon },
+          { name: 'flint', available: window.cardano && window.cardano.flint },
+          { name: 'nufi', available: window.cardano && window.cardano.nufi }
+        ];
+
+        walletChecks.forEach(wallet => {
+          const btn = document.querySelector(`[onclick="connectWallet('${wallet.name}')"]`);
+          if (btn && !wallet.available) {
+            btn.style.opacity = '0.5';
+            btn.title = `${wallet.name} wallet not detected. Please install the extension.`;
+          }
+        });
+      }, 1000); // Wait 1 second for wallets to load
+    });
+
+    // Particle Animation (existing code)
+    const canvas = document.getElementById('backgroundCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const numParticles = 80;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 2;
+        this.speedY = (Math.random() - 0.5) * 2;
+        this.opacity = Math.random() * 0.5 + 0.1;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = '#08fdd8';
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#08fdd8';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
