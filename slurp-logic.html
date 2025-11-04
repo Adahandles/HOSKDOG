@@ -460,6 +460,145 @@
          • Transparent tokenomics + compliance</p>
     </div>
 
+    <div class="faucet-box">
+      <h2>🔧 TECHNICAL INFRASTRUCTURE - THE CORE STACK</h2>
+      <p><strong>Phase 1 critical infrastructure for $HKDG professional development:</strong></p>
+      
+      <h3>🔐 1. Secure Wallet Architecture</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background-color: rgba(8, 253, 216, 0.1);">
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Purpose</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Description</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">💧 Faucet Wallet</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Holds HKDG tokens for slurping</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">💰 Payment Wallet</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Receives ADA deposits from slurpers</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🌍 Springs Wallet</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Receives ADA for water project donations</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🥣 Launch Bowl Wallet</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Future sale & LP pair wallet</td>
+        </tr>
+      </table>
+      <p><strong>✅ All wallets: Ledger/Trezor based, never reused, optionally controlled by multisig or DAO</strong></p>
+      
+      <h3>💧 2. Faucet Backend (Slurp Engine)</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background-color: rgba(8, 253, 216, 0.1);">
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Component</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Function</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🔌 Wallet Connect</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Via Lace / Nami / Eternl — connect wallet to site</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🧠 Wallet Checker</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Verifies SNEK/HOSKY ownership OR ADA deposit</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🧾 Payment Verifier</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Confirms min deposit (gas) made before slurp</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">💧 Faucet Handler</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Sends appropriate HKDG amount to wallet</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">📊 Slurp Logger</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Tracks wallet activity (slurp count, last slurp time)</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🧻 Airdrop Flagger</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Marks wallet as eligible for HOSKmas airdrop</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">⏳ Rate Limiter</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Optional: 1 slurp per 24h per wallet</td>
+        </tr>
+      </table>
+      
+      <h3>🧰 3. Development Stack (Best Practice)</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background-color: rgba(8, 253, 216, 0.1);">
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Layer</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Tech Recommendation</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Frontend</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">React (Next.js or Vite) with CIP30 wallet integration</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Backend (API)</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Node.js (Express) or Python (FastAPI)</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Wallet APIs</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Blockfrost or Koios</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Database</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Supabase (Postgres) or Firebase (NoSQL)</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Security</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">JWT-based auth for faucet access + slurp logs</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Transaction Builder</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Cardano-serialization-lib or Mesh.js</td>
+        </tr>
+      </table>
+      
+      <h3>🔐 4. Security Standards</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background-color: rgba(8, 253, 216, 0.1);">
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Security Layer</th>
+          <th style="padding: 10px; border: 1px solid rgba(8, 253, 216, 0.3); color: #08fdd8;">Rule</th>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Wallets</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🔒 Use hardware wallets only (Ledger/Trezor)</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Data</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ No private keys stored EVER</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Token Sending</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ Send via signed tx or multi-sig relay</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Rate Limits</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">🧻 1 slurp per wallet/day (optional)</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Abuse Protection</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ IP + wallet address throttling</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">Logging</td>
+          <td style="padding: 8px; border: 1px solid rgba(8, 253, 216, 0.2);">✅ Log every TX ID for transparency</td>
+        </tr>
+      </table>
+      
+      <h3>✅ Development Deliverables</h3>
+      <p>• <strong>Secure backend faucet handler</strong> - Input: wallet + deposit check, Output: sends HKDG<br>
+         • <strong>Wallet eligibility checker</strong> - Validates HOSKY/SNEK holdings via policy ID<br>
+         • <strong>Database schema</strong> - Slurp history, faucet balances, donation flagging, airdrop eligibility<br>
+         • <strong>Faucet flow controller</strong> - Reward logic, gas calculation, security guards<br>
+         • <strong>Clean React + CIP-30 frontend</strong> - Lightweight, mobile-optimized</p>
+      
+      <p><strong>💬 All code will be:</strong> Fully typed (TS/Python), modular, production-ready, commented + auditable, easy to plug into hoskdog.com</p>
+    </div>
+
     <div class="faucet-box" style="background-color: rgba(245, 101, 101, 0.1); border-left-color: #f56565;">
       <h2 style="color: #f56565;">⚠️ Important Disclaimer</h2>
       <p>HOSKDOG ($HKDG) is a meme token created for entertainment purposes. This roadmap represents aspirational goals and should not be considered financial advice. Cryptocurrency investments carry inherent risks. Always do your own research and never invest more than you can afford to lose. All dates and features are subject to change based on community feedback and market conditions.</p>
