@@ -1,143 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slurp Logic - HOSKDOG Roadmap</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HOSKDOG - Slurp Logic Roadmap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background-color: #0b0f1a;
+      color: #e0faff;
+    }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: white;
-            overflow-x: hidden;
-        }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
 
-        .aurora-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-            animation: aurora 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
+    main {
+      position: relative;
+      z-index: 2;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        @keyframes aurora {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.8;
-                transform: scale(1.1);
-            }
-        }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            position: relative;
-            z-index: 2;
-        }
+    .logo-container img {
+      width: 140px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 0 25px #08fdd8;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+    h1 {
+      text-align: center;
+      color: #08fdd8;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
 
-        .title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    .subtitle {
+      text-align: center;
+      color: #88ffe0;
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
 
-        .subtitle {
-            font-size: 1.2rem;
-            font-weight: 300;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
+    .nav-button {
+      display: inline-block;
+      margin: 20px auto;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
 
-        .nav-button {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            margin: 1rem 0;
-        }
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+      color: #000;
+    }
 
-        .nav-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+    }
 
-        .roadmap-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+    @media (max-width: 768px) {
+      main {
+        padding: 20px 10px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .faucet-box {
+        padding: 15px;
+        margin: 20px auto;
+      }
+      
+      .faucet-box h2 {
+        font-size: 1.5rem;
+      }
+      
+      .phase-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+    }
 
-        .section-title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+    .faucet-box {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 25px;
+      background-color: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
 
-        .phase-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-        }
+    .faucet-box h2 {
+      color: #08fdd8;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
 
-        .phase-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
+    .faucet-box h3 {
+      color: #08fdd8;
+      font-size: 1.4rem;
+      margin: 20px 0 10px 0;
+    }
 
-        .phase-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #ffffff;
-        }
+    .faucet-box p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+
+    .phase-card {
+      background-color: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .phase-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 25px rgba(8, 253, 216, 0.5);
+    }
+
+    .phase-title {
+      color: #08fdd8;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
 
         .phase-status {
             display: inline-block;
@@ -287,206 +306,218 @@
     </style>
 </head>
 <body>
-    <div class="aurora-bg"></div>
-    
-    <div class="container">
-        <div class="header">
-            <h1 class="title">🧻 Slurp Logic</h1>
-            <p class="subtitle">The complete roadmap for HOSKDOG ($HKDG) - From faucet drips to exchange listings</p>
-            <a href="index.html" class="nav-button">🚽 Back to Main</a>
-        </div>
-
-        <div class="roadmap-section">
-            <h2 class="section-title">🚀 Phase 1: The Great Flush</h2>
-            <div class="phase-card">
-                <div class="phase-title">Faucet Launch & Community Building</div>
-                <div class="phase-status status-complete">COMPLETED</div>
-                <div class="phase-description">
-                    The inaugural launch of the HOSKDOG faucet, establishing the foundation for our toilet paper economy.
-                </div>
-                <ul class="features-list">
-                    <li>Faucet mechanism deployment on Cardano</li>
-                    <li>Initial token distribution via drip claims</li>
-                    <li>Community Discord & Telegram setup</li>
-                    <li>Website and branding establishment</li>
-                    <li>Policy ID: 9560f81458c9c94e4d8baf4bb999ba8add98ec29f4c4b78b070cdf7b</li>
-                </ul>
-                
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-value">1,000,000</div>
-                        <div class="metric-label">Total Supply</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">500+</div>
-                        <div class="metric-label">Early Adopters</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">24/7</div>
-                        <div class="metric-label">Faucet Uptime</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="roadmap-section">
-            <h2 class="section-title">💧 Phase 2: Drip Economics</h2>
-            <div class="phase-card">
-                <div class="phase-title">Enhanced Faucet Mechanics</div>
-                <div class="phase-status status-active">ACTIVE</div>
-                <div class="phase-description">
-                    Implementing advanced drip logic with anti-gaming measures and reward optimization.
-                </div>
-                <ul class="features-list">
-                    <li>Time-locked claim intervals (1 hour cooldown)</li>
-                    <li>Anti-bot protection mechanisms</li>
-                    <li>Dynamic drip amounts based on supply</li>
-                    <li>Wallet verification systems</li>
-                    <li>Community feedback integration</li>
-                </ul>
-            </div>
-
-            <div class="phase-card">
-                <div class="phase-title">Airdrop Campaigns</div>
-                <div class="phase-status status-upcoming">Q1 2024</div>
-                <div class="phase-description">
-                    Strategic airdrops to Cardano NFT holders and active community members.
-                </div>
-                <ul class="features-list">
-                    <li>Snapshot-based distributions</li>
-                    <li>NFT holder rewards (Ape Society, Clay Nation, etc.)</li>
-                    <li>Community contest rewards</li>
-                    <li>Partnership token swaps</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="roadmap-section">
-            <h2 class="section-title">🏆 Phase 3: Domain Wars</h2>
-            <div class="phase-card">
-                <div class="phase-title">Battle for the Handles</div>
-                <div class="phase-status status-upcoming">Q2 2024</div>
-                <div class="phase-description">
-                    Epic competitions for premium Cardano handles and domain names using HKDG tokens.
-                </div>
-                <ul class="features-list">
-                    <li>Handle auction system powered by HKDG</li>
-                    <li>Community voting on premium domains</li>
-                    <li>Winner rewards and recognition system</li>
-                    <li>Integration with Cardano Handle protocol</li>
-                    <li>Toilet-themed handle collections</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="roadmap-section">
-            <h2 class="section-title">🎯 Phase 4: Launch Bowl</h2>
-            <div class="phase-card">
-                <div class="phase-title">DEX Integration & Trading</div>
-                <div class="phase-status status-upcoming">Q3 2024</div>
-                <div class="phase-description">
-                    Major decentralized exchange listings and liquidity pool establishment.
-                </div>
-                <ul class="features-list">
-                    <li>Minswap DEX listing</li>
-                    <li>SundaeSwap integration</li>
-                    <li>WingRiders partnership</li>
-                    <li>Liquidity incentive programs</li>
-                    <li>Yield farming opportunities</li>
-                </ul>
-            </div>
-
-            <div class="phase-card">
-                <div class="phase-title">Utility Expansion</div>
-                <div class="phase-status status-upcoming">Q3 2024</div>
-                <div class="phase-description">
-                    Real-world utility integrations and ecosystem partnerships.
-                </div>
-                <ul class="features-list">
-                    <li>NFT marketplace payments</li>
-                    <li>Gaming integration rewards</li>
-                    <li>Governance token mechanics</li>
-                    <li>Staking reward systems</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="roadmap-section">
-            <h2 class="section-title">📈 Phase 5: The Big Flush</h2>
-            <div class="phase-card">
-                <div class="phase-title">Centralized Exchange Listings</div>
-                <div class="phase-status status-upcoming">Q4 2024</div>
-                <div class="phase-description">
-                    Strategic listings on major centralized exchanges for global accessibility.
-                </div>
-                <ul class="features-list">
-                    <li>Tier 2 exchange partnerships</li>
-                    <li>Gate.io listing application</li>
-                    <li>MEXC Global integration</li>
-                    <li>Crypto.com listing goal</li>
-                    <li>Enhanced trading pairs (HKDG/USDT, HKDG/ADA)</li>
-                </ul>
-            </div>
-
-            <div class="phase-card">
-                <div class="phase-title">Ecosystem Maturation</div>
-                <div class="phase-status status-upcoming">2025</div>
-                <div class="phase-description">
-                    Full ecosystem development with advanced DeFi integrations.
-                </div>
-                <ul class="features-list">
-                    <li>Cross-chain bridge development</li>
-                    <li>Advanced tokenomics v2.0</li>
-                    <li>DAO governance implementation</li>
-                    <li>Institutional partnerships</li>
-                    <li>Toilet paper charity initiatives</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="roadmap-section">
-            <h2 class="section-title">🎮 Interactive Features</h2>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="phase-card">
-                        <div class="phase-title">Faucet Gamification</div>
-                        <div class="phase-description">
-                            Daily challenges, streak bonuses, and community leaderboards for faucet users.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="phase-card">
-                        <div class="phase-title">NFT Integration</div>
-                        <div class="phase-description">
-                            Exclusive toilet-themed NFT collections with HKDG utility and rewards.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="phase-card">
-                        <div class="phase-title">Community Rewards</div>
-                        <div class="phase-description">
-                            Referral systems, social media contests, and engagement-based token distributions.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="warning-box">
-            <div class="warning-title">⚠️ Important Disclaimer</div>
-            <p>HOSKDOG ($HKDG) is a meme token created for entertainment purposes. This roadmap represents aspirational goals and should not be considered financial advice. Cryptocurrency investments carry inherent risks. Always do your own research and never invest more than you can afford to lose. The faucet mechanism is experimental and subject to changes based on community feedback and technical requirements.</p>
-        </div>
-
-        <div style="text-align: center; margin-top: 3rem;">
-            <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem;">
-                Join the HOSKDOG community and help us flush the competition! 🚽💎
-            </p>
-        </div>
+  <canvas id="backgroundCanvas"></canvas>
+  <main>
+    <div class="logo-container">
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
     </div>
+
+    <h1>🧻 SLURP LOGIC</h1>
+    <p class="subtitle">The Ultimate HOSKDOG Roadmap - From Toilet Bowl to the Moon!</p>
+    
+    <div class="button-container">
+      <a href="index.html" class="nav-button">🚽 Back to Toilet Bowl</a>
+    </div>
+
+    <div class="faucet-box">
+      <h2>� Phase 1: The Great Flush (COMPLETED)</h2>
+      <p><strong>The toilet bowl has been cleaned and the faucet is flowing!</strong></p>
+      <p>✅ HOSKDOG Faucet launched on Cardano<br>
+         ✅ 1 Trillion $HKDG total supply established<br>
+         ✅ Community toilet bowl gathering started<br>
+         ✅ Policy ID: 9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447<br>
+         ✅ WingRiders DEX listing achieved</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>🎄 Phase 2: HOSKMAS - The Holiday Flush (ACTIVE)</h2>
+      <p><strong>Ho Ho HOSK! Santa's bringing toilet paper for Christmas!</strong></p>
+      
+      <h3>🎅 HOSKMAS Features:</h3>
+      <p>🎁 Daily HOSKMAS faucet bonuses (December 1-31)<br>
+         🧻 Special holiday toilet paper NFT drops<br>
+         ⛄ HOSKMAS meme contest with $HKDG rewards<br>
+         🎵 "Jingle Bowls" - Holiday themed content<br>
+         🤶 Santa's Little Helpers referral program</p>
+      
+      <h3>🚰 Enhanced Meme Faucet:</h3>
+      <p>💧 1-hour cooldown between slurps<br>
+         🤖 Anti-bot toilet paper verification<br>
+         📈 Dynamic drip amounts (more paper = smaller drips)<br>
+         🏆 Slurp streak rewards for daily users<br>
+         📊 Leaderboard for biggest slurpers</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>⚔️ Phase 3: Domain Wars Giveaway (Q1 2026)</h2>
+      <p><strong>Battle for the ultimate toilet handles and domains!</strong></p>
+      
+      <h3>🏆 The Great Handle War:</h3>
+      <p>🎯 Premium Cardano Handle giveaways powered by $HKDG<br>
+         🚽 Toilet-themed handle collections ($toilet, $flush, $bowl)<br>
+         👑 Community voting determines handle winners<br>
+         🎮 Handle auction system with $HKDG bidding<br>
+         🏅 Hall of Fame for handle champions</p>
+      
+      <h3>💰 Domain War Rewards:</h3>
+      <p>💎 Exclusive toilet bowl NFTs for winners<br>
+         🧻 Massive $HKDG bonus distributions<br>
+         🎖️ Special "Handle Hero" discord roles<br>
+         📱 Custom toilet bowl emoji rights<br>
+         🌟 Permanent HOSKDOG hall of fame entry</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>🚀 Phase 4: Minswap Custom Launch Bowl (Q2 2026)</h2>
+      <p><strong>The ultimate toilet bowl gets a custom Minswap launch!</strong></p>
+      
+      <h3>💫 Minswap Custom Launch:</h3>
+      <p>🌊 Official Minswap custom token launch event<br>
+         💧 Massive liquidity pools with $HKDG/ADA pairs<br>
+         🏊‍♂️ Liquidity mining rewards for early swimmers<br>
+         🎊 Launch day toilet paper airdrop celebration<br>
+         📈 Professional market maker support</p>
+      
+      <h3>🔥 Multi-DEX Domination:</h3>
+      <p>🧁 SundaeSwap integration with yield farming<br>
+         🕊️ WingRiders enhanced trading pairs<br>
+         ⚡ VyFinance lightning-fast swaps<br>
+         🌈 Spectrum decentralized trading<br>
+         🎯 MuesliSwap community governance</p>
+      
+      <h3>💎 Utility Expansion:</h3>
+      <p>🖼️ NFT marketplace toilet paper payments<br>
+         🎮 Gaming integration with flush mechanics<br>
+         🗳️ DAO governance for toilet bowl decisions<br>
+         🏆 Staking rewards for diamond hands</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>🌙 Phase 5: The Big Flush to the Moon! (2027)</h2>
+      <p><strong>From toilet bowl to the cosmos - HOSKDOG conquers the universe!</strong></p>
+      
+      <h3>🏛️ Centralized Exchange Conquest:</h3>
+      <p>🚪 Gate.io - The gateway to toilet paper wealth<br>
+         🌟 MEXC Global - Worldwide toilet dominance<br>
+         💳 Crypto.com - The holy grail of listings<br>
+         🔥 Binance consideration (ultimate dream)<br>
+         💱 Multiple trading pairs (HKDG/USDT, HKDG/BTC, HKDG/ETH)</p>
+      
+      <h3>🌐 Global Toilet Empire:</h3>
+      <p>🌉 Cross-chain bridges to Ethereum & BSC<br>
+         🏦 Institutional toilet paper partnerships<br>
+         🎓 University blockchain toilet studies<br>
+         🏥 Charity toilet paper initiatives worldwide<br>
+         🛸 Space toilet research funding (SpaceX collab?)</p>
+      
+      <h3>🎯 The Ultimate Vision:</h3>
+      <p>👑 First meme token to reach Mars<br>
+         🧻 Universal toilet paper currency<br>
+         🏰 HOSKDOG theme parks worldwide<br>
+         📺 Netflix documentary: "The Toilet Token"<br>
+         🎖️ Nobel Prize for Toilet Innovation</p>
+    </div>
+
+    <div class="faucet-box">
+      <h2>🎮 Interactive HOSK Features</h2>
+      
+      <h3>🏆 Faucet Gamification:</h3>
+      <p>📅 Daily toilet paper challenges<br>
+         🔥 Slurp streak bonuses (7-day, 30-day, 365-day)<br>
+         📊 Community leaderboards for biggest slurpers<br>
+         🎖️ Achievement badges for toilet mastery<br>
+         🎲 Random bonus multiplier events</p>
+      
+      <h3>🖼️ NFT Toilet Collection:</h3>
+      <p>🧻 Exclusive HOSKDOG toilet paper rolls<br>
+         🚽 Golden toilet bowl legendary NFTs<br>
+         🚰 Faucet handle collectible series<br>
+         💎 Diamond plunger ultra-rare items<br>
+         🎨 Community toilet art contests</p>
+      
+      <h3>👥 Community Rewards:</h3>
+      <p>🔗 Referral toilet paper bonuses<br>
+         📱 Social media meme contests<br>
+         💬 Discord engagement rewards<br>
+         🎯 Telegram toilet talk bonuses<br>
+         🎊 Holiday special events</p>
+    </div>
+
+    <div class="faucet-box" style="background-color: rgba(245, 101, 101, 0.1); border-left-color: #f56565;">
+      <h2 style="color: #f56565;">⚠️ Important Toilet Paper Disclaimer</h2>
+      <p>HOSKDOG ($HKDG) is a meme token created for maximum toilet humor and entertainment. This roadmap represents our wildest toilet dreams and should not be considered financial advice. Cryptocurrency investments carry inherent risks - you might lose your toilet paper! Always do your own research and never invest more than you can afford to flush. The faucet mechanism is experimental and may get clogged. Past performance does not guarantee future toilet success. 🧻</p>
+    </div>
+
+    <div style="text-align: center; margin: 40px 0; color: #88ffe0;">
+      <h2 style="color: #08fdd8;">🚽💎 Join the HOSKDOG Revolution! 💎🚽</h2>
+      <p style="font-size: 1.2rem;">Help us flush the competition and reach for the stars!</p>
+      <p style="font-size: 1rem;">One slurp at a time, one flush at a time, to the moon! 🌙</p>
+    </div>
+
+  </main>
+
+  <script>
+    const canvas = document.getElementById('backgroundCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const numParticles = 80;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 2;
+        this.speedY = (Math.random() - 0.5) * 2;
+        this.opacity = Math.random() * 0.5 + 0.1;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = '#08fdd8';
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#08fdd8';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 </body>
 </html>
