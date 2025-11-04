@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs-extra');
 const path = require('path');
 const config = require('../../config/faucet-settings.json');
+const { sendHKDGTokens, validateTransaction, getFaucetBalance } = require('../utils/cardano-tx');
 
 const router = express.Router();
 
@@ -34,9 +35,27 @@ router.post('/slurp', async (req, res) => {
       ? config.faucet.rewards.memeHolders 
       : config.faucet.rewards.adaOnly;
 
-    // For now, we'll simulate the transaction
-    // In production, you'd integrate with Cardano transaction building
-    const txHash = await simulateTokenTransfer(address, rewardAmount, tier);
+    // Validate transaction before attempting
+    const validation = await validateTransaction(address, rewardAmount);
+    if (!validation.valid) {
+      return res.status(400).json({ 
+        error: 'Transaction validation failed',
+        details: validation.error
+      });
+    }
+
+    // Send real HKDG tokens using Lucid + Cardano
+    const txResult = await sendHKDGTokens(
+      address, 
+      rewardAmount, 
+      `HOSKDOG Faucet - ${tier} tier reward`
+    );
+
+    if (!txResult.success) {
+      throw new Error('Transaction failed');
+    }
+
+    const txHash = txResult.txHash;
 
     // Log the slurp
     await logSlurp({
@@ -50,8 +69,10 @@ router.post('/slurp', async (req, res) => {
     res.json({
       success: true,
       txHash,
+      explorerUrl: txResult.explorerUrl,
       amount: formatTokenAmount(rewardAmount),
-      message: `Successfully sent ${formatTokenAmount(rewardAmount)} HKDG to your wallet!`
+      message: `Successfully sent ${formatTokenAmount(rewardAmount)} HKDG to your wallet!`,
+      note: 'Transaction may take 1-2 minutes to appear in your wallet'
     });
 
   } catch (error) {
@@ -134,6 +155,32 @@ async function checkRecentClaims(address) {
 function formatTokenAmount(amount) {
   return (amount / Math.pow(10, config.faucet.token.decimals)).toLocaleString();
 }
+
+// Get faucet balance and status
+router.get('/faucet-status', async (req, res) => {
+  try {
+    const balance = await getFaucetBalance();
+    
+    res.json({
+      status: 'operational',
+      balance: {
+        ada: balance.ada,
+        hkdg: formatTokenAmount(balance.hkdg),
+        hkdgRaw: balance.hkdg,
+        utxos: balance.utxoCount
+      },
+      network: process.env.CARDANO_NETWORK || 'mainnet',
+      canOperate: balance.hkdg > 0 && balance.ada > 2
+    });
+  } catch (error) {
+    console.error('Error getting faucet status:', error);
+    res.status(500).json({ 
+      status: 'error',
+      error: 'Failed to get faucet status',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
 
 // Get slurp statistics endpoint
 router.get('/stats', async (req, res) => {

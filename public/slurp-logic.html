@@ -841,13 +841,25 @@
         
         if (result.success) {
           document.getElementById('slurp-status').innerHTML = `
-            <div style="color: #08fdd8; font-weight: bold;">
+            <div style="color: #08fdd8; font-weight: bold; line-height: 1.6;">
               🎉 Slurp Successful! 🎉<br>
-              TX ID: ${result.txHash}<br>
-              ${result.amount} HKDG sent to your wallet!
+              <strong>${result.amount} HKDG</strong> sent to your wallet!<br>
+              <br>
+              📋 <strong>TX ID:</strong><br>
+              <span style="font-size: 0.8rem; word-break: break-all;">${result.txHash}</span><br>
+              <br>
+              🔍 <a href="${result.explorerUrl}" target="_blank" style="color: #08fdd8; text-decoration: underline;">
+                View on Blockchain Explorer →
+              </a><br>
+              <br>
+              <span style="font-size: 0.9rem; opacity: 0.8;">
+                ${result.note || 'Tokens will appear in your wallet within 1-2 minutes'}
+              </span>
             </div>
           `;
-          slurpBtn.textContent = '✅ Slurped!';
+          slurpBtn.textContent = '✅ Slurped Successfully!';
+          slurpBtn.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+          slurpBtn.style.animation = 'none';
         } else {
           throw new Error(result.error || 'Slurp failed');
         }

@@ -3,7 +3,7 @@
     "name": "HOSKDOG Faucet",
     "token": {
       "name": "HKDG",
-      "policyId": "YOUR_HKDG_POLICY_ID_HERE",
+      "policyId": "PASTE_YOUR_REAL_HKDG_POLICY_ID_HERE",
       "assetName": "HKDG",
       "decimals": 6
     },
