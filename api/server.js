@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const path = require('path');
 require('dotenv').config();
 
+const { validateConfiguration } = require('./utils/config-validator');
+
 const eligibilityRoutes = require('./routes/eligibility');
 const slurpRoutes = require('./routes/slurp');
 const { rateLimiter } = require('./middleware/rateLimiter');
@@ -67,9 +69,18 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚽 HOSKDOG Faucet Server running on port ${PORT}`);
+  console.log('🚽 HOSKDOG Faucet Server Starting...\n');
+  
+  // Validate configuration
+  if (!validateConfiguration()) {
+    console.error('\n❌ Server startup failed due to configuration errors');
+    process.exit(1);
+  }
+  
+  console.log(`\n� HOSKDOG Faucet Server running on port ${PORT}`);
   console.log(`🌐 Visit: http://localhost:${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`⚙️  Admin dashboard: http://localhost:${PORT}/admin.html`);
 });
 
 module.exports = app;

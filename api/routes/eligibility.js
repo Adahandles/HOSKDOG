@@ -70,7 +70,8 @@ router.post('/check-eligibility', async (req, res) => {
 // Check for HOSKY or SNEK tokens using Koios API
 async function checkMemeTokens(address) {
   try {
-    const response = await axios.post(`${config.api.koiosUrl}/address_assets`, {
+    const koiosUrl = process.env.KOIOS_API || config.api.koiosUrl;
+    const response = await axios.post(`${koiosUrl}/address_assets`, {
       _addresses: [address]
     }, {
       headers: { 'Content-Type': 'application/json' },
@@ -107,7 +108,8 @@ async function checkMemeTokens(address) {
 // Check ADA balance using Koios API
 async function checkAdaBalance(address) {
   try {
-    const response = await axios.post(`${config.api.koiosUrl}/address_info`, {
+    const koiosUrl = process.env.KOIOS_API || config.api.koiosUrl;
+    const response = await axios.post(`${koiosUrl}/address_info`, {
       _addresses: [address]
     }, {
       headers: { 'Content-Type': 'application/json' },

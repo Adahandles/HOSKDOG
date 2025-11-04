@@ -18,7 +18,7 @@ async function initializeLucid() {
     lucidInstance = await Lucid.new(provider, process.env.CARDANO_NETWORK || 'mainnet');
     
     // Set the faucet wallet
-    lucidInstance.selectWalletFromPrivateKey(process.env.FAUCET_WALLET_PRIVATE_KEY);
+    lucidInstance.selectWalletFromPrivateKey(process.env.FAUCET_SKEY);
     
     console.log('✅ Lucid initialized successfully');
     console.log('🔗 Network:', process.env.CARDANO_NETWORK || 'mainnet');
