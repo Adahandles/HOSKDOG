@@ -1,18 +1,27 @@
 {
   "name": "hoskdog-faucet",
   "version": "1.0.0",
-  "description": "HOSKDOG Token Faucet System",
+  "description": "HOSKDOG Token Faucet - Multi-wallet Cardano token distribution system",
   "main": "api/server.js",
+  "type": "module",
   "scripts": {
     "start": "node api/server.js",
-    "dev": "nodemon api/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch api/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mock": "cross-env USE_MOCK_SLURP=true node api/server.js",
+    "production": "cross-env NODE_ENV=production node api/server.js",
+    "check-config": "node -e \"import('./api/utils/config-validator.js').then(m => m.validateConfig()).then(() => console.log('✅ Configuration valid')).catch(e => {console.error('❌ Configuration error:', e.message); process.exit(1);})\"",
+    "init-logs": "mkdir -p logs && echo '[]' > logs/slurp-history.json",
+    "wallet-balance": "node scripts/check-wallet-balance.js"
   },
   "keywords": [
     "cardano",
     "faucet",
+    "tokens",
+    "web3",
+    "cip-30",
     "hoskdog",
-    "crypto"
+    "cryptocurrency"
   ],
   "author": "HOSKDOG Team",
   "license": "MIT",
@@ -20,8 +29,10 @@
     "@blockfrost/blockfrost-js": "^5.7.0",
     "axios": "^1.6.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
     "fs-extra": "^11.1.1",
     "helmet": "^7.1.0",
     "lucid-cardano": "^0.10.11",
@@ -29,5 +40,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

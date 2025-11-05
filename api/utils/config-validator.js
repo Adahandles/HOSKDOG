@@ -46,4 +46,4 @@ function validateConfiguration() {
   return true;
 }
 
-module.exports = { validateConfiguration };
+export { validateConfiguration };

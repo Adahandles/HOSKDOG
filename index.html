@@ -175,13 +175,23 @@
 
     .meme-grid img {
       max-width: 280px;
+      height: auto;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(8, 253, 216, 0.2);
       transition: transform 0.2s;
+      background-color: rgba(12, 18, 28, 0.8);
+      border: 2px solid transparent;
     }
 
     .meme-grid img:hover {
       transform: scale(1.05);
+      border-color: #08fdd8;
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.5);
+    }
+
+    .meme-grid img:error {
+      border-color: #ff4444;
+      opacity: 0.5;
     }
 
     .social-section {
@@ -261,7 +271,7 @@
   <canvas id="backgroundCanvas"></canvas>
   <main>
     <div class="logo-container">
-      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo" loading="eager">
     </div>
 
     <h1>HOSKDOG</h1>
@@ -273,7 +283,7 @@
     </div>
 
     <div class="toilet-row">
-      <img src="images/toiletbowl.png" alt="Toilet Bowl" />
+      <img src="images/toiletbowl.png" alt="HOSKDOG Toilet Bowl Faucet" loading="lazy" />
       <div class="faucet-box">
         <h2>🚰 HOSKDOG Faucet [COMING SOON]</h2>
         <p>🎅 <strong>Hoskmas is Coming!</strong><br><br>
@@ -324,20 +334,20 @@
   </div>
 </section>
    <div class="explorer-buttons">
-          <a href="https://cardanoscan.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">
-            <img src="images/cardanoscan.png" alt="CardanoScan">
+          <a href="https://cardanoscan.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank" rel="noopener noreferrer">
+            <img src="images/cardanoscan.png" alt="View HOSKDOG on CardanoScan" loading="lazy">
           </a>
-          <a href="https://cexplorer.io/asset/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">
-            <img src="images/cexplorer.jpg" alt="cExplorer">
+          <a href="https://cexplorer.io/asset/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank" rel="noopener noreferrer">
+            <img src="images/cexplorer.jpg" alt="View HOSKDOG on cExplorer" loading="lazy">
           </a>
-          <a href="https://builtoncardano.com/hoskdog" target="_blank">
-            <img src="images/built-on-cardano-logo-text-w.png" alt="Built on Cardano">
+          <a href="https://builtoncardano.com/hoskdog" target="_blank" rel="noopener noreferrer">
+            <img src="images/built-on-cardano-logo-text-w.png" alt="HOSKDOG Built on Cardano" loading="lazy">
           </a>
-          <a href="https://pool.pm/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">
-            <img src="images/poolpm.png" alt="Pool.pm">
+          <a href="https://pool.pm/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank" rel="noopener noreferrer">
+            <img src="images/poolpm.png" alt="View HOSKDOG on Pool.pm" loading="lazy">
           </a>
-          <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">
-            <img src="images/adastat.jpg" alt="ADASTAT">
+          <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank" rel="noopener noreferrer">
+            <img src="images/adastat.jpg" alt="View HOSKDOG on ADASTAT" loading="lazy">
           </a>
         </div>
     <div class="manifesto-box">
@@ -377,13 +387,17 @@
     </div>
 
     <div class="meme-section">
-      <h2>When the leash is off...</h2>
+      <h2>🐶 When the leash is off...</h2>
       <div class="meme-grid">
-        <img src="images/meme.png" alt="Meme 1">
-        <img src="images/meme2.png" alt="Meme 2">
-        <img src="images/meme3.png" alt="Meme 3">
-        <img src="images/hoskfather.png" alt="hoskfather">
-        <img src="images/hoskdizzle.png" alt="hoskdizzle">
+        <img src="images/meme.png" alt="HOSKDOG Meme 1" loading="lazy">
+        <img src="images/meme2.png" alt="HOSKDOG Meme 2" loading="lazy">
+        <img src="images/meme3.png" alt="HOSKDOG Meme 3" loading="lazy">
+        <img src="images/hoskfather.png" alt="The Hoskfather" loading="lazy">
+        <img src="images/hoskdizzle.png" alt="Hoskdizzle" loading="lazy">
+        <img src="images/hoskdog.png" alt="HOSKDOG Classic" loading="lazy">
+        <img src="images/onchain_hoskdog.png" alt="OnChain HOSKDOG" loading="lazy">
+        <img src="images/hosky.png" alt="HOSKY Tribute" loading="lazy">
+        <img src="images/snek.png" alt="SNEK Tribute" loading="lazy">
       </div>
     </div>
 
@@ -472,6 +486,26 @@
 
     // Update counter when page loads
     document.addEventListener('DOMContentLoaded', updateVisitorCounter);
+
+    // Handle image loading errors
+    function handleImageError(img) {
+      console.log('Image failed to load:', img.src);
+      img.style.opacity = '0.5';
+      img.style.border = '2px solid #ff4444';
+      img.alt = '🐶 Image loading error - ' + img.alt;
+    }
+
+    // Add error handlers to all images when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        img.addEventListener('error', () => handleImageError(img));
+        img.addEventListener('load', () => {
+          img.style.opacity = '1';
+          img.style.border = '2px solid transparent';
+        });
+      });
+    });
 
     const canvas = document.getElementById("backgroundCanvas");
     const ctx = canvas.getContext("2d");

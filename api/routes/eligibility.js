@@ -1,6 +1,17 @@
-const express = require('express');
-const axios = require('axios');
-const config = require('../../config/faucet-settings.json');
+import express from 'express';
+import axios from 'axios';
+import fs from 'fs-extra';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ES module dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load config
+const config = JSON.parse(
+  await fs.readFile(path.join(__dirname, '../../config/faucet-settings.json'), 'utf8')
+);
 
 const router = express.Router();
 
@@ -134,8 +145,7 @@ async function checkAdaBalance(address) {
 // Check if address has claimed recently
 async function checkRecentClaims(address) {
   try {
-    const fs = require('fs-extra');
-    const slurpHistoryPath = require('path').join(__dirname, '../../logs/slurp-history.json');
+    const slurpHistoryPath = path.join(__dirname, '../../logs/slurp-history.json');
     
     if (!await fs.pathExists(slurpHistoryPath)) {
       return false;
@@ -157,4 +167,4 @@ async function checkRecentClaims(address) {
   }
 }
 
-module.exports = router;
+export default router;

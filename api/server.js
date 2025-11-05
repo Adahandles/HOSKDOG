@@ -1,14 +1,32 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const path = require('path');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
-const { validateConfiguration } = require('./utils/config-validator');
+// Load environment variables first
+dotenv.config();
 
-const eligibilityRoutes = require('./routes/eligibility');
-const slurpRoutes = require('./routes/slurp');
-const { rateLimiter } = require('./middleware/rateLimiter');
+// ES module dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+import { validateConfiguration } from './utils/config-validator.js';
+import eligibilityRoutes from './routes/eligibility.js';
+import { rateLimiter } from './middleware/rateLimiter.js';
+
+// Conditional slurp route import based on environment
+let slurpRoutes;
+if (process.env.USE_MOCK_SLURP === 'true') {
+  console.log('🧪 Loading MOCK slurp implementation for testing');
+  const { default: mockSlurpRoutes } = await import('./routes/slurp-mock.js');
+  slurpRoutes = mockSlurpRoutes;
+} else {
+  console.log('🚀 Loading PRODUCTION slurp implementation with real Cardano transactions');
+  const { default: lucidSlurpRoutes } = await import('./routes/slurp-lucid.js');
+  slurpRoutes = lucidSlurpRoutes;
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,7 +69,7 @@ app.get('/api/health', (req, res) => {
 
 // Serve the main page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/slurp-logic.html'));
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 // Error handling middleware
@@ -77,10 +95,19 @@ app.listen(PORT, () => {
     process.exit(1);
   }
   
-  console.log(`\n� HOSKDOG Faucet Server running on port ${PORT}`);
+  const mode = process.env.USE_MOCK_SLURP === 'true' ? 'MOCK' : 'PRODUCTION';
+  console.log(`\n🚽 HOSKDOG Faucet Server running on port ${PORT} (${mode} mode)`);
   console.log(`🌐 Visit: http://localhost:${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
   console.log(`⚙️  Admin dashboard: http://localhost:${PORT}/admin.html`);
+  
+  if (process.env.USE_MOCK_SLURP === 'true') {
+    console.log(`\n🧪 Running in MOCK mode - no real transactions will be sent`);
+    console.log(`   To switch to production: npm run production`);
+  } else {
+    console.log(`\n🚀 Running in PRODUCTION mode - real Cardano transactions enabled`);
+    console.log(`   To test with mock: npm run mock`);
+  }
 });
 
-module.exports = app;
+export default app;

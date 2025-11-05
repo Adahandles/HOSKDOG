@@ -1,4 +1,4 @@
-const { RateLimiterMemory } = require('rate-limiter-flexible');
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 // Rate limiter for API requests
 const apiLimiter = new RateLimiterMemory({
@@ -35,7 +35,7 @@ const rateLimiter = async (req, res, next) => {
   }
 };
 
-module.exports = {
+export {
   rateLimiter,
   apiLimiter,
   slurpLimiter

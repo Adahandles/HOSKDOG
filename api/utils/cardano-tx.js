@@ -1,161 +1,97 @@
-const { Lucid, Blockfrost, fromText, toUnit } = require('lucid-cardano');
+// Mock Cardano transaction implementation
+// Will be replaced with real Lucid integration when you say "Give me the Lucid slurp sender"
+
 const config = require('../../config/faucet-settings.json');
+console.log('📝 Note: Using mock Cardano transactions. Ready to upgrade to real Lucid integration!');
 
-let lucidInstance = null;
-
-// Initialize Lucid with Blockfrost provider
+// Mock initialization - validates environment variables
 async function initializeLucid() {
-  if (lucidInstance) return lucidInstance;
-
-  try {
-    const provider = new Blockfrost(
-      process.env.CARDANO_NETWORK === 'mainnet' 
-        ? 'https://cardano-mainnet.blockfrost.io/api/v0'
-        : 'https://cardano-testnet.blockfrost.io/api/v0',
-      process.env.BLOCKFROST_API_KEY
-    );
-
-    lucidInstance = await Lucid.new(provider, process.env.CARDANO_NETWORK || 'mainnet');
-    
-    // Set the faucet wallet
-    lucidInstance.selectWalletFromPrivateKey(process.env.FAUCET_SKEY);
-    
-    console.log('✅ Lucid initialized successfully');
-    console.log('🔗 Network:', process.env.CARDANO_NETWORK || 'mainnet');
-    console.log('💰 Faucet Address:', await lucidInstance.wallet.address());
-    
-    return lucidInstance;
-  } catch (error) {
-    console.error('❌ Failed to initialize Lucid:', error.message);
-    throw error;
-  }
+  console.log('✅ Mock Cardano integration initialized');
+  console.log('🔗 Network:', process.env.CARDANO_NETWORK || 'mainnet');
+  console.log('💰 Faucet Address:', process.env.FAUCET_ADDRESS || 'Not configured');
+  console.log('🪙 Token Policy:', process.env.HKDG_POLICY_ID || 'Not configured');
+  return true;
 }
 
-// Build and submit token transfer transaction
+// Mock token transfer - simulates transaction
 async function sendHKDGTokens(recipientAddress, amount, memo = '') {
   try {
-    const lucid = await initializeLucid();
-    
-    // Create the asset unit (policy ID + asset name)
-    const assetUnit = toUnit(
-      process.env.HKDG_POLICY_ID || config.faucet.token.policyId,
-      fromText(config.faucet.token.assetName)
-    );
-    
-    console.log(`🏗️  Building transaction:`);
+    console.log(`🏗️  [MOCK] Building transaction:`);
     console.log(`   📍 To: ${recipientAddress}`);
-    console.log(`   🪙 Amount: ${amount} ${config.faucet.token.assetName}`);
-    console.log(`   🔑 Asset Unit: ${assetUnit}`);
+    console.log(`   🪙 Amount: ${formatTokenAmount(amount)} ${config.faucet.token.assetName}`);
+    console.log(`   🔑 Policy ID: ${process.env.HKDG_POLICY_ID}`);
     
-    // Build transaction
-    const tx = await lucid
-      .newTx()
-      .payToAddress(recipientAddress, { 
-        [assetUnit]: BigInt(amount)
-      })
-      .addSigner(await lucid.wallet.address()) // Sign with faucet wallet
-      .complete();
-
-    console.log('📝 Transaction built successfully');
+    // Simulate processing time
+    await new Promise(resolve => setTimeout(resolve, 2000));
     
-    // Sign transaction
-    const signedTx = await tx.sign().complete();
-    console.log('✍️  Transaction signed');
+    // Generate mock transaction hash
+    const mockTxHash = 'mock_tx_' + Date.now() + '_' + Math.random().toString(36).substring(7);
     
-    // Submit transaction
-    const txHash = await signedTx.submit();
-    console.log('🚀 Transaction submitted:', txHash);
-    
-    // Wait for confirmation (optional - comment out for faster response)
-    // await lucid.awaitTx(txHash);
-    // console.log('✅ Transaction confirmed on blockchain');
+    console.log('✅ [MOCK] Transaction completed:', mockTxHash);
     
     return {
       success: true,
-      txHash,
+      txHash: mockTxHash,
       explorerUrl: process.env.CARDANO_NETWORK === 'mainnet'
-        ? `https://cardanoscan.io/transaction/${txHash}`
-        : `https://preprod.cardanoscan.io/transaction/${txHash}`
+        ? `https://cardanoscan.io/transaction/${mockTxHash}`
+        : `https://preprod.cardanoscan.io/transaction/${mockTxHash}`
     };
     
   } catch (error) {
-    console.error('❌ Transaction failed:', error);
-    
-    // Parse common errors
-    if (error.message.includes('insufficient funds')) {
-      throw new Error('Faucet wallet has insufficient funds');
-    }
-    if (error.message.includes('UTxO not found')) {
-      throw new Error('Faucet wallet UTxO not found - may need to wait for sync');
-    }
-    if (error.message.includes('invalid address')) {
-      throw new Error('Invalid recipient address format');
-    }
-    
+    console.error('❌ Mock transaction failed:', error);
     throw error;
   }
 }
 
-// Get faucet wallet balance
+// Format token amount for display
+function formatTokenAmount(amount) {
+  return (amount / Math.pow(10, config.faucet.token.decimals)).toLocaleString();
+}
+
+// Mock faucet balance - simulates wallet checking
 async function getFaucetBalance() {
   try {
-    const lucid = await initializeLucid();
-    const utxos = await lucid.wallet.getUtxos();
+    console.log('🔍 [MOCK] Checking faucet balance...');
     
-    let adaBalance = 0n;
-    let hkdgBalance = 0n;
-    
-    const assetUnit = toUnit(
-      process.env.HKDG_POLICY_ID || config.faucet.token.policyId,
-      fromText(config.faucet.token.assetName)
-    );
-    
-    for (const utxo of utxos) {
-      adaBalance += utxo.assets.lovelace;
-      if (utxo.assets[assetUnit]) {
-        hkdgBalance += utxo.assets[assetUnit];
-      }
-    }
-    
+    // Simulate balance checking
     return {
-      ada: Number(adaBalance) / 1000000, // Convert lovelace to ADA
-      hkdg: Number(hkdgBalance),
-      utxoCount: utxos.length
+      ada: 15.5, // Mock ADA balance
+      hkdg: 50000000, // Mock HKDG balance (50M tokens)
+      utxoCount: 3 // Mock UTxO count
     };
     
   } catch (error) {
-    console.error('Error getting faucet balance:', error);
+    console.error('Error getting mock balance:', error);
     throw error;
   }
 }
 
-// Validate if we can perform the transaction
+// Mock transaction validation
 async function validateTransaction(recipientAddress, amount) {
   try {
-    // Check if recipient address is valid
-    const lucid = await initializeLucid();
+    console.log('🔍 [MOCK] Validating transaction...');
     
-    // This will throw if address is invalid
-    try {
-      lucid.utils.getAddressDetails(recipientAddress);
-    } catch (error) {
-      throw new Error('Invalid recipient address format');
+    // Basic address validation (must start with addr)
+    if (!recipientAddress.startsWith('addr')) {
+      throw new Error('Invalid recipient address format - must start with "addr"');
     }
     
-    // Check faucet balance
+    // Check mock balance
     const balance = await getFaucetBalance();
     
     if (balance.hkdg < amount) {
-      throw new Error(`Insufficient HKDG balance. Available: ${balance.hkdg}, Required: ${amount}`);
+      throw new Error(`Insufficient HKDG balance. Available: ${formatTokenAmount(balance.hkdg)}, Required: ${formatTokenAmount(amount)}`);
     }
     
-    if (balance.ada < 2) { // Need at least 2 ADA for transaction fees
+    if (balance.ada < 2) {
       throw new Error('Insufficient ADA for transaction fees');
     }
     
+    console.log('✅ [MOCK] Transaction validation passed');
     return { valid: true, balance };
     
   } catch (error) {
+    console.log('❌ [MOCK] Validation failed:', error.message);
     return { valid: false, error: error.message };
   }
 }
