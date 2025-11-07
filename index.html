@@ -237,7 +237,11 @@
       <a href="good-causes.html" class="nav-button">🌿 Good Causes</a>
       <a href="slurp-logic.html" class="nav-button">🧻 Slurp Logic</a>
   </div> <!-- This closes the "font-family: monospace" div -->
-  </a>
+    <div style="text-align: center; font-family: monospace; margin-top: 20px;">
+  <div>📄 Page Views: <span id="page-total">0</span> total | <span id="page-unique">0</span> unique</div>
+  <div>🌐 Site Views: <span id="site-total">0</span> total | <span id="site-unique">0</span> unique</div>
+</div>
+ </a>
 </div>
     <div class="toilet-row">
       <img src="images/toiletbowl.png" alt="Toilet Bowl" />
@@ -495,6 +499,45 @@
       document.getElementById('page-views').innerText = 'N/A';
     });
 })();
+<script>
+(function() {
+  const domain = 'hoskdog.com';  // your live domain
+  const pathKey = window.location.pathname.replace(/\//g, '_') || 'home';
+  const pageTotalKey = `${domain}_page_total_${pathKey}`;
+  const pageUniqueKey = `${domain}_page_unique_${pathKey}`;
+  const siteTotalKey = `${domain}_site_total`;
+  const siteUniqueKey = `${domain}_site_unique`;
+
+  const countAPI = 'https://api.countapi.xyz';
+
+  function updateCount(label, url, isUniqueKey = null) {
+    // If unique and already visited, skip
+    if (isUniqueKey && localStorage.getItem(isUniqueKey)) {
+      fetch(`${countAPI}/get/${url}`)
+        .then(res => res.json())
+        .then(res => {
+          document.getElementById(label).innerText = res.value;
+        });
+      return;
+    }
+
+    fetch(`${countAPI}/hit/${url}`)
+      .then(res => res.json())
+      .then(res => {
+        document.getElementById(label).innerText = res.value;
+        if (isUniqueKey) localStorage.setItem(isUniqueKey, true);
+      });
+  }
+
+  // Page-specific
+  updateCount('page-total', `${domain}/page_total/${pathKey}`);
+  updateCount('page-unique', `${domain}/page_unique/${pathKey}`, `visited_${pageUniqueKey}`);
+
+  // Site-wide
+  updateCount('site-total', `${domain}/site_total`);
+  updateCount('site-unique', `${domain}/site_unique`, `visited_${siteUniqueKey}`);
+})();
+</script>
 
   </script>
 </body>
