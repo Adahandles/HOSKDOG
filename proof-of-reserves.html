@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOSKDOG - Proof of Reserves 🪙</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Floating particle canvas */
+    #backgroundCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Global page styling */
+    body {
+      font-family: 'Rubik', sans-serif;
+      color: #e0faff;
+      text-align: left;
+      margin: 0;
+      background-color: #0b0f1a;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    header {
+      padding: 2rem 0;
+      text-align: center;
+      background: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 140px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 0 25px #08fdd8;
+    }
+
+    .nav-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 1rem 0;
+      text-align: center;
+      color: #08fdd8;
+    }
+
+    h2 {
+      color: #08fdd8;
+      font-size: 1.8rem;
+      margin: 2rem 0 1rem 0;
+      border-bottom: 2px solid #08fdd8;
+      padding-bottom: 0.5rem;
+    }
+
+    p {
+      line-height: 1.6;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      background: rgba(12, 18, 28, 0.95);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(8, 253, 216, 0.2);
+    }
+
+    th {
+      background-color: rgba(8, 253, 216, 0.2);
+      color: #08fdd8;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    td {
+      color: #e0faff;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background-color: rgba(8, 253, 216, 0.05);
+    }
+
+    .wallet-link {
+      color: #08fdd8;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .wallet-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="backgroundCanvas"></canvas>
+  
+  <header>
+    <div class="logo-container">
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
+    </div>
+    <h1>HOSKDOG</h1>
+    <div class="button-container">
+      <a href="index.html" class="nav-button">🏠 Home</a>
+      <a href="whitepaper.html" class="nav-button">📄 Whitepaper</a>
+      <a href="good-causes.html" class="nav-button">🌿 Good Causes</a>
+      <a href="slurp-logic.html" class="nav-button">🧻 Slurp Logic</a>
+    </div>
+  </header>
+
+  <main>
+    <h2>🪙 Proof of Reserves</h2>
+    <p>
+      HOSKDOG is committed to full transparency. Below is the complete allocation breakdown of the 1 Trillion HKDG token supply, showing how tokens are distributed across different purposes and wallets.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Allocation</th>
+          <th>Wallet</th>
+          <th>Quantity (HKDG)</th>
+          <th>% of Supply</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Faucet Rewards</strong></td>
+          <td><span class="wallet-link">[FAUCET_WALLET_ADDRESS]</span></td>
+          <td>199,999,969,596,647</td>
+          <td><strong>20%</strong></td>
+          <td>Primary faucet distribution. Burn 0.5% on claim.</td>
+        </tr>
+        <tr>
+          <td><strong>Orange Springs Project</strong></td>
+          <td><span class="wallet-link">[ORANGE_SPRINGS_WALLET_ADDRESS]</span></td>
+          <td>149,999,977,197,485</td>
+          <td><strong>15%</strong></td>
+          <td>Real-world integration &amp; utility.</td>
+        </tr>
+        <tr>
+          <td><strong>DEX Liquidity Pools + Marketing</strong></td>
+          <td><span class="wallet-link">[DEX_LIQUIDITY_WALLET_ADDRESS]</span></td>
+          <td>149,999,977,197,485</td>
+          <td><strong>15%</strong></td>
+          <td>WingRiders, Minswap liquidity + promo budget.</td>
+        </tr>
+        <tr>
+          <td><strong>HOSKMAS Event Fund</strong></td>
+          <td><span class="wallet-link">[HOSKMAS_WALLET_ADDRESS]</span></td>
+          <td>99,999,984,798,323</td>
+          <td><strong>10%</strong></td>
+          <td>Holiday drops and seasonal burns.</td>
+        </tr>
+        <tr>
+          <td><strong>Community Growth Fund</strong></td>
+          <td><span class="wallet-link">[COMMUNITY_WALLET_ADDRESS]</span></td>
+          <td>99,999,984,798,323</td>
+          <td><strong>10%</strong></td>
+          <td>Meme bounties, partnerships, collabs.</td>
+        </tr>
+        <tr>
+          <td><strong>CEX Liquidity + Listings</strong></td>
+          <td><span class="wallet-link">[CEX_LIQUIDITY_WALLET_ADDRESS]</span></td>
+          <td>99,999,984,798,323</td>
+          <td><strong>10%</strong></td>
+          <td>Exchange listing and marketing reserves.</td>
+        </tr>
+        <tr>
+          <td><strong>Founder 1 (W. Greene)</strong></td>
+          <td><span class="wallet-link">[FOUNDER1_WALLET_ADDRESS]</span></td>
+          <td>74,999,988,598,743</td>
+          <td><strong>7.5%</strong></td>
+          <td>1-year lock, 3-year vesting.</td>
+        </tr>
+        <tr>
+          <td><strong>Founder 2 (Partner)</strong></td>
+          <td><span class="wallet-link">[FOUNDER2_WALLET_ADDRESS]</span></td>
+          <td>74,999,988,598,743</td>
+          <td><strong>7.5%</strong></td>
+          <td>Same lock/vest schedule.</td>
+        </tr>
+        <tr>
+          <td><strong>Treasury / Reserve</strong></td>
+          <td><span class="wallet-link">[TREASURY_WALLET_ADDRESS]</span></td>
+          <td>49,999,992,399,162</td>
+          <td><strong>5%</strong></td>
+          <td>Governance DAO fund and buybacks.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top: 2rem; font-size: 0.9rem; color: #88ffe0;">
+      <strong>Note:</strong> Wallet addresses will be updated with actual on-chain addresses as they are deployed. All allocations are transparent and verifiable on the Cardano blockchain.
+    </p>
+  </main>
+
+  <footer>
+    &copy; 2025 HOSKDOG — Built for memes, not finance.
+  </footer>
+
+  <script>
+    const canvas = document.getElementById("backgroundCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+    class Star {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = Math.random() * 0.6 - 0.3;
+        this.vy = Math.random() * 0.6 - 0.3;
+        this.radius = Math.random() * 2;
+      }
+      move() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#08fdd8";
+        ctx.fill();
+      }
+    }
+
+    function connect() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = "rgba(8, 253, 216," + (1 - distance / 100) + ")";
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.move();
+        p.draw();
+      });
+      connect();
+      requestAnimationFrame(animate);
+    }
+
+    function init() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Star());
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      init();
+    });
+
+    init();
+    animate();
+  </script>
+</body>
+</html>
