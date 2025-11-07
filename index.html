@@ -237,7 +237,27 @@
       <a href="good-causes.html" class="nav-button">🌿 Good Causes</a>
       <a href="slurp-logic.html" class="nav-button">🧻 Slurp Logic</a>
     </div>
+<div style="font-family: monospace;">
+  👁️ Views: <span id="page-views">loading...</span>
+  <script>
+  (function() {
+    const domain = 'hoskdog.io';  // Your domain namespace
+    const path = window.location.pathname.replace(/\//g, '_') || 'home';
+    const key = `${domain}_${path}`;
+    const url = `https://api.countapi.xyz/hit/${domain}/${key}`;
 
+    fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        document.getElementById('page-views').innerText = res.value;
+      })
+      .catch(() => {
+        document.getElementById('page-views').innerText = 'N/A';
+      });
+  })();
+</script>
+
+</div>
     <div class="toilet-row">
       <img src="images/toiletbowl.png" alt="Toilet Bowl" />
       <div class="faucet-box">
