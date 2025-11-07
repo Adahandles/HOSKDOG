@@ -239,11 +239,13 @@
     </div>
 <div style="font-family: monospace;">
   👁️ Views: <span id="page-views">loading...</span>
-  <script>
+</div>
+
+<script>
   (function() {
-    const domain = 'hoskdog.io';  // Your domain namespace
+    const domain = 'hoskdog.io';
     const path = window.location.pathname.replace(/\//g, '_') || 'home';
-    const key = `${domain}_${path}`;
+    const key = path;
     const url = `https://api.countapi.xyz/hit/${domain}/${key}`;
 
     fetch(url)
@@ -251,10 +253,15 @@
       .then(res => {
         document.getElementById('page-views').innerText = res.value;
       })
-      .catch(() => {
+      .catch(err => {
+        console.error("CountAPI failed:", err);
         document.getElementById('page-views').innerText = 'N/A';
       });
   })();
+</script>
+
+</script>
+
 </script>
 
 </div>
