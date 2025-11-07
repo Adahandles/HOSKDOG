@@ -483,61 +483,7 @@
 
     init();
     animate();
-    (function () {
-  const domain = 'hoskdog.com';
-  const path = window.location.pathname.replace(/\//g, '_') || 'home';
-  const key = path;
-  const url = `https://api.countapi.xyz/hit/${domain}/${key}`;
-
-  fetch(url)
-    .then(res => res.json())
-    .then(res => {
-      document.getElementById('page-views').innerText = res.value;
-    })
-    .catch(err => {
-      console.error("CountAPI failed:", err);
-      document.getElementById('page-views').innerText = 'N/A';
-    });
-})();
-<script>
-(function() {
-  const domain = 'hoskdog.com';  // your live domain
-  const pathKey = window.location.pathname.replace(/\//g, '_') || 'home';
-  const pageTotalKey = `${domain}_page_total_${pathKey}`;
-  const pageUniqueKey = `${domain}_page_unique_${pathKey}`;
-  const siteTotalKey = `${domain}_site_total`;
-  const siteUniqueKey = `${domain}_site_unique`;
-
-  const countAPI = 'https://api.countapi.xyz';
-
-  function updateCount(label, url, isUniqueKey = null) {
-    // If unique and already visited, skip
-    if (isUniqueKey && localStorage.getItem(isUniqueKey)) {
-      fetch(`${countAPI}/get/${url}`)
-        .then(res => res.json())
-        .then(res => {
-          document.getElementById(label).innerText = res.value;
-        });
-      return;
-    }
-
-    fetch(`${countAPI}/hit/${url}`)
-      .then(res => res.json())
-      .then(res => {
-        document.getElementById(label).innerText = res.value;
-        if (isUniqueKey) localStorage.setItem(isUniqueKey, true);
-      });
-  }
-
-  // Page-specific
-  updateCount('page-total', `${domain}/page_total/${pathKey}`);
-  updateCount('page-unique', `${domain}/page_unique/${pathKey}`, `visited_${pageUniqueKey}`);
-
-  // Site-wide
-  updateCount('site-total', `${domain}/site_total`);
-  updateCount('site-unique', `${domain}/site_unique`, `visited_${siteUniqueKey}`);
-})();
-</script>
+   
 
   </script>
 </body>
