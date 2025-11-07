@@ -237,17 +237,6 @@
       <a href="good-causes.html" class="nav-button">🌿 Good Causes</a>
       <a href="slurp-logic.html" class="nav-button">🧻 Slurp Logic</a>
   </div> <!-- This closes the "font-family: monospace" div -->
-<div style="text-align: center; margin: 20px 0;">
-  <a 
-    href="https://app.wingriders.com/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img 
-      src="images/wingriders_logo.jpg"
-      alt="WingRiders Logo"
-      style="width: 120px; height: auto; border-radius: 8px; box-shadow: 0 0 15px #0ff;"
-    >
   </a>
 </div>
     <div class="toilet-row">
@@ -258,35 +247,17 @@
         <button onclick="flush()">Drink from the Toilet Bowl</button>
         <div class="flush-message" id="flushResult"></div>
       </div>
-      <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>WingRiders Token Link</title>
-  <style>
-    .wingriders-logo {
-      width: 150px;
-      height: auto;
-      transition: transform 0.3s ease;
-    }
-    .wingriders-logo:hover {
-      transform: scale(1.1);
-    }
-    .centered {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-  </style>
-</head>
-<body>
-  <div class="centered">
-    <a href="https://app.wingriders.com/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank" rel="noopener noreferrer">
-      <img 
-        src="https://app.wingriders.com/assets/logo.2bdf6cb7.svg" 
-        alt="WingRiders Logo" 
-        class="wingriders-logo"
+  <div style="text-align: center; margin: 20px 0;">
+  <a 
+    href="https://app.wingriders.com/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <img 
+      src="images/wingriders_logo.jpg"
+      alt="WingRiders Logo"
+      style="width: 120px; height: auto; border-radius: 8px; box-shadow: 0 0 15px #0ff;"
+    >
       >
     </a>
   </div>
@@ -504,6 +475,23 @@
 
     init();
     animate();
+    (function () {
+  const domain = 'hoskdog.com';
+  const path = window.location.pathname.replace(/\//g, '_') || 'home';
+  const key = path;
+  const url = `https://api.countapi.xyz/hit/${domain}/${key}`;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      document.getElementById('page-views').innerText = res.value;
+    })
+    .catch(err => {
+      console.error("CountAPI failed:", err);
+      document.getElementById('page-views').innerText = 'N/A';
+    });
+})();
+
   </script>
 </body>
 </html>
