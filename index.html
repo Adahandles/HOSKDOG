@@ -236,34 +236,19 @@
       <a href="whitepaper.html" class="nav-button">📄 Read Whitepaper</a>
       <a href="good-causes.html" class="nav-button">🌿 Good Causes</a>
       <a href="slurp-logic.html" class="nav-button">🧻 Slurp Logic</a>
-    </div>
-<div style="font-family: monospace;">
-  👁️ Views: <span id="page-views">loading...</span>
-</div>
-
-<script>
-  (function() {
-    const domain = 'hoskdog.io';
-    const path = window.location.pathname.replace(/\//g, '_') || 'home';
-    const key = path;
-    const url = `https://api.countapi.xyz/hit/${domain}/${key}`;
-
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        document.getElementById('page-views').innerText = res.value;
-      })
-      .catch(err => {
-        console.error("CountAPI failed:", err);
-        document.getElementById('page-views').innerText = 'N/A';
-      });
-  })();
-</script>
-
-</script>
-
-</script>
-
+  </div> <!-- This closes the "font-family: monospace" div -->
+<div style="text-align: center; margin: 20px 0;">
+  <a 
+    href="https://app.wingriders.com/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <img 
+      src="images/wingriders_logo.jpg"
+      alt="WingRiders Logo"
+      style="width: 120px; height: auto; border-radius: 8px; box-shadow: 0 0 15px #0ff;"
+    >
+  </a>
 </div>
     <div class="toilet-row">
       <img src="images/toiletbowl.png" alt="Toilet Bowl" />
