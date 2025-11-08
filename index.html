@@ -243,19 +243,77 @@
   <div>🌐 Site Views: <span id="site-total">0</span> total | <span id="site-unique">0</span> unique</div>
 </div>
  </a>
-</div>
-    <div class="toilet-row">
-      <img src="images/toiletbowl.png" alt="Toilet Bowl" />
-      <div class="faucet-box">
-        <h2>🚰 [HKDG]HOSKDOG Faucet</h2>
-        <p>Take a drink from the Toilet Bowl.<br>One slurp per wallet. No leash, no shame.</p>
-        <button onclick="flush()">Drink from the Toilet Bowl</button>
-        <div class="flush-message" id="flushResult"></div>
-      </div>
-  
+<!-- 🐕 HOSKDOG Faucet Section (live replacement) -->
+<section id="faucet" class="card" style="max-width:900px;margin:2rem auto;padding:2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;">
+  <img src="https://ipfs.io/ipfs/QmWf799LdLps83xPwDCE9Rb4qgGp547FqoATK7Lz2xiyLD" alt="HOSKDOG Faucet" style="width:100%;border-radius:16px;box-shadow:0 0 30px rgba(108,207,255,.3);" />
+  <div>
+    <h2 style="color:var(--cyan);margin-top:0;">[HKDG] HOSKDOG Faucet</h2>
+    <p style="color:var(--muted);line-height:1.5;">
+      Take a drink from the Toilet Bowl.<br>
+      <strong>One slurp per wallet per session.</strong><br>
+      Meme holders get rewarded; ADA-only wallets still welcome.
+    </p>
+    <button id="connectWallet" class="btn" style="margin-top:1rem;">🐾 Connect Wallet</button>
+    <div id="status" style="margin-top:1rem;font-size:1.05em;"></div>
+    <div id="depositBox" style="display:none;margin-top:1.4rem;">
+      <p>Send ADA to:</p>
+      <code style="display:block;background:var(--card);padding:.8rem 1rem;border-radius:10px;">
+        $hoskdog<br>
+        addr1q9lgquer5840jyexr52zjlpvvv33d7qkg4k35ty9f85leftvz5gkpuwt36e4h6zle5trhx3xqus8q08ac60hxe8pc4mqhuyj7k
+      </code>
+      <p style="color:var(--muted);margin-top:.8rem;">After deposit, tokens are sent manually.<br>
+      Meme holders get <strong>500,000,000 HKDG</strong> per slurp.<br>
+      ADA-only wallets get <strong>100,000,000 HKDG</strong>.</p>
+    </div>
   </div>
-</body>
-</html>
+
+<script type="module">
+import { Buffer } from "buffer";
+window.Buffer = Buffer;
+
+async function connectWallet() {
+  const status = document.getElementById("status");
+  const depositBox = document.getElementById("depositBox");
+  try {
+    const walletAPI = window.cardano?.nami || window.cardano?.eternl || window.cardano?.lace;
+    if (!walletAPI) {
+      status.innerText = "No Cardano wallet detected (use Nami, Eternl, or Lace).";
+      return;
+    }
+
+    const wallet = await walletAPI.enable();
+    const used = await wallet.getUsedAddresses();
+    const addr = Buffer.from(used[0], "hex").toString("base58");
+    status.innerText = "Verifying meme holdings...";
+
+    const r = await fetch(`https://api.cexplorer.io/v1/address/assets/${addr}`);
+    const j = await r.json();
+    const holdsHosky = j.data.some(a => a.asset_name === "HOSKY");
+    const holdsSnek = j.data.some(a => a.asset_name === "SNEK");
+
+    depositBox.style.display = "block";
+
+    if (holdsHosky || holdsSnek) {
+      status.innerHTML =
+        "✅ Meme verified!<br>" +
+        "• 1st slurp: <strong>2.5 ADA</strong> (gas only)<br>" +
+        "• Later slurps: <strong>4 ADA</strong> (2.5 gas + 1.5 fee)<br>" +
+        "Reward: <strong>500,000,000 HKDG</strong>.";
+    } else {
+      status.innerHTML =
+        "❌ No SNEK or HOSKY found.<br>" +
+        "Deposit <strong>5.5 ADA</strong> (2.5 gas + 3 fee).<br>" +
+        "Reward: <strong>100,000,000 HKDG</strong>.";
+    }
+  } catch (e) {
+    console.error(e);
+    status.innerText = "Wallet connection or lookup failed.";
+  }
+}
+
+document.getElementById("connectWallet").onclick = connectWallet;
+</script>
+</section>
 
     </div>
 <!-- HOSKDOG Stats Section using WingRiders metrics -->
