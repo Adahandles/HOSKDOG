@@ -1,9 +1,496 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Updated Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HOSKDOG</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background-color: #0b0f1a;
+      color: #e0faff;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 140px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 0 25px #08fdd8;
+    }
+
+    h1 {
+      text-align: center;
+      color: #08fdd8;
+      font-size: 2.5rem;
+    }
+
+    .toilet-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      margin: 40px auto;
+    }
+
+    .toilet-row img {
+      max-width: 360px;
+      border-radius: 10px;
+      box-shadow: 0 0 25px rgba(8, 253, 216, 0.5);
+    }
+
+    .faucet-box {
+      max-width: 400px;
+      padding: 20px;
+      background-color: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .faucet-box h2 {
+      color: #08fdd8;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .faucet-box p {
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .faucet-box button {
+      background-color: #08fdd8;
+      color: #000;
+      font-weight: bold;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s ease-in-out;
+      box-shadow: 0 0 12px rgba(8, 253, 216, 0.4);
+    }
+
+    .faucet-box button:hover {
+      background-color: #05e3c4;
+      transform: scale(1.05);
+    }
+
+    .flush-message {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #88ffe0;
+    }
+
+    .manifesto-box {
+      background-color: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      padding: 20px 25px;
+      margin: 30px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .manifesto-box h3 {
+      color: #08fdd8;
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
+
+    .manifesto-box p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .meme-section {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    .meme-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .meme-grid img {
+      max-width: 280px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.2);
+      transition: transform 0.2s;
+    }
+
+    .meme-grid img:hover {
+      transform: scale(1.05);
+    }
+
+    .social-section {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    .social-section a {
+      margin: 0 12px;
+      color: #08fdd8;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    /* Explorer buttons */
+    .explorer-buttons {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .explorer-buttons a {
+      margin: 0 12px;
+      display: inline-block;
+    }
+
+    .explorer-buttons img {
+      max-width: 120px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.2);
+      transition: transform 0.2s;
+    }
+
+    .explorer-buttons img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Navigation button styling */
+    .nav-button {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+      color: #000;
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+ </style>
 </head>
 <body>
-    <h1>Welcome to the Updated Page</h1>
-    <p>This content has been updated.</p>
+  <canvas id="backgroundCanvas"></canvas>
+  <main>
+    <div class="logo-container">
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
+    </div>
+
+    <h1>HOSKDOG</h1>
+
+    <div class="button-container">
+      <a href="whitepaper.html" class="nav-button">📄 Read Whitepaper</a>
+      <a href="good-causes.html" class="nav-button">🌿 Good Causes</a>
+      <a href="slurp-logic.html" class="nav-button">🧻 Slurp Logic</a>
+      <a href="proof-of-reserves.html" class="nav-button">🪙 Proof of Reserves</a>
+  </div> <!-- This closes the "font-family: monospace" div -->
+    <div style="text-align: center; font-family: monospace; margin-top: 20px;">
+  <div>📄 Page Views: <span id="page-total">0</span> total | <span id="page-unique">0</span> unique</div>
+  <div>🌐 Site Views: <span id="site-total">0</span> total | <span id="site-unique">0</span> unique</div>
+</div>
+ </a>
+</div>
+    <div class="toilet-row">
+      <img src="images/toiletbowl.png" alt="Toilet Bowl" />
+      <div class="faucet-box">
+        <h2>🚰 [HKDG]HOSKDOG Faucet</h2>
+        <p>Take a drink from the Toilet Bowl.<br>One slurp per wallet. No leash, no shame.</p>
+        <button onclick="flush()">Drink from the Toilet Bowl</button>
+        <div class="flush-message" id="flushResult"></div>
+      </div>
+  
+  </div>
+</body>
+</html>
+
+    </div>
+<!-- HOSKDOG Stats Section using WingRiders metrics -->
+<section id="stats" style="padding:3rem 1.1rem;text-align:center">
+  <h2 class="section-title">HOSKDOG by the Numbers (WingRiders)</h2>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:1.5rem">
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">1,000.000T</h3>
+      <p class="muted">Supply</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">18</h3>
+      <p class="muted">Holders (addresses)</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">~$0.00519</h3>
+      <p class="muted">Price (approx)</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">UPDATING</h3>
+      <p class="muted">Fully Diluted MC</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">~$156.61</h3>
+      <p class="muted">TVL (approx)</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">~$0.00</h3>
+      <p class="muted">Volume 24h (approx)</p>
+    </div>
+    <div class="token-box" style="width:180px;padding:1rem;border-radius:12px;box-shadow:0 4px 0 #0002">
+      <h3 style="margin:0;font-size:1.4rem">~$0.00</h3>
+      <p class="muted">Volume 7d (approx)</p>
+    </div>
+   </section>
+<!-- ✅ WingRiders logo BELOW stats -->
+<div style="text-align: center; margin: 30px 0;">
+  <a 
+    href="https://app.wingriders.com/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <img 
+      src="images/wingriders_logo.jpg"
+      alt="WingRiders Logo"
+      style="width: 140px; height: auto; border-radius: 8px; box-shadow: 0 0 20px #08fdd8; transition: transform 0.3s;"
+      onmouseover="this.style.transform='scale(1.1)'"
+      onmouseout="this.style.transform='scale(1)'"
+    >
+  </a>
+</div>
+
+   <div class="explorer-buttons">
+          <a href="https://cardanoscan.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">
+            <img src="images/cardanoscan.png" alt="CardanoScan">
+          </a>
+          <a href="https://www.taptools.io/charts/token/026a18d04a0c642759bb3d83b12e3344894e5c1c7b2aeb1a2113a570.c0cd27d5ab5c2ae5016f0f08f87ca394a7a26b8cc3e8dcc14bfead09312ec99b?charts=&table=Holders" target="_blank">
+            <img src="images/taptools_cover.webp" alt="Tap Tools">
+          </a> 
+          <a href="https://cexplorer.io/asset/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">
+            <img src="images/cexplorer.jpg" alt="cExplorer">
+          </a>
+          <a href="https://builtoncardano.com/hoskdog" target="_blank">
+            <img src="images/built-on-cardano-logo-text-w.png" alt="Built on Cardano">
+          </a>
+          <a href="https://pool.pm/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">
+            <img src="images/poolpm.png" alt="Pool.pm">
+          </a>
+          <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">
+            <img src="images/adastat.jpg" alt="ADASTAT">
+          </a>
+        </div>
+    <div class="manifesto-box">
+      <h3>🚀 Our Mission</h3>
+      <p>
+       HOSKDOG isn't just another memetoken — it's a decentralized beast with no leash.<br><br>
+        We're not here to beg for listings or follow centralized rules.<br>
+        We're here to run wild on Cardano — transparently, irreverently, and 100% owned by the pack.<br><br>Our mission is to build a vibrant, community-driven meme culture where everyone is part of a playful experiment. We value independence, fairness and fun over hype or price speculation, and there are no promises of financial return — only the promise of memes, laughter and connection.
+      </p>
+      
+    </div>
+
+    <div class="manifesto-box">
+      <h3>🌐 Our Vision</h3>
+      <p>
+        We don't chase trends. We chase freedom — freedom from gatekeepers, pointless red tape, and VC bro handshakes.<br>Our vision is to create a playful and inclusive space where the pack can express itself through memes without corporate influence or price charts.
+           HOSKDOG's conception was inspired by SNEK and HOSKY, so this Hoskmas Santa is going to drop the tokens from the faucet to Snek and Hosky holders that participated in the faucet, yah we'll let ADA holders slurp to but its gonna cost ya. no meme, no ADA, ...GO HOME!! — empowering them to decide how it is distributed.<br><br>There are no promises of financial return — only the promise of fun, community and collective decision-making.
+      </p>
+    </div>
+
+        <!-- Disclaimer section -->
+    <div class="manifesto-box">
+      <h3>Disclaimer</h3>
+      <p>
+        HOSKDOG is a memetoken created for entertainment only. It has no intrinsic value and there is no expectation of financial return. There is no formal team and no roadmap. This information is for entertainment purposes only and is not financial advice.
+      </p>
+    </div>
+
+    <!-- Community join section -->
+    <div class="manifesto-box">
+      <h3>Join the Pack</h3>
+      <p>
+        <a href="https://t.me/+nl93xy-qv6RhNmVh" style="color: #08fdd8; text-decoration: none;">Telegram</a> |
+        <a href="#" style="color: #08fdd8; text-decoration: none;">Discord (coming soon)</a> |
+        <a href="#" style="color: #08fdd8; text-decoration: none;">@HOSKDOG on X</a>
+      </p>
+    </div>
+
+    <div class="meme-section">
+      <h2>When the leash is off...</h2>
+      <div class="meme-grid">
+        <img src="images/meme2.png" alt="Meme 2">
+        <img src="images/meme3.png" alt="Meme 3">
+        <img src="images/hoskfather.png" alt="hoskfather">
+        <img src="images/hoskdizzle.png" alt="hoskdizzle">
+        <img src="images/slurped.png alt="slurped"> 
+        <img src="images/launch.png" alt="launch">
+        <img src="images/buy2slurp.png" alt="buy2slurp">
+        <img src="images/sec.png" alt="sec">
+        <img src="images/meme.png" alt="Meme 1">
+    </div>
+
+    <div class="social-section">
+      <h3>Connect with HOSKDOG</h3>
+      <a href="https://www.facebook.com/hoskdog" target="_blank" rel="noopener noreferrer">
+  Facebook
+      <a href="https://web.telegram.org/a/#-5076512579" target="_blank" rel="noopener noreferrer">
+  Telegram
+      </a>
+      <a href="https://discord.com/channels/1433556241631936544/1433556244777664655" target="_blank" rel="noopener noreferrer">
+  Discord
+</a>
+      <a href="mailto:Hosk@Hoskdog.com">Email</a>
+        <div class="explorer-buttons">
+          <a href="https://cardanoscan.io/token/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">
+            <img src="images/cardanoscan.png" alt="CardanoScan">
+          </a>
+          <a href="https://cexplorer.io/asset/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">
+            <img src="images/cexplorer.jpg" alt="cExplorer">
+          </a>
+          <a href="https://pool.pm/asset1hhuertk37z54kra8a7u9sy46arnpphhvxjckh9" target="_blank">
+            <img src="images/poolpm.png" alt="Pool.pm">
+          </a>
+          <a href="https://adastat.net/tokens/9560f81458d28648d9261d180ee2b10afcf6b2305909d367f8f9f0ad484b4447" target="_blank">
+            <img src="images/adastat.jpg" alt="ADASTAT">
+          </a>
+        </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 HOSKDOG — Built for memes, not finance.
+  </footer>
+
+  <audio id="flushAudio" src="audio/flush.mp3" preload="auto"></audio>
+  <script>
+    function flush() {
+      const sound = document.getElementById("flushAudio");
+      const result = document.getElementById("flushResult");
+      if (sound) sound.play();
+      result.textContent = "💦 You took a drink. HOSKDOG is on the way...";
+    }
+
+    const canvas = document.getElementById("backgroundCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+    class Star {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = Math.random() * 0.6 - 0.3;
+        this.vy = Math.random() * 0.6 - 0.3;
+        this.radius = Math.random() * 2;
+      }
+      move() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#08fdd8";
+        ctx.fill();
+      }
+    }
+
+    function connect() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = "rgba(8, 253, 216," + (1 - distance / 100) + ")";
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.move();
+        p.draw();
+      });
+      connect();
+      requestAnimationFrame(animate);
+    }
+
+    function init() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Star());
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      init();
+    });
+
+    init();
+    animate();
+   
+
+  </script>
 </body>
 </html>
