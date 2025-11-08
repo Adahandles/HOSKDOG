@@ -1,9 +1,366 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Updated Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOSKDOG - Meme-Powered Cardano Token 🐶</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Floating particle canvas */
+    #backgroundCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Global page styling */
+    body {
+      font-family: 'Rubik', sans-serif;
+      color: #e0faff;
+      text-align: left;
+      margin: 0;
+      background-color: #0b0f1a;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    header {
+      padding: 2rem 0;
+      text-align: center;
+      background: rgba(12, 18, 28, 0.95);
+      border-left: 4px solid #08fdd8;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 140px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 0 25px #08fdd8;
+    }
+
+    .nav-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 1rem 0;
+      text-align: center;
+      color: #08fdd8;
+    }
+
+    h2 {
+      color: #08fdd8;
+      font-size: 1.8rem;
+      margin: 2rem 0 1rem 0;
+      border-bottom: 2px solid #08fdd8;
+      padding-bottom: 0.5rem;
+    }
+
+    p {
+      line-height: 1.6;
+      margin: 1rem 0;
+      font-size: 1.1rem;
+    }
+
+    .hero-section {
+      background: rgba(12, 18, 28, 0.95);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+      text-align: center;
+    }
+
+    .hero-section h2 {
+      border-bottom: none;
+      margin-top: 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .feature-card {
+      background: rgba(12, 18, 28, 0.95);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+      border-left: 4px solid #08fdd8;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(8, 253, 216, 0.5);
+    }
+
+    .feature-card h3 {
+      color: #08fdd8;
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
+
+    .cta-section {
+      background: rgba(12, 18, 28, 0.95);
+      border-radius: 12px;
+      padding: 3rem;
+      margin: 3rem 0;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .cta-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 16px 32px;
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .cta-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to the Updated Page</h1>
-    <p>This content has been updated.</p>
+  <canvas id="backgroundCanvas"></canvas>
+  
+  <header>
+    <div class="logo-container">
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
+    </div>
+    <h1>HOSKDOG</h1>
+    <p style="font-size: 1.2rem; color: #88ffe0; margin: 0;">Meme-Powered Native Token on Cardano 🐶</p>
+    <div class="button-container">
+      <a href="whitepaper.html" class="nav-button">📄 Whitepaper</a>
+      <a href="proof-of-reserves.html" class="nav-button">🪙 Proof of Reserves</a>
+      <a href="good-causes.html" class="nav-button">🌿 Good Causes</a>
+      <a href="slurp-logic.html" class="nav-button">🧻 Slurp Logic</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="hero-section">
+      <h2>Welcome to the HOSKDOG Ecosystem 🚽</h2>
+      <p style="font-size: 1.2rem;">
+        HOSKDOG ($HKDG) is a meme-powered native token built on the Cardano blockchain. 
+        Combining community-driven energy with on-chain meme utility, we bring fun, engagement, 
+        and decentralization to the Cardano ecosystem.
+      </p>
+    </div>
+
+    <h2>🎯 Key Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>💧 Faucet Distribution</h3>
+        <p>
+          Claim your $HKDG tokens through our interactive faucet system. 
+          Hold HOSKY or SNEK for bonus rewards, or claim with ADA.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>🪙 Full Transparency</h3>
+        <p>
+          Complete proof of reserves showing all token allocations. 
+          Every wallet and distribution is transparent and verifiable on-chain.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>🌿 Real-World Utility</h3>
+        <p>
+          Supporting the Orange Springs conservation project, 
+          bringing real-world environmental impact to the Cardano ecosystem.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>🎭 Community Driven</h3>
+        <p>
+          Every holder is part of the pack. We build together, laugh together, 
+          and win together in the spirit of meme culture.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>🔥 Deflationary Burns</h3>
+        <p>
+          0.5% burn on every faucet claim, with seasonal HOSKMAS burns 
+          to reduce supply and increase scarcity.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>🚀 DEX Liquidity</h3>
+        <p>
+          Trading available on major Cardano DEXs including WingRiders and Minswap, 
+          with deep liquidity pools.
+        </p>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h2>🚽 Get Started with HOSKDOG</h2>
+      <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+        Join the meme revolution on Cardano. Claim your tokens, read the whitepaper, 
+        and become part of the pack!
+      </p>
+      <div class="button-container">
+        <a href="slurp-logic.html" class="cta-button">💧 Claim Tokens</a>
+        <a href="whitepaper.html" class="cta-button">📄 Read Whitepaper</a>
+        <a href="proof-of-reserves.html" class="cta-button">🪙 View Reserves</a>
+      </div>
+    </div>
+
+    <h2>📊 Tokenomics</h2>
+    <div class="hero-section">
+      <p style="text-align: left;">
+        <strong>Total Supply:</strong> 1 Trillion $HKDG<br>
+        <strong>Faucet Rewards:</strong> 20% (with 0.5% burn per claim)<br>
+        <strong>DEX Liquidity:</strong> 15%<br>
+        <strong>Orange Springs Project:</strong> 15%<br>
+        <strong>Community Growth:</strong> 10%<br>
+        <strong>HOSKMAS Events:</strong> 10%<br>
+        <strong>Founders:</strong> 15% (1-year lock, 3-year vesting)<br>
+        <strong>CEX & Marketing:</strong> 10%<br>
+        <strong>Treasury:</strong> 5%
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 HOSKDOG — Built for memes, not finance.
+  </footer>
+
+  <script>
+    const canvas = document.getElementById("backgroundCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+    class Star {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = Math.random() * 0.6 - 0.3;
+        this.vy = Math.random() * 0.6 - 0.3;
+        this.radius = Math.random() * 2;
+      }
+      move() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "#08fdd8";
+        ctx.fill();
+      }
+    }
+
+    function connect() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = "rgba(8, 253, 216," + (1 - distance / 100) + ")";
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.move();
+        p.draw();
+      });
+      connect();
+      requestAnimationFrame(animate);
+    }
+
+    function init() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Star());
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      init();
+    });
+
+    init();
+    animate();
+  </script>
 </body>
 </html>
