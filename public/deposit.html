@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HOSKDOG - ADA Deposit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --card: rgba(12, 18, 28, 0.95);
+      --cyan: #08fdd8;
+      --cyan-dark: #05e3c4;
+      --muted: #88ffe0;
+      --error: #ff6b6b;
+      --warning: #f9a825;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background-color: var(--bg);
+      color: #e0faff;
+      min-height: 100vh;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 100px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 0 25px var(--cyan);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--cyan);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+
+    .nav-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, var(--cyan), var(--cyan-dark));
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(8, 253, 216, 0.6);
+    }
+
+    .button-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .deposit-box {
+      background-color: var(--card);
+      border-left: 4px solid var(--cyan);
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.3);
+    }
+
+    .deposit-box h2 {
+      color: var(--cyan);
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    select, input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid rgba(8, 253, 216, 0.3);
+      border-radius: 8px;
+      background-color: rgba(0,0,0,0.3);
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px rgba(8, 253, 216, 0.3);
+    }
+
+    .wallet-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .wallet-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 12px 16px;
+      border: 2px solid var(--cyan);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--cyan);
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .wallet-btn:hover:not(:disabled) {
+      background: var(--cyan);
+      color: #000;
+    }
+
+    .wallet-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .wallet-btn.connected {
+      background: var(--cyan);
+      color: #000;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(45deg, var(--cyan), var(--cyan-dark));
+      color: #000;
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.4);
+    }
+
+    .primary-btn:hover:not(:disabled) {
+      transform: scale(1.02);
+      box-shadow: 0 0 25px rgba(8, 253, 216, 0.6);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status-area {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.3);
+      display: none;
+    }
+
+    .status-area.show {
+      display: block;
+    }
+
+    .status-area.success {
+      border-left: 4px solid var(--cyan);
+    }
+
+    .status-area.error {
+      border-left: 4px solid var(--error);
+    }
+
+    .status-area.warning {
+      border-left: 4px solid var(--warning);
+    }
+
+    .info-text {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .address-display {
+      font-family: monospace;
+      font-size: 0.85rem;
+      word-break: break-all;
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
+    .warning-text {
+      color: var(--warning);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      border: 2px solid var(--cyan);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.5);
+    }
+
+    .modal h3 {
+      color: var(--cyan);
+      margin-top: 0;
+    }
+
+    .modal-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .modal-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .modal-label {
+      color: var(--muted);
+    }
+
+    .modal-value {
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .cancel-btn {
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    .cancel-btn:hover {
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .confirm-btn {
+      background: linear-gradient(45deg, var(--cyan), var(--cyan-dark));
+      border: none;
+      color: #000;
+    }
+
+    .confirm-btn:hover:not(:disabled) {
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.5);
+    }
+
+    .confirm-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .advanced-toggle {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .advanced-toggle summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .advanced-content {
+      margin-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .wallet-buttons {
+        flex-direction: column;
+      }
+      
+      .modal-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="backgroundCanvas"></canvas>
+  
+  <main>
+    <div class="logo-container">
+      <img src="images/HKDGlogo.jpg" alt="HOSKDOG Logo">
+    </div>
+
+    <h1>💰 ADA Deposit</h1>
+    <p class="subtitle">Send ADA to the HOSKDOG treasury</p>
+
+    <div class="button-container">
+      <a href="index.html" class="nav-button">🏠 Home</a>
+      <a href="slurp-logic.html" class="nav-button">🧻 Slurp Logic</a>
+    </div>
+
+    <!-- Deposit Form -->
+    <div class="deposit-box">
+      <h2>1️⃣ Connect Wallet</h2>
+      <p>Select and connect your Cardano wallet:</p>
+      
+      <div class="wallet-buttons">
+        <button class="wallet-btn" id="btn-eternl" onclick="connectWallet('eternl')">♾️ Eternl</button>
+        <button class="wallet-btn" id="btn-nami" onclick="connectWallet('nami')">🌊 Nami</button>
+        <button class="wallet-btn" id="btn-flint" onclick="connectWallet('flint')">🔥 Flint</button>
+      </div>
+      
+      <div id="wallet-status" class="status-area"></div>
+    </div>
+
+    <div class="deposit-box">
+      <h2>2️⃣ Enter Amount</h2>
+      
+      <label for="network-select">Network</label>
+      <select id="network-select">
+        <option value="Mainnet">Mainnet</option>
+        <option value="Preprod">Preprod (Testnet)</option>
+      </select>
+      <p class="info-text">Make sure your wallet is on the same network.</p>
+
+      <label for="amount-input">Amount (ADA)</label>
+      <input type="number" id="amount-input" placeholder="5" min="1" step="0.1" />
+      <p class="info-text">Minimum deposit: 1 ADA. Network fees will be added automatically.</p>
+      
+      <div class="address-display">
+        <strong>Receiving Address:</strong><br>
+        <span id="recipient-address">addr1q9lgquer5840jyexr52zjlpvvv33d7qkg4k35ty9f85leftvz5gkpuwt36e4h6zle5trhx3xqus8q08ac60hxe8pc4mqhuyj7k</span>
+      </div>
+      
+      <button class="primary-btn" id="prepare-btn" onclick="prepareDeposit()" disabled>
+        🔄 Prepare Deposit
+      </button>
+      
+      <div id="prepare-status" class="status-area"></div>
+    </div>
+
+    <!-- Advanced Options (for developers) -->
+    <details class="deposit-box advanced-toggle">
+      <summary>⚙️ Advanced / Developer Options</summary>
+      <div class="advanced-content">
+        <label for="server-url">Server URL</label>
+        <input type="text" id="server-url" value="http://localhost:4000" />
+        <p class="info-text">URL of the deposit server. Leave default for local testing.</p>
+        
+        <label for="blockfrost-key">Blockfrost API Key (Local Fallback Only)</label>
+        <input type="text" id="blockfrost-key" placeholder="Optional - for local testing without server" />
+        <p class="warning-text">⚠️ Never use a real API key in production! This is for local testing only.</p>
+        <p class="info-text">If server is unavailable and you provide a key here, transactions will be built locally. This is insecure and should only be used for development.</p>
+      </div>
+    </details>
+
+    <footer>
+      &copy; 2025 HOSKDOG — Built for memes, not finance.<br>
+      <small>This is a meme token. Not financial advice.</small>
+    </footer>
+  </main>
+
+  <!-- Confirmation Modal -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal">
+      <h3>📋 Confirm Deposit</h3>
+      <p>Please review the transaction details:</p>
+      
+      <div class="modal-row">
+        <span class="modal-label">Amount</span>
+        <span class="modal-value" id="modal-amount">-</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-label">Network Fee (est.)</span>
+        <span class="modal-value" id="modal-fee">-</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-label">Total</span>
+        <span class="modal-value" id="modal-total">-</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-label">Network</span>
+        <span class="modal-value" id="modal-network">-</span>
+      </div>
+      <div class="modal-row">
+        <span class="modal-label">To</span>
+        <span class="modal-value" id="modal-recipient" style="font-size: 0.8rem;">-</span>
+      </div>
+      
+      <div class="modal-buttons">
+        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+        <button class="confirm-btn" id="sign-btn" onclick="signAndSubmit()">✍️ Sign & Send</button>
+      </div>
+      
+      <div id="modal-status" class="status-area" style="margin-top: 15px;"></div>
+    </div>
+  </div>
+
+  <!-- Load the deposit client module -->
+  <script src="deposit-client.js"></script>
+  
+  <!-- Background animation -->
+  <script>
+    const canvas = document.getElementById('backgroundCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const numParticles = 60;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+        this.opacity = Math.random() * 0.4 + 0.1;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = '#08fdd8';
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#08fdd8';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
