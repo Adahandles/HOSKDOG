@@ -3,13 +3,18 @@
  * 
  * Client-side module for handling ADA deposits to the HOSKDOG treasury.
  * This script:
- *   1. Detects and connects to Cardano wallets (Eternl, Nami, Flint)
- *   2. Builds transactions via the server (or local fallback for testing)
- *   3. Requests wallet signature using CIP-30 signTx
- *   4. Submits signed transactions through the server
+ *   1. Detects and connects to Cardano wallets via unified dropdown (Eternl, Lace, Nami, Flint, etc.)
+ *   2. Shows deposit preview with fee estimation BEFORE requesting signature
+ *   3. Builds transactions via the server (or local fallback for testing)
+ *   4. Requests wallet signature using CIP-30 signTx
+ *   5. Submits signed transactions through the server
  * 
  * The Blockfrost API key is kept on the server side for security.
  * A local fallback is available for developer testing only.
+ * 
+ * Fee Estimation Fallback:
+ *   If server is unavailable and no Blockfrost key is provided, uses a conservative
+ *   fee estimate: fallbackFee = 0.17 + 0.0001 * estimatedBytes (approx 0.20 ADA for typical tx)
  */
 
 // ============================================================================
@@ -18,6 +23,14 @@
 
 const HOSKDOG_RECEIVING_ADDRESS = 'addr1q9lgquer5840jyexr52zjlpvvv33d7qkg4k35ty9f85leftvz5gkpuwt36e4h6zle5trhx3xqus8q08ac60hxe8pc4mqhuyj7k';
 
+// Conservative fee estimation constants (used when server unavailable)
+// Based on Cardano fee formula: a + b * txSize
+// a = 155381 lovelace (0.155381 ADA), b = 44 lovelace per byte
+// Typical simple tx is ~200-300 bytes, complex ~400-600 bytes
+const FEE_CONSTANT_LOVELACE = 155381;  // Base fee (~0.155 ADA)
+const FEE_PER_BYTE_LOVELACE = 44;      // Per byte cost
+const ESTIMATED_TX_SIZE_BYTES = 350;   // Conservative estimate for simple ADA transfer
+
 // ============================================================================
 // State
 // ============================================================================
@@ -25,32 +38,85 @@ const HOSKDOG_RECEIVING_ADDRESS = 'addr1q9lgquer5840jyexr52zjlpvvv33d7qkg4k35ty9
 let connectedWallet = null;      // { name, api, address }
 let pendingTx = null;            // { unsignedTxCborHex, estimatedFee, lovelace }
 let isProcessing = false;        // Prevent double-click
+let previewDebounceTimer = null; // For debouncing preview updates
 
 // ============================================================================
-// Wallet Detection and Connection
+// Wallet Detection and Connection (Unified Dropdown)
 // ============================================================================
 
 /**
- * Detect available wallets on page load
+ * Detect available wallets and update dropdown on page load
  */
 function detectWallets() {
   setTimeout(() => {
     const wallets = [
       { id: 'eternl', check: () => window.cardano?.eternl },
+      { id: 'lace', check: () => window.cardano?.lace },
       { id: 'nami', check: () => window.cardano?.nami },
       { id: 'flint', check: () => window.cardano?.flint },
+      { id: 'yoroi', check: () => window.cardano?.yoroi },
+      { id: 'typhon', check: () => window.cardano?.typhon },
     ];
 
+    // Update dropdown items to show availability
     wallets.forEach(wallet => {
-      const btn = document.getElementById(`btn-${wallet.id}`);
-      if (btn) {
+      const item = document.querySelector(`[data-wallet="${wallet.id}"]`);
+      if (item) {
         if (!wallet.check()) {
-          btn.style.opacity = '0.5';
-          btn.title = `${wallet.id} wallet not detected`;
+          item.style.opacity = '0.5';
+          item.title = `${wallet.id} wallet not detected - click to try anyway`;
         }
       }
     });
   }, 500);
+}
+
+/**
+ * Toggle wallet dropdown visibility
+ */
+function toggleWalletDropdown() {
+  const menu = document.getElementById('wallet-dropdown-menu');
+  const btn = document.getElementById('wallet-dropdown-btn');
+  if (!menu || !btn) return;
+  
+  const isOpen = menu.style.display === 'block';
+  menu.style.display = isOpen ? 'none' : 'block';
+  btn.setAttribute('aria-expanded', !isOpen);
+}
+
+/**
+ * Close wallet dropdown
+ */
+function closeWalletDropdown() {
+  const menu = document.getElementById('wallet-dropdown-menu');
+  const btn = document.getElementById('wallet-dropdown-btn');
+  if (menu) menu.style.display = 'none';
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+/**
+ * Handle wallet selection from dropdown
+ */
+async function handleWalletSelection(walletName) {
+  closeWalletDropdown();
+  
+  // For "other", try to find any available wallet
+  if (walletName === 'other') {
+    const otherWallets = ['yoroi', 'typhon', 'gerowallet', 'nufi', 'begin'];
+    for (const w of otherWallets) {
+      if (window.cardano?.[w]) {
+        walletName = w;
+        break;
+      }
+    }
+    if (walletName === 'other') {
+      const statusEl = document.getElementById('wallet-status');
+      showStatus(statusEl, '❌ No compatible wallet found. Please install Eternl, Lace, Nami, or Flint.', 'error');
+      return;
+    }
+  }
+  
+  await connectWallet(walletName);
 }
 
 /**
@@ -65,15 +131,11 @@ async function connectWallet(walletName) {
   try {
     showStatus(statusEl, `Connecting to ${walletName}...`, 'info');
     
-    // Get wallet API
+    // Get wallet API - support all common Cardano wallets
     let walletApi = null;
     
-    if (walletName === 'eternl' && window.cardano?.eternl) {
-      walletApi = await window.cardano.eternl.enable();
-    } else if (walletName === 'nami' && window.cardano?.nami) {
-      walletApi = await window.cardano.nami.enable();
-    } else if (walletName === 'flint' && window.cardano?.flint) {
-      walletApi = await window.cardano.flint.enable();
+    if (window.cardano?.[walletName]) {
+      walletApi = await window.cardano[walletName].enable();
     }
     
     if (!walletApi) {
@@ -102,11 +164,14 @@ async function connectWallet(walletName) {
       hexAddress: hexAddress
     };
     
-    // Update UI
-    document.querySelectorAll('.wallet-btn').forEach(btn => {
-      btn.classList.remove('connected');
-    });
-    document.getElementById(`btn-${walletName}`).classList.add('connected');
+    // Update dropdown button to show connected state
+    const btnIcon = document.getElementById('wallet-btn-icon');
+    const btnText = document.getElementById('wallet-btn-text');
+    const dropdownBtn = document.getElementById('wallet-dropdown-btn');
+    
+    if (btnIcon) btnIcon.textContent = '✅';
+    if (btnText) btnText.textContent = walletName.charAt(0).toUpperCase() + walletName.slice(1);
+    if (dropdownBtn) dropdownBtn.classList.add('connected');
     
     showStatus(statusEl, `✅ Connected to ${walletName}<br><small>${truncateAddress(bech32Address)}</small>`, 'success');
     
@@ -114,6 +179,9 @@ async function connectWallet(walletName) {
     
     // Check network match
     checkNetworkMatch();
+    
+    // Update deposit preview with wallet connected
+    updateDepositPreview();
     
   } catch (error) {
     console.error('Wallet connection error:', error);
@@ -143,6 +211,135 @@ async function checkNetworkMatch() {
       'warning'
     );
   }
+}
+
+// ============================================================================
+// Deposit Preview with Fee Estimation
+// ============================================================================
+
+/**
+ * Calculate conservative fee estimate when server is unavailable
+ * Uses Cardano fee formula: fee = a + b * txSize
+ * 
+ * @param {number} estimatedTxSize - Estimated transaction size in bytes (default: 350)
+ * @returns {number} - Estimated fee in lovelace
+ */
+function calculateFallbackFee(estimatedTxSize = ESTIMATED_TX_SIZE_BYTES) {
+  // fee = 155381 + 44 * txSize (in lovelace)
+  // For a typical simple transfer (~350 bytes): ~170,781 lovelace (~0.17 ADA)
+  // We add a small buffer for safety
+  const baseFee = FEE_CONSTANT_LOVELACE + (FEE_PER_BYTE_LOVELACE * estimatedTxSize);
+  const safetyBuffer = 30000; // ~0.03 ADA buffer
+  return baseFee + safetyBuffer;
+}
+
+/**
+ * Update the deposit preview based on current input
+ * Called when amount changes or wallet connects
+ */
+async function updateDepositPreview() {
+  const previewBox = document.getElementById('deposit-preview');
+  const amountInput = document.getElementById('amount-input');
+  const previewAmount = document.getElementById('preview-amount');
+  const previewFee = document.getElementById('preview-fee');
+  const previewTotal = document.getElementById('preview-total');
+  const previewReceipt = document.getElementById('preview-receipt');
+  const previewError = document.getElementById('preview-error');
+  const prepareBtn = document.getElementById('prepare-btn');
+  
+  if (!previewBox) return;
+  
+  // Clear any pending debounce
+  if (previewDebounceTimer) {
+    clearTimeout(previewDebounceTimer);
+  }
+  
+  // Debounce to avoid too many updates
+  previewDebounceTimer = setTimeout(async () => {
+    const adaAmount = parseFloat(amountInput?.value);
+    
+    // Hide preview if no valid amount
+    if (isNaN(adaAmount) || adaAmount < 1) {
+      previewBox.style.display = 'none';
+      if (prepareBtn) prepareBtn.disabled = true;
+      return;
+    }
+    
+    // Show preview box
+    previewBox.style.display = 'block';
+    previewError.style.display = 'none';
+    
+    // Update deposit amount
+    if (previewAmount) {
+      previewAmount.textContent = `${adaAmount.toFixed(2)} ADA`;
+    }
+    
+    // Estimate fee
+    let estimatedFeeLovelace;
+    let feeSource = 'fallback';
+    
+    // Try to get fee from server if available and wallet connected
+    const serverUrl = document.getElementById('server-url')?.value || 'http://localhost:4000';
+    
+    if (connectedWallet) {
+      try {
+        // Try to get a real fee estimate from the server
+        const response = await fetch(`${serverUrl}/api/health`, { 
+          method: 'GET',
+          signal: AbortSignal.timeout(2000)
+        });
+        
+        if (response.ok) {
+          // Server is available, we'll get real fee during prepareDeposit
+          // For now, use a reasonable estimate based on typical Cardano fees
+          estimatedFeeLovelace = calculateFallbackFee(350);
+          feeSource = 'estimate';
+        }
+      } catch {
+        // Server unavailable, use fallback
+        estimatedFeeLovelace = calculateFallbackFee(350);
+      }
+    } else {
+      // No wallet connected, use fallback estimate
+      estimatedFeeLovelace = calculateFallbackFee(350);
+    }
+    
+    if (!estimatedFeeLovelace) {
+      estimatedFeeLovelace = calculateFallbackFee(350);
+    }
+    
+    const estimatedFeeAda = estimatedFeeLovelace / 1000000;
+    const totalDeduction = adaAmount + estimatedFeeAda;
+    
+    // Update fee display
+    if (previewFee) {
+      const feeLabel = feeSource === 'fallback' ? '~' : '≈';
+      previewFee.textContent = `${feeLabel}${estimatedFeeAda.toFixed(4)} ADA`;
+    }
+    
+    // Update total
+    if (previewTotal) {
+      previewTotal.textContent = `≈${totalDeduction.toFixed(4)} ADA`;
+    }
+    
+    // Update expected receipt (placeholder - tokens credited based on deposit)
+    if (previewReceipt) {
+      // Note: This is a placeholder. Real receipt depends on the token sale mechanics
+      previewReceipt.innerHTML = `${adaAmount.toFixed(2)} ADA credited to treasury<br><small style="color:var(--muted);">HKDG tokens sent manually after verification</small>`;
+    }
+    
+    // Enable prepare button only if wallet is connected and amount is valid
+    if (prepareBtn) {
+      prepareBtn.disabled = !connectedWallet || isNaN(adaAmount) || adaAmount < 1;
+    }
+    
+    // Show warning if no wallet connected
+    if (!connectedWallet) {
+      previewError.style.display = 'block';
+      previewError.textContent = '⚠️ Connect your wallet to proceed with deposit';
+    }
+    
+  }, 300); // 300ms debounce
 }
 
 // ============================================================================
@@ -538,15 +735,76 @@ function hexToBech32Address(hexAddr) {
 // Event Listeners
 // ============================================================================
 
-// Detect wallets on page load
-window.addEventListener('load', detectWallets);
+// Initialize on page load
+window.addEventListener('load', () => {
+  detectWallets();
+  
+  // Setup wallet dropdown
+  const dropdownBtn = document.getElementById('wallet-dropdown-btn');
+  if (dropdownBtn) {
+    dropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleWalletDropdown();
+    });
+  }
+  
+  // Setup dropdown menu items
+  const menuItems = document.querySelectorAll('.wallet-dropdown-item');
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      handleWalletSelection(item.dataset.wallet);
+    });
+    
+    // Keyboard support
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleWalletSelection(item.dataset.wallet);
+      }
+    });
+  });
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+  const container = document.getElementById('wallet-dropdown-container');
+  if (container && !container.contains(e.target)) {
+    closeWalletDropdown();
+  }
+});
 
 // Check network match when network selection changes
-document.getElementById('network-select')?.addEventListener('change', checkNetworkMatch);
+document.getElementById('network-select')?.addEventListener('change', () => {
+  checkNetworkMatch();
+  updateDepositPreview();
+});
 
-// Close modal on escape key
+// Handle keyboard navigation in dropdown
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
+  // Close modal on escape
+  if (e.key === 'Escape') {
+    closeModal();
+    closeWalletDropdown();
+    return;
+  }
+  
+  // Dropdown keyboard navigation
+  const menu = document.getElementById('wallet-dropdown-menu');
+  if (!menu || menu.style.display !== 'block') return;
+  
+  const items = menu.querySelectorAll('.wallet-dropdown-item');
+  const focused = document.activeElement;
+  const idx = Array.from(items).indexOf(focused);
+  
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (idx < items.length - 1) items[idx + 1].focus();
+    else items[0].focus();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (idx > 0) items[idx - 1].focus();
+    else items[items.length - 1].focus();
+  }
 });
 
 // Close modal when clicking outside
