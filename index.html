@@ -254,17 +254,7 @@
       Meme holders get rewarded; ADA-only wallets still welcome.
     </p>
     <!-- Unified Wallet Connect Dropdown -->
-    <div id="walletDropdownContainer" style="margin-top:1rem;position:relative;display:inline-block;">
-      <button id="walletDropdownBtn" style="background-color:#08fdd8;color:#000;font-weight:bold;padding:12px 24px;border:none;border-radius:6px;cursor:pointer;font-size:1rem;transition:0.2s ease-in-out;box-shadow:0 0 12px rgba(8,253,216,0.4);display:flex;align-items:center;gap:8px;" aria-haspopup="listbox" aria-expanded="false">
-        <span id="walletBtnText">🐾 Connect Wallet</span>
-        <span style="font-size:0.8em;">▼</span>
-      </button>
-      <ul id="walletDropdownMenu" role="listbox" aria-label="Select wallet" style="display:none;position:absolute;top:100%;left:0;margin-top:4px;padding:0;list-style:none;background-color:#0b0f1a;border:2px solid #08fdd8;border-radius:6px;min-width:180px;box-shadow:0 4px 12px rgba(0,0,0,0.5);z-index:100;">
-        <li role="option" tabindex="0" data-wallet="eternl" style="padding:12px 16px;cursor:pointer;color:#e0faff;transition:background-color 0.2s;" onmouseover="this.style.backgroundColor='rgba(8,253,216,0.2)'" onmouseout="this.style.backgroundColor='transparent'">♾️ Eternl</li>
-        <li role="option" tabindex="0" data-wallet="lace" style="padding:12px 16px;cursor:pointer;color:#e0faff;transition:background-color 0.2s;border-top:1px solid rgba(8,253,216,0.3);" onmouseover="this.style.backgroundColor='rgba(8,253,216,0.2)'" onmouseout="this.style.backgroundColor='transparent'">🃏 Lace</li>
-        <li role="option" tabindex="0" data-wallet="other" style="padding:12px 16px;cursor:pointer;color:#e0faff;transition:background-color 0.2s;border-top:1px solid rgba(8,253,216,0.3);" onmouseover="this.style.backgroundColor='rgba(8,253,216,0.2)'" onmouseout="this.style.backgroundColor='transparent'">🔗 Other (Nami/Flint)</li>
-      </ul>
-    </div>
+    <div id="wallet-dropdown-container" style="margin-top:1rem;"></div>
     <div id="walletStatus" style="margin-top:1rem;font-size:1.05em;color:#88ffe0;"></div>
     <div id="status" style="margin-top:1rem;font-size:1.05em;"></div>
     <div id="depositBox" style="display:none;margin-top:1.4rem;">
@@ -279,203 +269,31 @@
     </div>
   </div>
 
+<script src="assets/js/wallet-dropdown.js"></script>
 <script>
-// Bech32 encoding utilities for Cardano addresses (browser-compatible, no external deps)
-const BECH32_ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
-function bech32Polymod(values) {
-  const GEN = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
-  let chk = 1;
-  for (const v of values) {
-    const b = chk >> 25;
-    chk = ((chk & 0x1ffffff) << 5) ^ v;
-    for (let i = 0; i < 5; i++) if ((b >> i) & 1) chk ^= GEN[i];
-  }
-  return chk;
-}
-function bech32HrpExpand(hrp) {
-  const ret = [];
-  for (const c of hrp) ret.push(c.charCodeAt(0) >> 5);
-  ret.push(0);
-  for (const c of hrp) ret.push(c.charCodeAt(0) & 31);
-  return ret;
-}
-function bech32CreateChecksum(hrp, data) {
-  const values = bech32HrpExpand(hrp).concat(data).concat([0, 0, 0, 0, 0, 0]);
-  const polymod = bech32Polymod(values) ^ 1;
-  const ret = [];
-  for (let i = 0; i < 6; i++) ret.push((polymod >> (5 * (5 - i))) & 31);
-  return ret;
-}
-function bech32Encode(hrp, data) {
-  const combined = data.concat(bech32CreateChecksum(hrp, data));
-  let ret = hrp + '1';
-  for (const d of combined) ret += BECH32_ALPHABET[d];
-  return ret;
-}
-function convertBits(data, fromBits, toBits, pad) {
-  let acc = 0, bits = 0;
-  const ret = [], maxv = (1 << toBits) - 1;
-  for (const d of data) {
-    acc = (acc << fromBits) | d;
-    bits += fromBits;
-    while (bits >= toBits) {
-      bits -= toBits;
-      ret.push((acc >> bits) & maxv);
-    }
-  }
-  if (pad && bits > 0) ret.push((acc << (toBits - bits)) & maxv);
-  return ret;
-}
-function hexToBytes(hex) {
-  const bytes = [];
-  for (let i = 0; i < hex.length; i += 2) bytes.push(parseInt(hex.substring(i, i + 2), 16));
-  return bytes;
-}
-function hexToBech32Address(hexAddr) {
-  // Cardano mainnet addresses start with 0x01, 0x11, 0x21, 0x31, 0x41, 0x51, 0x61, 0x71
-  // The prefix is "addr" for mainnet payment addresses
-  const bytes = hexToBytes(hexAddr);
-  const words = convertBits(bytes, 8, 5, true);
-  return bech32Encode('addr', words);
-}
-
-// Unified wallet dropdown and connection logic
-let connectedWalletAPI = null;
-let connectedWalletName = null;
-
-// Toggle dropdown visibility
-function toggleWalletDropdown() {
-  const menu = document.getElementById("walletDropdownMenu");
-  const btn = document.getElementById("walletDropdownBtn");
-  const isOpen = menu.style.display === "block";
-  menu.style.display = isOpen ? "none" : "block";
-  btn.setAttribute("aria-expanded", !isOpen);
-}
-
-// Close dropdown when clicking outside
-document.addEventListener("click", function(e) {
-  const container = document.getElementById("walletDropdownContainer");
-  if (container && !container.contains(e.target)) {
-    const menu = document.getElementById("walletDropdownMenu");
-    const btn = document.getElementById("walletDropdownBtn");
-    if (menu) menu.style.display = "none";
-    if (btn) btn.setAttribute("aria-expanded", "false");
+// Initialize wallet dropdown for index page faucet section
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize the wallet dropdown
+  if (window.WalletDropdown) {
+    WalletDropdown.init('wallet-dropdown-container');
   }
 });
 
-// Handle keyboard navigation for accessibility
-document.addEventListener("keydown", function(e) {
-  const menu = document.getElementById("walletDropdownMenu");
-  if (!menu || menu.style.display !== "block") return;
-  
-  const items = menu.querySelectorAll("li[role='option']");
-  const focused = document.activeElement;
-  const idx = Array.from(items).indexOf(focused);
-  
-  if (e.key === "ArrowDown") {
-    e.preventDefault();
-    // If no item focused or at end, focus first item; otherwise next item
-    if (idx === -1 || idx >= items.length - 1) {
-      items[0].focus();
-    } else {
-      items[idx + 1].focus();
-    }
-  } else if (e.key === "ArrowUp") {
-    e.preventDefault();
-    // If no item focused or at start, focus last item; otherwise previous item
-    if (idx === -1 || idx <= 0) {
-      items[items.length - 1].focus();
-    } else {
-      items[idx - 1].focus();
-    }
-  } else if (e.key === "Enter" && focused.dataset.wallet) {
-    e.preventDefault();
-    handleWalletSelection(focused.dataset.wallet);
-  } else if (e.key === "Escape") {
-    menu.style.display = "none";
-    document.getElementById("walletDropdownBtn").setAttribute("aria-expanded", "false");
-    document.getElementById("walletDropdownBtn").focus();
-  }
-});
-
-// Handle wallet selection from dropdown
-async function handleWalletSelection(walletType) {
-  const menu = document.getElementById("walletDropdownMenu");
-  menu.style.display = "none";
-  document.getElementById("walletDropdownBtn").setAttribute("aria-expanded", "false");
-  
+// Handle wallet connection event from unified dropdown
+document.addEventListener('walletConnected', async function(e) {
   const status = document.getElementById("status");
   const walletStatus = document.getElementById("walletStatus");
   const depositBox = document.getElementById("depositBox");
   
-  // Determine which wallet(s) to try
-  let walletNames = [];
-  if (walletType === "eternl") {
-    walletNames = ["eternl"];
-  } else if (walletType === "lace") {
-    walletNames = ["lace"];
-  } else {
-    // "other" - try nami, flint, yoroi, etc.
-    walletNames = ["nami", "flint", "yoroi", "typhon", "gerowallet"];
-  }
-  
-  let walletAPI = null;
-  let selectedWallet = null;
-  
-  for (const name of walletNames) {
-    if (window.cardano?.[name]) {
-      walletAPI = window.cardano[name];
-      selectedWallet = name;
-      break;
-    }
-  }
-  
-  if (!walletAPI) {
-    const walletLabel = walletType === "other" ? "compatible wallet (Nami, Flint, etc.)" : walletType;
-    status.innerText = `No ${walletLabel} detected. Please install the wallet extension.`;
-    walletStatus.innerText = "";
-    return;
-  }
-  
   try {
-    status.innerText = `Connecting to ${selectedWallet}...`;
-    const wallet = await walletAPI.enable();
-    
-    // Check network
-    const net = await wallet.getNetworkId();
-    if (net !== 1) {
-      status.innerText = `${selectedWallet} is on wrong network (use mainnet)`;
-      walletStatus.innerText = "";
-      return;
-    }
-    
-    const used = await wallet.getUsedAddresses();
-    if (!used || used.length === 0) {
-      status.innerText = "No addresses found in wallet.";
-      walletStatus.innerText = "";
-      return;
-    }
-    
-    // Store connected wallet
-    connectedWalletAPI = wallet;
-    connectedWalletName = selectedWallet;
-    
-    // Convert hex CBOR address to bech32 format for API
-    const hexAddr = used[0];
-    const addr = hexToBech32Address(hexAddr);
-    
-    // Update UI to show connected state
-    const btnText = document.getElementById("walletBtnText");
-    btnText.innerHTML = `✅ ${selectedWallet.charAt(0).toUpperCase() + selectedWallet.slice(1)}`;
-    walletStatus.innerHTML = `<span style="color:#08fdd8;">Connected:</span> ${addr.slice(0, 12)}...${addr.slice(-8)}`;
-    
+    const { address } = e.detail;
     status.innerText = "Verifying meme holdings...";
 
     let holdsHosky = false;
     let holdsSnek = false;
     
     try {
-      const r = await fetch(`https://api.cexplorer.io/v1/address/assets/${addr}`);
+      const r = await fetch(`https://api.cexplorer.io/v1/address/assets/${address}`);
       if (r.ok) {
         const j = await r.json();
         if (j.data && Array.isArray(j.data)) {
@@ -503,27 +321,17 @@ async function handleWalletSelection(walletType) {
     }
   } catch (e) {
     console.error(e);
-    status.innerText = `${selectedWallet} connection failed. Please try again.`;
-    walletStatus.innerText = "";
+    status.innerText = "Wallet verification failed.";
   }
-}
+});
 
-// Initialize dropdown click handlers
-document.addEventListener("DOMContentLoaded", function() {
-  const btn = document.getElementById("walletDropdownBtn");
-  if (btn) {
-    btn.onclick = function(e) {
-      e.stopPropagation();
-      toggleWalletDropdown();
-    };
-  }
+// Handle wallet disconnection
+document.addEventListener('walletDisconnected', function() {
+  const status = document.getElementById("status");
+  const depositBox = document.getElementById("depositBox");
   
-  const menuItems = document.querySelectorAll("#walletDropdownMenu li[role='option']");
-  menuItems.forEach(function(item) {
-    item.onclick = function() {
-      handleWalletSelection(this.dataset.wallet);
-    };
-  });
+  status.innerText = "";
+  depositBox.style.display = "none";
 });
 </script>
 </section>

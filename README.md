@@ -159,15 +159,10 @@ Create `server/.env` from `server/.env.example`:
 - [ ] Server starts without errors (`npm start` in `server/`)
 - [ ] Health check returns OK: `curl http://localhost:4000/api/health`
 - [ ] Deposit page loads: `http://localhost:8080/deposit.html`
-- [ ] Wallet dropdown shows all wallet options (Eternl, Lace, Nami, Flint, Other)
-- [ ] Wallet dropdown is accessible via keyboard (arrow keys, enter, escape)
-- [ ] Wallet connection works with selected wallet
-- [ ] Amount input shows deposit preview when valid amount entered
-- [ ] Deposit preview shows: amount, estimated fee, total deduction, expected receipt
-- [ ] Preview updates when amount changes (with debounce)
-- [ ] Warning shown if wallet not connected
-- [ ] "Prepare Deposit" button disabled until wallet connected and valid amount
-- [ ] "Prepare Deposit" builds transaction successfully
+- [ ] Wallet connection works via unified dropdown (Eternl, Lace, Nami, etc.)
+- [ ] Amount validation shows errors for invalid input
+- [ ] "Generate Preview" shows deposit preview with fee estimate
+- [ ] "Confirm & Sign" button only enabled after preview is generated
 - [ ] Confirmation modal shows correct amount and fee
 - [ ] Transaction can be signed with wallet
 - [ ] Transaction submits and returns txHash
@@ -201,17 +196,79 @@ Create `server/.env` from `server/.env.example`:
 
 ```
 HOSKDOG/
+├── assets/
+│   ├── js/
+│   │   └── wallet-dropdown.js    # Unified wallet dropdown component
+│   └── css/
+│       └── style.css             # Main stylesheet
 ├── public/
-│   ├── deposit.html              # Deposit UI with preview
-│   ├── deposit-client.js         # Client-side logic with fee estimation
+│   ├── deposit.html              # Deposit UI with preview flow
+│   ├── deposit-client.js         # Client-side deposit logic with fee estimation
+│   ├── slurp-logic.html          # Slurp logic page
 │   └── deposit-local-fallback.js # Local testing fallback
 ├── server/
 │   ├── package.json              # Server dependencies
 │   ├── index.js                  # Express server
 │   ├── .env.example              # Environment template
 │   └── README.md                 # Server documentation
+├── index.html                    # Main homepage
 └── README.md                     # This file
 ```
+
+---
+
+## Deposit Preview Feature
+
+The deposit feature includes a preview flow that shows transaction details BEFORE signing:
+
+### Preview Flow
+
+1. **Connect Wallet**: Use the unified wallet dropdown to connect Eternl, Lace, Nami, or other CIP-30 wallets
+2. **Enter Amount**: Input the ADA amount to deposit (minimum 1 ADA)
+3. **Generate Preview**: Click "Generate Preview" to see:
+   - Deposit amount
+   - Estimated network fee
+   - Total deduction (amount + fee)
+   - Expected receipt
+4. **Confirm & Sign**: Only enabled after preview is generated and wallet is connected
+
+### Fee Estimation
+
+Fee estimation follows this priority order:
+
+1. **Server Estimation** (recommended): Uses the deposit server's `/api/build-tx` endpoint which builds a transaction skeleton with Lucid/Blockfrost to calculate accurate fees
+2. **Blockfrost Fallback**: If server is unavailable but `BLOCKFROST_API_KEY` is provided in the advanced options, uses Blockfrost directly (development only)
+3. **Conservative Fallback**: If neither server nor Blockfrost is available, uses a conservative estimate:
+   ```
+   fallbackFeeAda = 0.17 + 0.0001 * 200 (bytes) ≈ 0.19 ADA
+   ```
+
+### Environment Variables for Fee Estimation
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `BLOCKFROST_KEY` | Yes (server) | Blockfrost API key for the deposit server |
+| `NETWORK` | No | `Mainnet` (default) or `Preprod` |
+
+---
+
+## Unified Wallet Dropdown
+
+The application uses a single "Connect Wallet" dropdown across all pages instead of separate wallet buttons. This provides:
+
+- **Single point of connection**: One dropdown to select from available wallets
+- **Accessibility**: Proper ARIA labels and keyboard navigation
+- **Event-driven**: Emits `walletConnected` and `walletDisconnected` events for cross-component communication
+- **Auto-detection**: Automatically detects installed CIP-30 wallets
+
+### Supported Wallets
+
+- Eternl
+- Lace
+- Nami
+- Flint
+- Typhon
+- NuFi
 
 ---
 
