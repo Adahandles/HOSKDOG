@@ -567,6 +567,16 @@
           <span class="preview-label">Expected Receipt:</span>
           <span class="preview-value" id="preview-receipt">-</span>
         </div>
+        <div class="preview-row" id="preview-tx-size-row" style="display: none;">
+          <span class="preview-label">Transaction Size:</span>
+          <span class="preview-value" id="preview-tx-size">-</span>
+        </div>
+        <div id="preview-tx-hex-container" style="display: none; margin-top: 15px;">
+          <details class="tx-hex-details">
+            <summary style="cursor: pointer; color: var(--muted); font-size: 0.9rem;">📜 View Serialized TX (CBOR Hex)</summary>
+            <div id="preview-tx-hex" class="tx-hex-display" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; font-family: monospace; font-size: 0.7rem; word-break: break-all; max-height: 150px; overflow-y: auto; color: var(--muted);"></div>
+          </details>
+        </div>
         <div id="preview-error" class="preview-error" style="display: none;"></div>
       </div>
       

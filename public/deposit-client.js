@@ -209,6 +209,27 @@ async function generatePreview() {
     document.getElementById('preview-total').textContent = `${totalDeductionAda.toFixed(4)} ADA`;
     document.getElementById('preview-receipt').textContent = expectedReceipt;
     
+    // Display tx size and serialized tx hex when available
+    const txSizeRow = document.getElementById('preview-tx-size-row');
+    const txHexContainer = document.getElementById('preview-tx-hex-container');
+    const txSizeEl = document.getElementById('preview-tx-size');
+    const txHexEl = document.getElementById('preview-tx-hex');
+    
+    if (feeResult.unsignedTxCborHex && txSizeRow && txHexContainer && txSizeEl && txHexEl) {
+      // Calculate tx size in bytes (hex string length / 2)
+      const txSizeBytes = Math.floor(feeResult.unsignedTxCborHex.length / 2);
+      txSizeEl.textContent = `${txSizeBytes} bytes`;
+      txSizeRow.style.display = 'flex';
+      
+      // Show serialized tx hex
+      txHexEl.textContent = feeResult.unsignedTxCborHex;
+      txHexContainer.style.display = 'block';
+    } else {
+      // Hide tx size and hex when not available (fallback mode)
+      if (txSizeRow) txSizeRow.style.display = 'none';
+      if (txHexContainer) txHexContainer.style.display = 'none';
+    }
+    
     // Show preview section
     previewEl.style.display = 'block';
     

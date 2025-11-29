@@ -24,6 +24,8 @@ Before requesting a wallet signature, the deposit page shows:
 2. **Estimated Network Fee**: Blockchain fee in ADA (calculated using Cardano fee formula)
 3. **Total Deduction**: Amount + Fee (what will be deducted from your wallet)
 4. **Expected Receipt**: Confirmation of tokens to be credited
+5. **Transaction Size**: Size in bytes (when server builds tx)
+6. **Serialized TX Hex**: Expandable CBOR hex of unsigned transaction (for advanced users)
 
 The "Prepare Deposit" button is disabled until:
 - A wallet is connected
