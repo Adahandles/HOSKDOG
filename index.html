@@ -372,12 +372,22 @@ document.addEventListener("keydown", function(e) {
   const focused = document.activeElement;
   const idx = Array.from(items).indexOf(focused);
   
-  if (e.key === "ArrowDown" && idx < items.length - 1) {
+  if (e.key === "ArrowDown") {
     e.preventDefault();
-    items[idx + 1].focus();
-  } else if (e.key === "ArrowUp" && idx > 0) {
+    // If no item focused or at end, focus first item; otherwise next item
+    if (idx === -1 || idx >= items.length - 1) {
+      items[0].focus();
+    } else {
+      items[idx + 1].focus();
+    }
+  } else if (e.key === "ArrowUp") {
     e.preventDefault();
-    items[idx - 1].focus();
+    // If no item focused or at start, focus last item; otherwise previous item
+    if (idx === -1 || idx <= 0) {
+      items[items.length - 1].focus();
+    } else {
+      items[idx - 1].focus();
+    }
   } else if (e.key === "Enter" && focused.dataset.wallet) {
     e.preventDefault();
     handleWalletSelection(focused.dataset.wallet);

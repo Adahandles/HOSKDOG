@@ -14,7 +14,9 @@
  * 
  * Fee Estimation Fallback:
  *   If server is unavailable and no Blockfrost key is provided, uses a conservative
- *   fee estimate: fallbackFee = 0.17 + 0.0001 * estimatedBytes (approx 0.20 ADA for typical tx)
+ *   fee estimate based on Cardano's fee formula:
+ *   fee = (155381 + 44 * txSizeBytes + 30000 safety buffer) lovelace
+ *   For a typical ~350 byte transaction: ~0.20 ADA
  */
 
 // ============================================================================
@@ -284,10 +286,16 @@ async function updateDepositPreview() {
     if (connectedWallet) {
       try {
         // Try to get a real fee estimate from the server
+        // Use AbortController for browser compatibility
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        
         const response = await fetch(`${serverUrl}/api/health`, { 
           method: 'GET',
-          signal: AbortSignal.timeout(2000)
+          signal: controller.signal
         });
+        
+        clearTimeout(timeoutId);
         
         if (response.ok) {
           // Server is available, we'll get real fee during prepareDeposit
