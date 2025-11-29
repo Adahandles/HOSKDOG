@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HOSKDOG - ADA Deposit</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <link href="../assets/css/wallet-dropdown.css" rel="stylesheet">
   <style>
     :root {
       --bg: #0b0f1a;
@@ -571,10 +572,10 @@
           <span class="preview-label">Transaction Size:</span>
           <span class="preview-value" id="preview-tx-size">-</span>
         </div>
-        <div id="preview-tx-hex-container" style="display: none; margin-top: 15px;">
+        <div id="preview-tx-hex-container" class="tx-hex-container" style="display: none;">
           <details class="tx-hex-details">
-            <summary style="cursor: pointer; color: var(--muted); font-size: 0.9rem;">📜 View Serialized TX (CBOR Hex)</summary>
-            <div id="preview-tx-hex" class="tx-hex-display" style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; font-family: monospace; font-size: 0.7rem; word-break: break-all; max-height: 150px; overflow-y: auto; color: var(--muted);"></div>
+            <summary>📜 View Serialized TX (CBOR Hex)</summary>
+            <div id="preview-tx-hex" class="tx-hex-display"></div>
           </details>
         </div>
         <div id="preview-error" class="preview-error" style="display: none;"></div>

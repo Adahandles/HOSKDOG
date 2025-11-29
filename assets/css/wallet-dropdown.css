@@ -270,6 +270,11 @@
   font-size: 0.9rem;
 }
 
+/* TX Hex container */
+.tx-hex-container {
+  margin-top: 15px;
+}
+
 /* TX Hex display styles */
 .tx-hex-details summary {
   cursor: pointer;
