@@ -657,6 +657,9 @@ function truncateAddress(address, chars = 10) {
 
 // ============================================================================
 // Address Utilities (Bech32 encoding for Cardano addresses)
+// NOTE: These utilities are intentionally duplicated from wallet-dropdown.js
+// to keep this module self-contained and functional independently.
+// If the wallet dropdown is loaded, it provides hexToBech32 via WalletDropdown.hexToBech32
 // ============================================================================
 
 const BECH32_ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
