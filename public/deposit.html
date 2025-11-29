@@ -358,6 +358,79 @@
       font-size: 0.9rem;
     }
 
+    /* Wallet dropdown styles */
+    .wallet-dropdown-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      color: #e0faff;
+      transition: background-color 0.2s;
+      border-bottom: 1px solid rgba(8, 253, 216, 0.2);
+    }
+    
+    .wallet-dropdown-item:last-child {
+      border-bottom: none;
+    }
+    
+    .wallet-dropdown-item:hover,
+    .wallet-dropdown-item:focus {
+      background-color: rgba(8, 253, 216, 0.2);
+      outline: none;
+    }
+
+    /* Deposit preview styles */
+    .preview-box {
+      background: rgba(8, 253, 216, 0.05);
+      border: 1px solid rgba(8, 253, 216, 0.3);
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+    
+    .preview-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .preview-row:last-child {
+      border-bottom: none;
+    }
+    
+    .preview-row.total {
+      font-weight: bold;
+      border-top: 2px solid var(--cyan);
+      margin-top: 8px;
+      padding-top: 12px;
+    }
+    
+    .preview-label {
+      color: var(--muted);
+    }
+    
+    .preview-value {
+      color: #fff;
+      font-weight: 500;
+    }
+    
+    .preview-value.highlight {
+      color: var(--cyan);
+    }
+    
+    .preview-loading {
+      text-align: center;
+      padding: 15px;
+      color: var(--muted);
+    }
+    
+    .preview-error {
+      color: var(--error);
+      padding: 10px;
+      background: rgba(255, 107, 107, 0.1);
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
     @media (max-width: 600px) {
       .wallet-buttons {
         flex-direction: column;
@@ -472,7 +545,7 @@
       <p class="info-text">Make sure your wallet is on the same network.</p>
 
       <label for="amount-input">Amount (ADA)</label>
-      <input type="number" id="amount-input" placeholder="5" min="1" step="0.1" />
+      <input type="number" id="amount-input" placeholder="5" min="1" step="0.1" oninput="updateDepositPreview()" />
       <p class="info-text">Minimum deposit: 1 ADA. Network fees will be added automatically.</p>
       
       <!-- Deposit Preview Section -->

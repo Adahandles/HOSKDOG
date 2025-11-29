@@ -282,6 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Handle wallet connection event from unified dropdown
 document.addEventListener('walletConnected', async function(e) {
   const status = document.getElementById("status");
+  const walletStatus = document.getElementById("walletStatus");
   const depositBox = document.getElementById("depositBox");
   
   try {

@@ -7,12 +7,38 @@ HOSKDOG is a meme-powered native token built on the Cardano blockchain. It combi
 
 ## Deposit Feature
 
-The deposit feature allows users to send ADA to the HOSKDOG treasury using their Cardano wallet (Eternl, Nami, or Flint). The system includes:
+The deposit feature allows users to send ADA to the HOSKDOG treasury using their Cardano wallet (Eternl, Lace, Nami, Flint, or other CIP-30 compatible wallets). The system includes:
 
-- **Wallet Connection**: CIP-30 compliant wallet integration
-- **Fee Estimation**: Shows estimated network fees before signing
+- **Unified Wallet Connection**: Single dropdown to select and connect any supported Cardano wallet
+- **Deposit Preview**: Shows amount, estimated fee, total deduction, and expected receipt BEFORE signing
+- **Fee Estimation**: Real-time fee estimation with conservative fallback when server unavailable
 - **Secure Transaction Building**: Server-side transaction building keeps Blockfrost API key secret
 - **Multi-Network Support**: Works with Mainnet and Preprod (testnet)
+- **Accessible UI**: Keyboard navigation and ARIA labels for screen readers
+
+### Deposit Preview Flow
+
+Before requesting a wallet signature, the deposit page shows:
+
+1. **Requested Deposit Amount**: The ADA amount you entered
+2. **Estimated Network Fee**: Blockchain fee in ADA (calculated using Cardano fee formula)
+3. **Total Deduction**: Amount + Fee (what will be deducted from your wallet)
+4. **Expected Receipt**: Confirmation of tokens to be credited
+
+The "Prepare Deposit" button is disabled until:
+- A wallet is connected
+- A valid amount (≥1 ADA) is entered
+- The preview is successfully computed
+
+### Fee Estimation
+
+Fee estimation uses the following order of preference:
+
+1. **Server-side estimation**: If the deposit server is running with a valid `BLOCKFROST_API_KEY`, real transaction fees are calculated using Lucid/Blockfrost
+2. **Conservative fallback**: If server unavailable, uses Cardano's fee formula:
+   - `fee = 155381 + (44 * txSizeBytes) + 30000 (safety buffer)` lovelace
+   - For a typical ~350 byte transaction: ~0.20 ADA
+   - This is intentionally conservative to ensure transactions succeed
 
 ### HOSKDOG Receiving Address (Mainnet)
 
@@ -50,14 +76,15 @@ Then visit: `http://localhost:8080/deposit.html`
 
 #### 3. Connect Wallet and Deposit
 
-1. Click one of the wallet buttons (Eternl, Nami, Flint)
+1. Click "Connect Wallet" dropdown and select your wallet (Eternl, Lace, Nami, Flint, or Other)
 2. Authorize the connection in your wallet
 3. Enter the ADA amount (minimum 1 ADA)
-4. Click "Prepare Deposit"
-5. Review the fee estimate in the confirmation modal
-6. Click "Sign & Send"
-7. Confirm the transaction in your wallet
-8. Wait for the transaction hash to appear
+4. Review the deposit preview showing amount, fee, and total
+5. Click "Prepare Deposit"
+6. Review the confirmation modal with final amounts
+7. Click "Sign & Send"
+8. Confirm the transaction in your wallet
+9. Wait for the transaction hash to appear
 
 ### Server API Endpoints
 
@@ -140,6 +167,30 @@ Create `server/.env` from `server/.env.example`:
 - [ ] Transaction can be signed with wallet
 - [ ] Transaction submits and returns txHash
 - [ ] Transaction visible on Cardanoscan
+- [ ] Index page unified wallet dropdown works correctly
+
+### Manual Testing Steps
+
+1. **Test Wallet Dropdown (index.html)**:
+   - Open `index.html` in browser
+   - Click "Connect Wallet" button - dropdown should appear
+   - Use keyboard (arrow keys, enter) to navigate - should work
+   - Click outside dropdown - should close
+   - Press Escape - should close
+
+2. **Test Deposit Preview (deposit.html)**:
+   - Open `deposit.html` in browser
+   - Enter amount (e.g., 5 ADA) without connecting wallet
+   - Preview should show with warning "Connect your wallet"
+   - Connect wallet via dropdown
+   - Preview should update, "Prepare Deposit" should be enabled
+   - Change amount - preview should update with debounce
+
+3. **Test Fee Estimation Fallback**:
+   - Stop the deposit server if running
+   - Enter amount on deposit page
+   - Preview should show fallback fee (~0.20 ADA)
+   - Fee should be marked with "~" to indicate estimate
 
 ### File Structure
 

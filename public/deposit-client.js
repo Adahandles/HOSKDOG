@@ -11,6 +11,12 @@
  * 
  * The Blockfrost API key is kept on the server side for security.
  * A local fallback is available for developer testing only.
+ * 
+ * Fee Estimation Fallback:
+ *   If server is unavailable and no Blockfrost key is provided, uses a conservative
+ *   fee estimate based on Cardano's fee formula:
+ *   fee = (155381 + 44 * txSizeBytes + 30000 safety buffer) lovelace
+ *   For a typical ~350 byte transaction: ~0.20 ADA
  */
 
 // ============================================================================
@@ -218,6 +224,9 @@ async function generatePreview() {
       showStatus(statusEl, '✅ Preview ready. Review details and click Confirm & Sign.', 'success');
     }
     
+    // Update deposit preview with wallet connected
+    updateDepositPreview();
+    
   } catch (error) {
     console.error('Preview generation error:', error);
     showPreviewError(`Failed to generate preview: ${error.message}`);
@@ -340,6 +349,141 @@ async function checkNetworkMatch() {
       'warning'
     );
   }
+}
+
+// ============================================================================
+// Deposit Preview with Fee Estimation
+// ============================================================================
+
+/**
+ * Calculate conservative fee estimate when server is unavailable
+ * Uses Cardano fee formula: fee = a + b * txSize
+ * 
+ * @param {number} estimatedTxSize - Estimated transaction size in bytes (default: 350)
+ * @returns {number} - Estimated fee in lovelace
+ */
+function calculateFallbackFee(estimatedTxSize = ESTIMATED_TX_SIZE_BYTES) {
+  // fee = 155381 + 44 * txSize (in lovelace)
+  // For a typical simple transfer (~350 bytes): ~170,781 lovelace (~0.17 ADA)
+  // We add a small buffer for safety
+  const baseFee = FEE_CONSTANT_LOVELACE + (FEE_PER_BYTE_LOVELACE * estimatedTxSize);
+  const safetyBuffer = 30000; // ~0.03 ADA buffer
+  return baseFee + safetyBuffer;
+}
+
+/**
+ * Update the deposit preview based on current input
+ * Called when amount changes or wallet connects
+ */
+async function updateDepositPreview() {
+  const previewBox = document.getElementById('deposit-preview');
+  const amountInput = document.getElementById('amount-input');
+  const previewAmount = document.getElementById('preview-amount');
+  const previewFee = document.getElementById('preview-fee');
+  const previewTotal = document.getElementById('preview-total');
+  const previewReceipt = document.getElementById('preview-receipt');
+  const previewError = document.getElementById('preview-error');
+  const prepareBtn = document.getElementById('prepare-btn');
+  
+  if (!previewBox) return;
+  
+  // Clear any pending debounce
+  if (previewDebounceTimer) {
+    clearTimeout(previewDebounceTimer);
+  }
+  
+  // Debounce to avoid too many updates
+  previewDebounceTimer = setTimeout(async () => {
+    const adaAmount = parseFloat(amountInput?.value);
+    
+    // Hide preview if no valid amount
+    if (isNaN(adaAmount) || adaAmount < 1) {
+      previewBox.style.display = 'none';
+      if (prepareBtn) prepareBtn.disabled = true;
+      return;
+    }
+    
+    // Show preview box
+    previewBox.style.display = 'block';
+    previewError.style.display = 'none';
+    
+    // Update deposit amount
+    if (previewAmount) {
+      previewAmount.textContent = `${adaAmount.toFixed(2)} ADA`;
+    }
+    
+    // Estimate fee
+    let estimatedFeeLovelace;
+    let feeSource = 'fallback';
+    
+    // Try to get fee from server if available and wallet connected
+    const serverUrl = document.getElementById('server-url')?.value || 'http://localhost:4000';
+    
+    if (connectedWallet) {
+      try {
+        // Try to get a real fee estimate from the server
+        // Use AbortController for browser compatibility
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        
+        const response = await fetch(`${serverUrl}/api/health`, { 
+          method: 'GET',
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+          // Server is available, we'll get real fee during prepareDeposit
+          // For now, use a reasonable estimate based on typical Cardano fees
+          estimatedFeeLovelace = calculateFallbackFee(350);
+          feeSource = 'estimate';
+        }
+      } catch {
+        // Server unavailable, use fallback
+        estimatedFeeLovelace = calculateFallbackFee(350);
+      }
+    } else {
+      // No wallet connected, use fallback estimate
+      estimatedFeeLovelace = calculateFallbackFee(350);
+    }
+    
+    if (!estimatedFeeLovelace) {
+      estimatedFeeLovelace = calculateFallbackFee(350);
+    }
+    
+    const estimatedFeeAda = estimatedFeeLovelace / 1000000;
+    const totalDeduction = adaAmount + estimatedFeeAda;
+    
+    // Update fee display
+    if (previewFee) {
+      const feeLabel = feeSource === 'fallback' ? '~' : '≈';
+      previewFee.textContent = `${feeLabel}${estimatedFeeAda.toFixed(4)} ADA`;
+    }
+    
+    // Update total
+    if (previewTotal) {
+      previewTotal.textContent = `≈${totalDeduction.toFixed(4)} ADA`;
+    }
+    
+    // Update expected receipt (placeholder - tokens credited based on deposit)
+    if (previewReceipt) {
+      // Note: This is a placeholder. Real receipt depends on the token sale mechanics
+      previewReceipt.innerHTML = `${adaAmount.toFixed(2)} ADA credited to treasury<br><small style="color:var(--muted);">HKDG tokens sent manually after verification</small>`;
+    }
+    
+    // Enable prepare button only if wallet is connected and amount is valid
+    if (prepareBtn) {
+      prepareBtn.disabled = !connectedWallet || isNaN(adaAmount) || adaAmount < 1;
+    }
+    
+    // Show warning if no wallet connected
+    if (!connectedWallet) {
+      previewError.style.display = 'block';
+      previewError.textContent = '⚠️ Connect your wallet to proceed with deposit';
+    }
+    
+  }, 300); // 300ms debounce
 }
 
 // ============================================================================
@@ -773,9 +917,32 @@ document.getElementById('amount-input')?.addEventListener('input', () => {
   }
 });
 
-// Close modal on escape key
+// Handle keyboard navigation in dropdown
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
+  // Close modal on escape
+  if (e.key === 'Escape') {
+    closeModal();
+    closeWalletDropdown();
+    return;
+  }
+  
+  // Dropdown keyboard navigation
+  const menu = document.getElementById('wallet-dropdown-menu');
+  if (!menu || menu.style.display !== 'block') return;
+  
+  const items = menu.querySelectorAll('.wallet-dropdown-item');
+  const focused = document.activeElement;
+  const idx = Array.from(items).indexOf(focused);
+  
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (idx < items.length - 1) items[idx + 1].focus();
+    else items[0].focus();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (idx > 0) items[idx - 1].focus();
+    else items[items.length - 1].focus();
+  }
 });
 
 // Close modal when clicking outside
