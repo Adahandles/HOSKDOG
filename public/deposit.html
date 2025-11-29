@@ -358,6 +358,24 @@
       font-size: 0.9rem;
     }
 
+    /* Dropdown styles */
+    .dropdown-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      color: #e0faff;
+    }
+    
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+      background: rgba(8, 253, 216, 0.15);
+      outline: none;
+    }
+    
+    .wallet-dropdown-container {
+      margin-bottom: 10px;
+    }
+
     @media (max-width: 600px) {
       .wallet-buttons {
         flex-direction: column;
@@ -365,6 +383,18 @@
       
       .modal-buttons {
         flex-direction: column;
+      }
+      
+      .wallet-dropdown-container {
+        width: 100%;
+      }
+      
+      #walletDropdownBtn {
+        width: 100%;
+      }
+      
+      #walletDropdown {
+        width: 100%;
       }
     }
   </style>
@@ -390,10 +420,19 @@
       <h2>1️⃣ Connect Wallet</h2>
       <p>Select and connect your Cardano wallet:</p>
       
-      <div class="wallet-buttons">
-        <button class="wallet-btn" id="btn-eternl" onclick="connectWallet('eternl')">♾️ Eternl</button>
-        <button class="wallet-btn" id="btn-nami" onclick="connectWallet('nami')">🌊 Nami</button>
-        <button class="wallet-btn" id="btn-flint" onclick="connectWallet('flint')">🔥 Flint</button>
+      <!-- Unified Wallet Connect Dropdown -->
+      <div class="wallet-dropdown-container" style="position:relative;display:inline-block;">
+        <button id="walletDropdownBtn" class="wallet-btn" style="display:flex;align-items:center;gap:8px;min-width:200px;justify-content:center;" aria-haspopup="listbox" aria-expanded="false">
+          🐾 Connect Wallet
+          <span style="font-size:0.8em;">▼</span>
+        </button>
+        <ul id="walletDropdown" role="listbox" aria-label="Select wallet" style="display:none;position:absolute;top:100%;left:0;z-index:100;background-color:var(--card);border:2px solid var(--cyan);border-radius:8px;list-style:none;padding:8px 0;margin:4px 0 0 0;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+          <li role="option" tabindex="0" data-wallet="eternl" class="dropdown-item">♾️ Eternl</li>
+          <li role="option" tabindex="0" data-wallet="lace" class="dropdown-item">🎴 Lace</li>
+          <li role="option" tabindex="0" data-wallet="nami" class="dropdown-item">🌊 Nami</li>
+          <li role="option" tabindex="0" data-wallet="flint" class="dropdown-item">🔥 Flint</li>
+          <li role="option" tabindex="0" data-wallet="other" class="dropdown-item">🔗 Other Wallet</li>
+        </ul>
       </div>
       
       <div id="wallet-status" class="status-area"></div>
@@ -410,12 +449,37 @@
       <p class="info-text">Make sure your wallet is on the same network.</p>
 
       <label for="amount-input">Amount (ADA)</label>
-      <input type="number" id="amount-input" placeholder="5" min="1" step="0.1" />
+      <input type="number" id="amount-input" placeholder="5" min="1" step="0.1" oninput="updatePreview()" />
       <p class="info-text">Minimum deposit: 1 ADA. Network fees will be added automatically.</p>
       
       <div class="address-display">
         <strong>Receiving Address:</strong><br>
         <span id="recipient-address">addr1q9lgquer5840jyexr52zjlpvvv33d7qkg4k35ty9f85leftvz5gkpuwt36e4h6zle5trhx3xqus8q08ac60hxe8pc4mqhuyj7k</span>
+      </div>
+      
+      <!-- Deposit Preview Section -->
+      <div id="deposit-preview" class="deposit-preview" style="display:none;margin-top:20px;padding:15px;background:rgba(8,253,216,0.05);border-radius:8px;border:1px solid rgba(8,253,216,0.2);">
+        <h3 style="color:var(--cyan);margin:0 0 12px 0;font-size:1.1rem;">📋 Deposit Preview</h3>
+        <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <span style="color:var(--muted);">Deposit Amount:</span>
+          <span id="preview-amount" style="font-weight:600;">-</span>
+        </div>
+        <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <span style="color:var(--muted);">Estimated Network Fee:</span>
+          <span id="preview-fee" style="font-weight:600;">-</span>
+        </div>
+        <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <span style="color:var(--muted);">Total Deduction:</span>
+          <span id="preview-total" style="font-weight:600;color:var(--cyan);">-</span>
+        </div>
+        <div class="preview-row" style="display:flex;justify-content:space-between;padding:8px 0;">
+          <span style="color:var(--muted);">Expected Receipt:</span>
+          <span id="preview-receipt" style="font-weight:600;color:#22c55e;">-</span>
+        </div>
+        <p id="preview-note" class="info-text" style="margin-top:12px;font-size:0.85rem;">
+          <em>Note: Fee is estimated. Actual fee may vary slightly based on network conditions.</em>
+        </p>
+        <div id="preview-error" class="status-area error" style="display:none;margin-top:10px;"></div>
       </div>
       
       <button class="primary-btn" id="prepare-btn" onclick="prepareDeposit()" disabled>
