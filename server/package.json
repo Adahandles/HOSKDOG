@@ -1,0 +1,24 @@
+{
+  "name": "hoskdog-deposit-server",
+  "version": "1.0.0",
+  "description": "HOSKDOG Deposit Server - Secure proxy for ADA deposits",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "cardano",
+    "deposit",
+    "hoskdog",
+    "lucid"
+  ],
+  "author": "HOSKDOG Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "lucid-cardano": "^0.10.11"
+  }
+}
