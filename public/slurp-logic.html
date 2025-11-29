@@ -575,29 +575,10 @@
       <h2>🚽 HOSKDOG FAUCET - LIVE NOW!</h2>
       <p><strong>Connect your Cardano wallet to start slurping $HKDG tokens!</strong></p>
       
-      <!-- Wallet Connection Section -->
+      <!-- Wallet Connection Section - Using Unified Dropdown -->
       <div id="wallet-section">
         <h3>🔗 Connect Your Wallet</h3>
-        <div id="wallet-buttons" class="wallet-buttons">
-          <button class="wallet-btn" onclick="connectWallet('lace')">
-            🦀 Lace
-          </button>
-          <button class="wallet-btn" onclick="connectWallet('nami')">
-            🌊 Nami  
-          </button>
-          <button class="wallet-btn" onclick="connectWallet('eternl')">
-            ♾️ Eternl
-          </button>
-          <button class="wallet-btn" onclick="connectWallet('typhon')">
-            🌪️ Typhon
-          </button>
-          <button class="wallet-btn" onclick="connectWallet('flint')">
-            🔥 Flint
-          </button>
-          <button class="wallet-btn" onclick="connectWallet('nufi')">
-            🔐 NuFi
-          </button>
-        </div>
+        <div id="slurp-wallet-dropdown" style="margin: 15px 0;"></div>
       </div>
 
       <!-- Connected Wallet Display -->
@@ -637,17 +618,11 @@
           </button>
           <p id="slurp-status"></p>
         </div>
-
-        <button class="disconnect-btn" onclick="disconnectWallet()">
-          🔌 Disconnect Wallet
-        </button>
       </div>
     </div>
 
 
     
-
-
 
     </div>
 
@@ -664,8 +639,11 @@
 
   </main>
 
+  <!-- Load the wallet dropdown module -->
+  <script src="../assets/js/wallet-dropdown.js"></script>
+  
   <script>
-    // Wallet Management
+    // Wallet Management - using unified dropdown
     let connectedWallet = null;
     let walletAddress = null;
     let userEligibility = null;
@@ -673,86 +651,38 @@
     // API Base URL (adjust for your backend)
     const API_BASE = 'http://localhost:3000/api';
 
-    // Wallet connection function
-    async function connectWallet(walletName) {
-      try {
-        // Update button state
-        document.querySelectorAll('.wallet-btn').forEach(btn => {
-          btn.disabled = true;
-          btn.textContent = 'Connecting...';
-        });
-
-        let walletApi = null;
-        
-        // Try to connect based on wallet type
-        switch(walletName) {
-          case 'nami':
-            if (window.cardano && window.cardano.nami) {
-              walletApi = await window.cardano.nami.enable();
-            }
-            break;
-          case 'lace':
-            if (window.cardano && window.cardano.lace) {
-              walletApi = await window.cardano.lace.enable();
-            }
-            break;
-          case 'eternl':
-            if (window.cardano && window.cardano.eternl) {
-              walletApi = await window.cardano.eternl.enable();
-            }
-            break;
-          case 'typhon':
-            if (window.cardano && window.cardano.typhon) {
-              walletApi = await window.cardano.typhon.enable();
-            }
-            break;
-          case 'flint':
-            if (window.cardano && window.cardano.flint) {
-              walletApi = await window.cardano.flint.enable();
-            }
-            break;
-          case 'nufi':
-            if (window.cardano && window.cardano.nufi) {
-              walletApi = await window.cardano.nufi.enable();
-            }
-            break;
-        }
-
-        if (!walletApi) {
-          throw new Error(`${walletName} wallet not found. Please install the ${walletName} extension.`);
-        }
-
-        // Get wallet address
-        const addresses = await walletApi.getUsedAddresses();
-        if (addresses.length === 0) {
-          const unusedAddresses = await walletApi.getUnusedAddresses();
-          if (unusedAddresses.length === 0) {
-            throw new Error('No addresses found in wallet');
-          }
-          walletAddress = unusedAddresses[0];
-        } else {
-          walletAddress = addresses[0];
-        }
-
-        // Convert hex address to bech32 if needed
-        const addressDisplay = hexToBech32(walletAddress);
-
-        connectedWallet = {
-          name: walletName,
-          api: walletApi,
-          address: addressDisplay
-        };
-
-        // Update UI
-        showConnectedWallet(addressDisplay);
-        await checkEligibility(addressDisplay);
-
-      } catch (error) {
-        console.error('Wallet connection failed:', error);
-        alert(`Failed to connect ${walletName}: ${error.message}`);
-        resetWalletButtons();
+    // Initialize wallet dropdown on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.WalletDropdown) {
+        WalletDropdown.init('slurp-wallet-dropdown');
       }
-    }
+    });
+
+    // Handle wallet connection from unified dropdown
+    document.addEventListener('walletConnected', async function(e) {
+      const { walletName, address, api } = e.detail;
+      
+      connectedWallet = {
+        name: walletName,
+        api: api,
+        address: address
+      };
+      walletAddress = address;
+
+      // Update UI
+      showConnectedWallet(address);
+      await checkEligibility(address);
+    });
+
+    // Handle wallet disconnection
+    document.addEventListener('walletDisconnected', function() {
+      connectedWallet = null;
+      walletAddress = null;
+      userEligibility = null;
+      
+      document.getElementById('wallet-section').style.display = 'block';
+      document.getElementById('connected-section').style.display = 'none';
+    });
 
     // Show connected wallet UI
     function showConnectedWallet(address) {
@@ -876,66 +806,7 @@
       }
     }
 
-    // Disconnect wallet
-    function disconnectWallet() {
-      connectedWallet = null;
-      walletAddress = null;
-      userEligibility = null;
-      
-      document.getElementById('wallet-section').style.display = 'block';
-      document.getElementById('connected-section').style.display = 'none';
-      resetWalletButtons();
-    }
-
-    // Reset wallet buttons
-    function resetWalletButtons() {
-      const walletNames = ['lace', 'nami', 'eternl', 'typhon', 'flint', 'nufi'];
-      const emojis = ['🦀', '🌊', '♾️', '🌪️', '🔥', '🔐'];
-      
-      document.querySelectorAll('.wallet-btn').forEach((btn, index) => {
-        btn.disabled = false;
-        btn.textContent = `${emojis[index]} ${walletNames[index].charAt(0).toUpperCase() + walletNames[index].slice(1)}`;
-      });
-    }
-
-    // Convert hex address to bech32 (simplified - you might need a proper library)
-    function hexToBech32(hexAddress) {
-      // This is a simplified version - in production you'd use a proper Cardano library
-      // For now, just return the hex address if conversion fails
-      try {
-        // If it's already bech32, return as is
-        if (typeof hexAddress === 'string' && hexAddress.startsWith('addr')) {
-          return hexAddress;
-        }
-        return hexAddress; // Return as-is for now
-      } catch (error) {
-        return hexAddress;
-      }
-    }
-
-    // Check if wallets are available on page load
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const walletChecks = [
-          { name: 'lace', available: window.cardano && window.cardano.lace },
-          { name: 'nami', available: window.cardano && window.cardano.nami },
-          { name: 'eternl', available: window.cardano && window.cardano.eternl },
-          { name: 'typhon', available: window.cardano && window.cardano.typhon },
-          { name: 'flint', available: window.cardano && window.cardano.flint },
-          { name: 'nufi', available: window.cardano && window.cardano.nufi }
-        ];
-
-        walletChecks.forEach(wallet => {
-          const btn = document.querySelector(`[onclick="connectWallet('${wallet.name}')"]`);
-          if (btn && !wallet.available) {
-            btn.style.opacity = '0.5';
-            btn.title = `${wallet.name} wallet not detected. Please install the extension.`;
-          }
-        });
-      }, 1000); // Wait 1 second for wallets to load
-    });
-
-    // Particle Animation (existing code)
+    // Particle Animation
     const canvas = document.getElementById('backgroundCanvas');
     const ctx = canvas.getContext('2d');
 

@@ -367,6 +367,71 @@
         flex-direction: column;
       }
     }
+
+    /* Deposit Preview Styles */
+    .deposit-preview {
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(8, 253, 216, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .preview-header {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--cyan);
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(8, 253, 216, 0.2);
+    }
+
+    .preview-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .preview-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .preview-row.preview-total {
+      background: rgba(8, 253, 216, 0.1);
+      margin: 10px -15px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border-bottom: none;
+    }
+
+    .preview-label {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .preview-value {
+      font-weight: 600;
+      color: #fff;
+      font-size: 1rem;
+      text-align: right;
+    }
+
+    .preview-row.preview-total .preview-value {
+      color: var(--cyan);
+      font-size: 1.1rem;
+    }
+
+    .preview-error {
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid rgba(255, 107, 107, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 15px;
+      color: var(--error);
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -390,17 +455,14 @@
       <h2>1️⃣ Connect Wallet</h2>
       <p>Select and connect your Cardano wallet:</p>
       
-      <div class="wallet-buttons">
-        <button class="wallet-btn" id="btn-eternl" onclick="connectWallet('eternl')">♾️ Eternl</button>
-        <button class="wallet-btn" id="btn-nami" onclick="connectWallet('nami')">🌊 Nami</button>
-        <button class="wallet-btn" id="btn-flint" onclick="connectWallet('flint')">🔥 Flint</button>
-      </div>
+      <!-- Unified Wallet Dropdown -->
+      <div id="deposit-wallet-dropdown" style="margin: 15px 0;"></div>
       
       <div id="wallet-status" class="status-area"></div>
     </div>
 
     <div class="deposit-box">
-      <h2>2️⃣ Enter Amount</h2>
+      <h2>2️⃣ Deposit Preview</h2>
       
       <label for="network-select">Network</label>
       <select id="network-select">
@@ -413,13 +475,39 @@
       <input type="number" id="amount-input" placeholder="5" min="1" step="0.1" />
       <p class="info-text">Minimum deposit: 1 ADA. Network fees will be added automatically.</p>
       
+      <!-- Deposit Preview Section -->
+      <div id="deposit-preview" class="deposit-preview" style="display: none;">
+        <div class="preview-header">📋 Transaction Preview</div>
+        <div class="preview-row">
+          <span class="preview-label">Deposit Amount:</span>
+          <span class="preview-value" id="preview-amount">-</span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-label">Estimated Network Fee:</span>
+          <span class="preview-value" id="preview-fee">-</span>
+        </div>
+        <div class="preview-row preview-total">
+          <span class="preview-label">Total Deduction:</span>
+          <span class="preview-value" id="preview-total">-</span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-label">Expected Receipt:</span>
+          <span class="preview-value" id="preview-receipt">-</span>
+        </div>
+        <div id="preview-error" class="preview-error" style="display: none;"></div>
+      </div>
+      
       <div class="address-display">
         <strong>Receiving Address:</strong><br>
         <span id="recipient-address">addr1q9lgquer5840jyexr52zjlpvvv33d7qkg4k35ty9f85leftvz5gkpuwt36e4h6zle5trhx3xqus8q08ac60hxe8pc4mqhuyj7k</span>
       </div>
       
-      <button class="primary-btn" id="prepare-btn" onclick="prepareDeposit()" disabled>
-        🔄 Prepare Deposit
+      <button class="primary-btn" id="preview-btn" onclick="generatePreview()" disabled>
+        👁️ Generate Preview
+      </button>
+      
+      <button class="primary-btn" id="prepare-btn" onclick="prepareDeposit()" disabled style="display: none;">
+        ✅ Confirm & Sign
       </button>
       
       <div id="prepare-status" class="status-area"></div>
@@ -482,6 +570,9 @@
     </div>
   </div>
 
+  <!-- Load the wallet dropdown module -->
+  <script src="../assets/js/wallet-dropdown.js"></script>
+  
   <!-- Load the deposit client module -->
   <script src="deposit-client.js"></script>
   
