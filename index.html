@@ -267,9 +267,65 @@
     </div>
   </div>
 
-<script type="module">
-import { Buffer } from "buffer";
-window.Buffer = Buffer;
+<script>
+// Bech32 encoding utilities for Cardano addresses (browser-compatible, no external deps)
+const BECH32_ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+function bech32Polymod(values) {
+  const GEN = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
+  let chk = 1;
+  for (const v of values) {
+    const b = chk >> 25;
+    chk = ((chk & 0x1ffffff) << 5) ^ v;
+    for (let i = 0; i < 5; i++) if ((b >> i) & 1) chk ^= GEN[i];
+  }
+  return chk;
+}
+function bech32HrpExpand(hrp) {
+  const ret = [];
+  for (const c of hrp) ret.push(c.charCodeAt(0) >> 5);
+  ret.push(0);
+  for (const c of hrp) ret.push(c.charCodeAt(0) & 31);
+  return ret;
+}
+function bech32CreateChecksum(hrp, data) {
+  const values = bech32HrpExpand(hrp).concat(data).concat([0, 0, 0, 0, 0, 0]);
+  const polymod = bech32Polymod(values) ^ 1;
+  const ret = [];
+  for (let i = 0; i < 6; i++) ret.push((polymod >> (5 * (5 - i))) & 31);
+  return ret;
+}
+function bech32Encode(hrp, data) {
+  const combined = data.concat(bech32CreateChecksum(hrp, data));
+  let ret = hrp + '1';
+  for (const d of combined) ret += BECH32_ALPHABET[d];
+  return ret;
+}
+function convertBits(data, fromBits, toBits, pad) {
+  let acc = 0, bits = 0;
+  const ret = [], maxv = (1 << toBits) - 1;
+  for (const d of data) {
+    acc = (acc << fromBits) | d;
+    bits += fromBits;
+    while (bits >= toBits) {
+      bits -= toBits;
+      ret.push((acc >> bits) & maxv);
+    }
+  }
+  if (pad && bits > 0) ret.push((acc << (toBits - bits)) & maxv);
+  return ret;
+}
+function hexToBytes(hex) {
+  const bytes = [];
+  for (let i = 0; i < hex.length; i += 2) bytes.push(parseInt(hex.substring(i, i + 2), 16));
+  return bytes;
+}
+function hexToBech32Address(hexAddr) {
+  // Cardano mainnet addresses start with 0x01, 0x11, 0x21, 0x31, 0x41, 0x51, 0x61, 0x71
+  // The prefix is "addr" for mainnet payment addresses
+  const bytes = hexToBytes(hexAddr);
+  const words = convertBits(bytes, 8, 5, true);
+  return bech32Encode('addr', words);
+}
 
 async function connectWallet() {
   const status = document.getElementById("status");
@@ -283,13 +339,31 @@ async function connectWallet() {
 
     const wallet = await walletAPI.enable();
     const used = await wallet.getUsedAddresses();
-    const addr = Buffer.from(used[0], "hex").toString("base58");
+    if (!used || used.length === 0) {
+      status.innerText = "No addresses found in wallet.";
+      return;
+    }
+    
+    // Convert hex CBOR address to bech32 format for API
+    const hexAddr = used[0];
+    const addr = hexToBech32Address(hexAddr);
     status.innerText = "Verifying meme holdings...";
 
-    const r = await fetch(`https://api.cexplorer.io/v1/address/assets/${addr}`);
-    const j = await r.json();
-    const holdsHosky = j.data.some(a => a.asset_name === "HOSKY");
-    const holdsSnek = j.data.some(a => a.asset_name === "SNEK");
+    let holdsHosky = false;
+    let holdsSnek = false;
+    
+    try {
+      const r = await fetch(`https://api.cexplorer.io/v1/address/assets/${addr}`);
+      if (r.ok) {
+        const j = await r.json();
+        if (j.data && Array.isArray(j.data)) {
+          holdsHosky = j.data.some(a => a.asset_name && a.asset_name.toUpperCase() === "HOSKY");
+          holdsSnek = j.data.some(a => a.asset_name && a.asset_name.toUpperCase() === "SNEK");
+        }
+      }
+    } catch (apiErr) {
+      console.warn("Asset lookup failed, defaulting to non-holder:", apiErr);
+    }
 
     depositBox.style.display = "block";
 
