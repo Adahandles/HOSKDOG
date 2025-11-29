@@ -254,6 +254,11 @@
       Meme holders get rewarded; ADA-only wallets still welcome.
     </p>
     <button id="connectWallet" class="btn" style="margin-top:1rem;">🐾 Connect Wallet</button>
+    <div style="margin-top:1rem;">
+      <button id="connectEternl" style="background-color:#08fdd8;color:#000;font-weight:bold;padding:12px 24px;border:none;border-radius:6px;cursor:pointer;font-size:1rem;transition:0.2s ease-in-out;box-shadow:0 0 12px rgba(8,253,216,0.4);margin-right:0.5rem;">Connect Eternl</button>
+      <button id="connectLace" style="background-color:#08fdd8;color:#000;font-weight:bold;padding:12px 24px;border:none;border-radius:6px;cursor:pointer;font-size:1rem;transition:0.2s ease-in-out;box-shadow:0 0 12px rgba(8,253,216,0.4);">Connect Lace</button>
+    </div>
+    <div id="walletStatus" style="margin-top:1rem;font-size:1.05em;color:#88ffe0;"></div>
     <div id="status" style="margin-top:1rem;font-size:1.05em;"></div>
     <div id="depositBox" style="display:none;margin-top:1.4rem;">
       <p>Send ADA to:</p>
@@ -623,6 +628,30 @@ document.getElementById("connectWallet").onclick = connectWallet;
     animate();
    
 
+  </script>
+
+  <script>
+async function connectWallet(name){
+  if(!window.cardano?.[name]){ 
+    walletStatus.textContent = name+" not found";
+    return;
+  }
+  try{
+    const api = await window.cardano[name].enable();
+    const net = await api.getNetworkId();
+    if(net !== 1){
+      walletStatus.textContent = name+" wrong network (use mainnet)";
+      return;
+    }
+    const addr = await api.getChangeAddress();
+    walletStatus.textContent = name+" connected: "+addr.slice(0,20)+"...";
+  }catch(e){
+    walletStatus.textContent = name+" connection failed";
+    console.error(e);
+  }
+}
+document.getElementById("connectEternl").onclick = ()=>connectWallet("eternl");
+document.getElementById("connectLace").onclick = ()=>connectWallet("lace");
   </script>
 </body>
 </html>
