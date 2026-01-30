@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+
+# Dependencies
+node_modules
+npm-debug.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Logs
+logs
+*.log
+server.log
+
+# Docker files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+*.md
+docs
+
+# CI/CD
+.github
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp
+temp
+
+# Backups
+backups
+*.bak
+
+# Testing
+coverage
+.nyc_output
+
+# Build artifacts
+dist
+build

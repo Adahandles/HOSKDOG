@@ -86,3 +86,10 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Docker volumes and data
+backups/
+*.rdb
+
+# Production environment file
+.env.production
