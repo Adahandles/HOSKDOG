@@ -209,7 +209,7 @@ jobs:
     
     steps:
       - name: 📢 Send Discord notification
-        if: ${{ secrets.DISCORD_WEBHOOK }}
+        if: ${{ secrets.DISCORD_WEBHOOK != '' }}
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
