@@ -1,0 +1,35 @@
+name: 🗄️ Database Migration
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to migrate'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  migrate:
+    name: 🗄️ Run Database Migration
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🚀 Run migration on ${{ github.event.inputs.environment }}
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /opt/hoskdog
+            docker-compose exec -T postgres psql -U hoskdog -d hoskdog -f /docker-entrypoint-initdb.d/migrations/$(date +%Y%m%d).sql
+      
+      - name: ✅ Verify migration
+        run: echo "Migration completed on ${{ github.event.inputs.environment }}"

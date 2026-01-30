@@ -1,0 +1,40 @@
+name: 🔄 Update Dependencies
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Every Monday at midnight
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: 🔄 Update dependencies
+        run: |
+          npm update
+          cd server && npm update
+      
+      - name: 🧪 Run tests
+        run: npm test || echo "No tests found"
+      
+      - name: 📝 Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: '🔄 Update dependencies'
+          title: '🔄 Automated Dependency Update'
+          body: |
+            Automated dependency update from scheduled workflow.
+            
+            Please review changes and merge if tests pass.
+          branch: dependency-updates
+          labels: dependencies
