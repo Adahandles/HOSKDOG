@@ -9,6 +9,7 @@
     "docker:dev": "./scripts/dev.sh",
     "docker:prod": "./scripts/prod.sh",
     "docker:backup": "./scripts/backup.sh",
+    "docker:validate": "./scripts/validate-setup.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
