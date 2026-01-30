@@ -19,6 +19,16 @@ const express = require('express');
 const cors = require('cors');
 const { Lucid, Blockfrost } = require('lucid-cardano');
 
+// Import database modules (optional - will gracefully handle if not available)
+let db, redisClient;
+try {
+  db = require('../database/db');
+  redisClient = require('../database/redis');
+  console.log('✅ Database modules loaded');
+} catch (err) {
+  console.log('ℹ️  Database modules not available - running without DB/Redis');
+}
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -72,14 +82,38 @@ async function getLucid() {
 /**
  * Health Check Endpoint
  */
-app.get('/api/health', (req, res) => {
-  res.json({
+app.get('/api/health', async (req, res) => {
+  const health = {
     status: 'OK',
     service: 'HOSKDOG Deposit Server',
     network: NETWORK,
     timestamp: new Date().toISOString(),
     configured: !!BLOCKFROST_KEY && !BLOCKFROST_KEY.includes('YOUR_BLOCKFROST')
-  });
+  };
+
+  // Check database health if available
+  if (db) {
+    try {
+      const dbHealth = await db.healthCheck();
+      health.database = dbHealth;
+    } catch (err) {
+      health.database = { healthy: false, error: err.message };
+      health.status = 'DEGRADED';
+    }
+  }
+
+  // Check Redis health if available
+  if (redisClient && redisClient.client.isOpen) {
+    try {
+      await redisClient.client.ping();
+      health.redis = { healthy: true };
+    } catch (err) {
+      health.redis = { healthy: false, error: err.message };
+      health.status = 'DEGRADED';
+    }
+  }
+
+  res.json(health);
 });
 
 /**
@@ -194,14 +228,14 @@ app.post('/api/build-tx', async (req, res) => {
  * Accepts a signed transaction CBOR and submits it to the Cardano network.
  * 
  * Request body:
- *   { signedTxCborHex: string }
+ *   { signedTxCborHex: string, senderAddress?: string, amount?: string }
  * 
  * Response:
  *   { txHash: string, explorerUrl: string }
  */
 app.post('/api/submit', async (req, res) => {
   try {
-    const { signedTxCborHex } = req.body;
+    const { signedTxCborHex, senderAddress, amount } = req.body;
     
     if (!signedTxCborHex || typeof signedTxCborHex !== 'string') {
       return res.status(400).json({ error: 'signedTxCborHex is required' });
@@ -224,6 +258,24 @@ app.post('/api/submit', async (req, res) => {
     const txHash = await signedTx.submit();
     
     console.log(`[submit] Transaction submitted: ${txHash}`);
+    
+    // Log deposit to database if available
+    if (db && senderAddress && amount) {
+      try {
+        const tx = signedTx.txComplete;
+        const fee = tx.body().fee().to_str();
+        
+        await db.query(
+          `INSERT INTO deposit_history (wallet_address, tx_hash, amount_ada, fee_ada, status) 
+           VALUES ($1, $2, $3, $4, $5)`,
+          [senderAddress, txHash, amount, fee, 'completed']
+        );
+        console.log(`[submit] Deposit logged to database for ${senderAddress}`);
+      } catch (dbErr) {
+        console.error('[submit] Failed to log deposit to database:', dbErr.message);
+        // Don't fail the request if DB logging fails
+      }
+    }
     
     const explorerUrl = NETWORK === 'Mainnet'
       ? `https://cardanoscan.io/transaction/${txHash}`
