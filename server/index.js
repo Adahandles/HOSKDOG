@@ -81,6 +81,11 @@ async function getLucid() {
 
 /**
  * Health Check Endpoint
+ * 
+ * Note: This endpoint is intentionally NOT rate-limited at the application level
+ * because it's used by monitoring systems and load balancers. Rate limiting is
+ * handled at the Nginx level via separate configuration (see nginx/conf.d/hoskdog.conf).
+ * The database queries here are minimal (SELECT NOW()) and pose no security risk.
  */
 app.get('/api/health', async (req, res) => {
   const health = {
