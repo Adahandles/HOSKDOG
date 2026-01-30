@@ -313,8 +313,8 @@
     </header>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('single')">Single Address</button>
-      <button class="tab" onclick="switchTab('multi')">Beneficial Ownership</button>
+      <button class="tab active" onclick="switchTab(event, 'single')">Single Address</button>
+      <button class="tab" onclick="switchTab(event, 'multi')">Beneficial Ownership</button>
     </div>
 
     <!-- Single Address Analysis -->
@@ -371,10 +371,10 @@
   <script>
     const API_BASE = window.location.origin;
 
-    function switchTab(tab) {
+    function switchTab(event, tab) {
       // Update tab buttons
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
+      event.currentTarget.classList.add('active');
 
       // Update tab content
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -460,9 +460,10 @@
         `;
         
         data.connections.slice(0, 5).forEach(conn => {
+          const displayTarget = conn.targetDisplay || conn.target;
           html += `
             <li class="cluster-item">
-              <strong>Target:</strong> ${conn.target}
+              <strong>Target:</strong> ${displayTarget}
               <br><strong>Strength:</strong> ${conn.strength} interactions
               <br><strong>Type:</strong> ${conn.type}
             </li>

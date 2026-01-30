@@ -11,6 +11,8 @@ const config = require('../../config/faucet-settings.json');
  * Analyze relationships between wallet addresses
  * @param {string} address - Primary address to analyze
  * @param {number} depth - How many levels deep to analyze (default: 2)
+ *                        Note: Current implementation analyzes direct connections only.
+ *                        Multi-level traversal is a planned enhancement.
  * @returns {Object} Relationship graph data
  */
 async function analyzeAddressRelationships(address, depth = 2) {
@@ -24,7 +26,8 @@ async function analyzeAddressRelationships(address, depth = 2) {
       metadata: {
         analyzedAt: new Date().toISOString(),
         totalConnections: 0,
-        uniqueAddresses: 0
+        uniqueAddresses: 0,
+        note: 'Current implementation analyzes direct connections. Multi-level analysis is planned.'
       }
     };
 
@@ -138,7 +141,14 @@ function buildRelationshipGraph(sourceAddress, transactions) {
     lastSeen: null
   };
 
-  const addressFrequency = {};
+  // Note: This is a simplified implementation that tracks transaction patterns
+  // In a full implementation, we would:
+  // 1. Fetch full transaction details for each tx_hash
+  // 2. Extract input/output addresses
+  // 3. Build actual address-to-address relationships
+  // For now, we track transaction frequency as a proxy for activity patterns
+
+  const transactionFrequency = {};
 
   transactions.forEach(tx => {
     const txHash = tx.tx_hash;
@@ -152,24 +162,26 @@ function buildRelationshipGraph(sourceAddress, transactions) {
       graph.lastSeen = timestamp;
     }
 
-    // For relationship analysis, we'd need to fetch full transaction details
-    // This is a simplified version tracking transaction frequency
-    if (!addressFrequency[txHash]) {
-      addressFrequency[txHash] = {
+    // Track transaction frequency
+    const txKey = txHash; // In production, this would be the connected address
+    if (!transactionFrequency[txKey]) {
+      transactionFrequency[txKey] = {
+        txHash: txHash, // Store full hash
         count: 1,
         firstSeen: timestamp,
         lastSeen: timestamp
       };
     } else {
-      addressFrequency[txHash].count++;
-      addressFrequency[txHash].lastSeen = timestamp;
+      transactionFrequency[txKey].count++;
+      transactionFrequency[txKey].lastSeen = timestamp;
     }
   });
 
   // Build connections from frequency data
-  Object.entries(addressFrequency).forEach(([hash, data]) => {
+  Object.entries(transactionFrequency).forEach(([key, data]) => {
     graph.connections.push({
-      target: hash.substring(0, 16) + '...', // Truncated for display
+      target: data.txHash, // Store full transaction hash
+      targetDisplay: data.txHash.substring(0, 16) + '...', // Separate display field
       strength: data.count,
       firstSeen: data.firstSeen,
       lastSeen: data.lastSeen,
@@ -365,8 +377,10 @@ function groupByTransactionTiming(analyses) {
       let addedToGroup = false;
       for (const group of groups) {
         if (Math.abs(group.avgTime - avgTime) < timeWindow) {
+          const oldSize = group.addresses.length;
           group.addresses.push(analysis.address);
-          group.avgTime = (group.avgTime + avgTime) / 2; // Recalculate average
+          // Weighted average calculation
+          group.avgTime = (group.avgTime * oldSize + avgTime) / (oldSize + 1);
           addedToGroup = true;
           break;
         }
@@ -376,10 +390,42 @@ function groupByTransactionTiming(analyses) {
         groups.push({
           addresses: [analysis.address],
           avgTime,
-          confidence: 0.5
+          confidence: 1.0 // Single address groups start with full confidence
         });
       }
     }
+  });
+  
+  // Calculate confidence based on timing variance for each group
+  groups = groups.map(group => {
+    if (group.addresses.length < 2) {
+      return group;
+    }
+    
+    // Calculate standard deviation of timing within group
+    // Lower variance = higher confidence
+    const times = [];
+    analyses.forEach(analysis => {
+      if (group.addresses.includes(analysis.address) && analysis.connections.length > 0) {
+        const avgTime = analysis.connections.reduce((sum, c) => 
+          sum + (c.lastSeen || 0), 0
+        ) / analysis.connections.length;
+        times.push(avgTime);
+      }
+    });
+    
+    if (times.length > 1) {
+      const mean = times.reduce((sum, t) => sum + t, 0) / times.length;
+      const variance = times.reduce((sum, t) => sum + Math.pow(t - mean, 2), 0) / times.length;
+      const stdDev = Math.sqrt(variance);
+      
+      // Normalize confidence: smaller std dev = higher confidence
+      // Use time window as reference scale
+      const normalizedStdDev = Math.min(stdDev / timeWindow, 1);
+      group.confidence = 1 - normalizedStdDev;
+    }
+    
+    return group;
   });
   
   return groups.filter(g => g.addresses.length >= 2);
@@ -404,10 +450,10 @@ function calculateDistributionMetrics(analyses) {
   const totalConnections = connectionCounts.reduce((sum, count) => sum + count, 0);
   
   if (totalConnections > 0) {
-    // Higher concentration means fewer addresses hold most connections
-    const maxPossibleConcentration = totalConnections;
-    const actualConcentration = Math.max(...connectionCounts);
-    metrics.concentration = (actualConcentration / maxPossibleConcentration) * 100;
+    // Concentration measures how much the connections are concentrated in few addresses
+    // Higher concentration = fewer addresses hold most connections
+    const maxConnections = Math.max(...connectionCounts);
+    metrics.concentration = (maxConnections / totalConnections) * 100;
   }
 
   // Calculate diversity (how spread out the connections are)
