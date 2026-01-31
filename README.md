@@ -280,6 +280,42 @@ See [FAUCET_README.md](./FAUCET_README.md) for documentation on the HOSKDOG toke
 
 ---
 
+## Relationship Intelligence & Beneficial Ownership Analysis
+
+The HOSKDOG system includes advanced blockchain analytics for tracking relationships between wallet addresses and identifying beneficial ownership patterns.
+
+### Features
+
+- **Single Address Analysis**: Analyze transaction patterns and relationships for individual addresses
+- **Beneficial Ownership Detection**: Identify potential beneficial owners across multiple addresses
+- **Risk Scoring**: Automated risk assessment based on transaction behavior
+- **Network Visualization**: Interactive relationship graphs and cluster identification
+- **Distribution Analytics**: Token concentration and diversity metrics
+
+### Quick Start
+
+1. Start the API server:
+   ```bash
+   npm start
+   ```
+
+2. Access the relationship intelligence interface:
+   ```
+   http://localhost:3000/relationship-intelligence.html
+   ```
+
+3. Use the API endpoints:
+   - `POST /api/relationships/analyze` - Analyze single address
+   - `POST /api/relationships/graph` - Get network graph data
+   - `POST /api/ownership/beneficial` - Identify beneficial owners
+   - `POST /api/ownership/distribution` - Analyze token distribution
+
+### Documentation
+
+See [docs/RELATIONSHIP_INTELLIGENCE.md](./docs/RELATIONSHIP_INTELLIGENCE.md) for complete API documentation, algorithms, and usage examples.
+
+---
+
 ## License
 
 MIT

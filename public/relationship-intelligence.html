@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relationship Intelligence - HOSKDOG</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(135deg, #0b0f1a 0%, #1a1f2e 100%);
+      color: #e0faff;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(12, 18, 28, 0.8);
+      border-radius: 12px;
+      border: 2px solid #08fdd8;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.3);
+    }
+
+    h1 {
+      color: #08fdd8;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: #88ffe0;
+      font-size: 1.1rem;
+    }
+
+    .nav-links {
+      margin-top: 1rem;
+    }
+
+    .nav-links a {
+      color: #08fdd8;
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #00e5c0;
+    }
+
+    .panel {
+      background: rgba(12, 18, 28, 0.8);
+      border: 1px solid #08fdd8;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 15px rgba(8, 253, 216, 0.2);
+    }
+
+    .panel h2 {
+      color: #08fdd8;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #88ffe0;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      background: rgba(8, 253, 216, 0.1);
+      border: 1px solid #08fdd8;
+      border-radius: 8px;
+      color: #e0faff;
+      font-family: 'Rubik', monospace;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #00e5c0;
+      box-shadow: 0 0 10px rgba(8, 253, 216, 0.3);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .button {
+      background: linear-gradient(45deg, #08fdd8, #05e3c4);
+      color: #000;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(8, 253, 216, 0.4);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(8, 253, 216, 0.6);
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .results {
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: rgba(8, 253, 216, 0.1);
+      border: 1px solid #08fdd8;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .stat-card h3 {
+      color: #08fdd8;
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #88ffe0;
+      margin: 0.5rem 0;
+    }
+
+    .risk-score {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .risk-low {
+      background: rgba(0, 255, 100, 0.2);
+      color: #00ff64;
+      border: 1px solid #00ff64;
+    }
+
+    .risk-medium {
+      background: rgba(255, 200, 0, 0.2);
+      color: #ffc800;
+      border: 1px solid #ffc800;
+    }
+
+    .risk-high {
+      background: rgba(255, 50, 50, 0.2);
+      color: #ff3232;
+      border: 1px solid #ff3232;
+    }
+
+    .cluster-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .cluster-item {
+      background: rgba(8, 253, 216, 0.05);
+      border-left: 3px solid #08fdd8;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border-radius: 4px;
+    }
+
+    .cluster-item strong {
+      color: #08fdd8;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #08fdd8;
+      font-size: 1.2rem;
+    }
+
+    .loading::after {
+      content: '...';
+      animation: dots 1.5s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60%, 100% { content: '...'; }
+    }
+
+    .error {
+      background: rgba(255, 50, 50, 0.2);
+      border: 1px solid #ff3232;
+      color: #ff3232;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+
+    .beneficial-owner {
+      background: rgba(8, 253, 216, 0.05);
+      border: 1px solid #08fdd8;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .beneficial-owner .address {
+      font-family: monospace;
+      color: #88ffe0;
+      word-break: break-all;
+    }
+
+    .likelihood-bar {
+      height: 8px;
+      background: rgba(8, 253, 216, 0.2);
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+
+    .likelihood-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #08fdd8, #05e3c4);
+      transition: width 0.5s;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #08fdd8;
+    }
+
+    .tab {
+      padding: 1rem 2rem;
+      background: transparent;
+      border: none;
+      color: #88ffe0;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab.active {
+      color: #08fdd8;
+      border-bottom-color: #08fdd8;
+    }
+
+    .tab:hover {
+      color: #08fdd8;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .help-text {
+      color: #88ffe0;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔍 Relationship Intelligence</h1>
+      <p class="subtitle">Complex Relationship Analysis & Beneficial Ownership Detection</p>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/slurp-logic.html">Faucet</a>
+        <a href="/relationship-intelligence.html">Intelligence</a>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab(event, 'single')">Single Address</button>
+      <button class="tab" onclick="switchTab(event, 'multi')">Beneficial Ownership</button>
+    </div>
+
+    <!-- Single Address Analysis -->
+    <div id="single-tab" class="tab-content active">
+      <div class="panel">
+        <h2>Analyze Single Address</h2>
+        <form id="single-form" onsubmit="analyzeSingleAddress(event)">
+          <div class="form-group">
+            <label for="address">Wallet Address</label>
+            <input 
+              type="text" 
+              id="address" 
+              placeholder="addr1q..." 
+              required
+              pattern="(addr1|stake1)[a-z0-9]+"
+            >
+            <p class="help-text">Enter a Cardano wallet address (addr1... or stake1...)</p>
+          </div>
+          
+          <button type="submit" class="button" id="analyze-btn">
+            Analyze Relationships
+          </button>
+        </form>
+
+        <div id="single-results" class="results"></div>
+      </div>
+    </div>
+
+    <!-- Multi-Address Beneficial Ownership -->
+    <div id="multi-tab" class="tab-content">
+      <div class="panel">
+        <h2>Analyze Beneficial Ownership</h2>
+        <form id="multi-form" onsubmit="analyzeMultiAddress(event)">
+          <div class="form-group">
+            <label for="addresses">Wallet Addresses (one per line, max 20)</label>
+            <textarea 
+              id="addresses" 
+              placeholder="addr1q...&#10;addr1q...&#10;addr1q..."
+              required
+            ></textarea>
+            <p class="help-text">Enter multiple addresses to analyze beneficial ownership patterns</p>
+          </div>
+          
+          <button type="submit" class="button" id="analyze-multi-btn">
+            Analyze Ownership
+          </button>
+        </form>
+
+        <div id="multi-results" class="results"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin;
+
+    function switchTab(event, tab) {
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(`${tab}-tab`).classList.add('active');
+    }
+
+    async function analyzeSingleAddress(event) {
+      event.preventDefault();
+      
+      const address = document.getElementById('address').value.trim();
+      const resultsDiv = document.getElementById('single-results');
+      const button = document.getElementById('analyze-btn');
+      
+      button.disabled = true;
+      button.textContent = 'Analyzing...';
+      resultsDiv.innerHTML = '<div class="loading">Analyzing address relationships</div>';
+
+      try {
+        const response = await fetch(`${API_BASE}/api/relationships/analyze`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ address, depth: 2 })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Analysis failed');
+        }
+
+        displaySingleResults(result.data);
+      } catch (error) {
+        resultsDiv.innerHTML = `<div class="error">❌ ${error.message}</div>`;
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Analyze Relationships';
+      }
+    }
+
+    function displaySingleResults(data) {
+      const resultsDiv = document.getElementById('single-results');
+      
+      const riskClass = data.riskScore < 30 ? 'risk-low' : 
+                        data.riskScore < 60 ? 'risk-medium' : 'risk-high';
+      
+      const riskLabel = data.riskScore < 30 ? 'Low Risk' : 
+                        data.riskScore < 60 ? 'Medium Risk' : 'High Risk';
+
+      let html = `
+        <div class="stat-card">
+          <h3>📊 Analysis Summary</h3>
+          <p><strong>Address:</strong> <span style="font-family: monospace; color: #88ffe0;">${data.address}</span></p>
+          <p><strong>Total Connections:</strong> <span class="stat-value">${data.metadata.totalConnections}</span></p>
+          <p><strong>Unique Addresses:</strong> <span class="stat-value">${data.metadata.uniqueAddresses}</span></p>
+          <p><strong>Risk Assessment:</strong> <span class="risk-score ${riskClass}">${riskLabel} (${data.riskScore}%)</span></p>
+        </div>
+      `;
+
+      if (data.clusters && data.clusters.length > 0) {
+        html += `
+          <div class="stat-card">
+            <h3>🔗 Relationship Clusters</h3>
+            <ul class="cluster-list">
+        `;
+        
+        data.clusters.forEach(cluster => {
+          html += `
+            <li class="cluster-item">
+              <strong>${cluster.type}</strong> (${cluster.size} addresses)
+              <br>Risk Level: ${cluster.riskLevel}
+            </li>
+          `;
+        });
+        
+        html += `</ul></div>`;
+      }
+
+      if (data.connections && data.connections.length > 0) {
+        html += `
+          <div class="stat-card">
+            <h3>🌐 Top Connections</h3>
+            <ul class="cluster-list">
+        `;
+        
+        data.connections.slice(0, 5).forEach(conn => {
+          const displayTarget = conn.targetDisplay || conn.target;
+          html += `
+            <li class="cluster-item">
+              <strong>Target:</strong> ${displayTarget}
+              <br><strong>Strength:</strong> ${conn.strength} interactions
+              <br><strong>Type:</strong> ${conn.type}
+            </li>
+          `;
+        });
+        
+        html += `</ul></div>`;
+      }
+
+      resultsDiv.innerHTML = html;
+    }
+
+    async function analyzeMultiAddress(event) {
+      event.preventDefault();
+      
+      const addressesText = document.getElementById('addresses').value.trim();
+      const addresses = addressesText.split('\n').map(a => a.trim()).filter(a => a);
+      
+      const resultsDiv = document.getElementById('multi-results');
+      const button = document.getElementById('analyze-multi-btn');
+      
+      if (addresses.length === 0) {
+        resultsDiv.innerHTML = '<div class="error">Please enter at least one address</div>';
+        return;
+      }
+
+      if (addresses.length > 20) {
+        resultsDiv.innerHTML = '<div class="error">Maximum 20 addresses allowed</div>';
+        return;
+      }
+      
+      button.disabled = true;
+      button.textContent = 'Analyzing...';
+      resultsDiv.innerHTML = '<div class="loading">Analyzing beneficial ownership patterns</div>';
+
+      try {
+        const response = await fetch(`${API_BASE}/api/ownership/beneficial`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ addresses })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Analysis failed');
+        }
+
+        displayMultiResults(result.data);
+      } catch (error) {
+        resultsDiv.innerHTML = `<div class="error">❌ ${error.message}</div>`;
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Analyze Ownership';
+      }
+    }
+
+    function displayMultiResults(data) {
+      const resultsDiv = document.getElementById('multi-results');
+      
+      let html = `
+        <div class="stat-card">
+          <h3>📈 Ownership Analysis</h3>
+          <p><strong>Analyzed Addresses:</strong> <span class="stat-value">${data.metadata.addressCount}</span></p>
+          <p><strong>Concentration:</strong> <span class="stat-value">${data.distributionMetrics.concentration.toFixed(1)}%</span></p>
+          <p><strong>Diversity:</strong> <span class="stat-value">${data.distributionMetrics.diversity.toFixed(1)}</span></p>
+        </div>
+      `;
+
+      if (data.beneficialOwners && data.beneficialOwners.length > 0) {
+        html += `
+          <div class="stat-card">
+            <h3>👤 Potential Beneficial Owners</h3>
+            <p>Addresses that appear across multiple address networks:</p>
+        `;
+        
+        data.beneficialOwners.slice(0, 5).forEach(owner => {
+          html += `
+            <div class="beneficial-owner">
+              <p><strong>Type:</strong> ${owner.type}</p>
+              <p class="address">${owner.address}</p>
+              <p><strong>Likelihood:</strong> ${owner.likelihood.toFixed(1)}%</p>
+              <div class="likelihood-bar">
+                <div class="likelihood-bar-fill" style="width: ${owner.likelihood}%"></div>
+              </div>
+              <p><strong>Connected to ${owner.connectedAddresses.length} addresses</strong></p>
+            </div>
+          `;
+        });
+        
+        html += `</div>`;
+      }
+
+      if (data.controlPatterns && data.controlPatterns.length > 0) {
+        html += `
+          <div class="stat-card">
+            <h3>🎯 Control Patterns</h3>
+            <ul class="cluster-list">
+        `;
+        
+        data.controlPatterns.forEach(pattern => {
+          html += `
+            <li class="cluster-item">
+              <strong>${pattern.type.toUpperCase()}</strong>: ${pattern.description}
+            </li>
+          `;
+        });
+        
+        html += `</ul></div>`;
+      }
+
+      resultsDiv.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
