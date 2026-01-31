@@ -8,6 +8,7 @@ const { validateConfiguration } = require('./utils/config-validator');
 
 const eligibilityRoutes = require('./routes/eligibility');
 const slurpRoutes = require('./routes/slurp');
+const relationshipRoutes = require('./routes/relationships');
 const { rateLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // API routes
 app.use('/api', eligibilityRoutes);
 app.use('/api', slurpRoutes);
+app.use('/api', relationshipRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

@@ -1,26 +1,29 @@
-# Multi-stage build for optimized image size
-FROM node:18-alpine AS builder
+# Use official Node.js runtime as base image
+FROM node:18-alpine
+
+# Set working directory in container
 WORKDIR /app
+
+# Copy package files
 COPY package*.json ./
 COPY server/package*.json ./server/
-RUN npm ci --production
-RUN cd server && npm ci --production
 
-FROM node:18-alpine
-WORKDIR /app
+# Install dependencies
+RUN npm ci --only=production
+RUN cd server && npm ci --only=production
 
-# Security: Run as non-root user
-RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
-USER nodejs
+# Copy application files
+COPY . .
 
-# Copy dependencies and application
-COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nodejs:nodejs /app/server/node_modules ./server/node_modules
-COPY --chown=nodejs:nodejs . .
+# Create necessary directories
+RUN mkdir -p logs data
+
+# Expose port for the deposit server
+EXPOSE 4000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:4000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD node scripts/health-check.js || exit 1
 
-EXPOSE 4000
+# Start the deposit server
 CMD ["node", "server/index.js"]
