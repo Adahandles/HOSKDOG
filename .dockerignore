@@ -1,41 +1,54 @@
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Test files
-tests/
-coverage/
-*.test.js
-*.spec.js
-jest.config.js
-
-# Development files
-.git/
-.github/
+# Git
+.git
 .gitignore
-.env.example
-.env.test
-.vscode/
-.idea/
 
-# Documentation
-docs/
-*.md
-!README.md
+# Dependencies
+node_modules
+npm-debug.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.production
 
 # Logs
-logs/*.log
+logs
+*.log
+server.log
+
+# Docker files
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+*.md
+docs
+
+# CI/CD
+.github
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Temporary files
-*.tmp
-*.temp
-.DS_Store
-
-# Build artifacts
-.cache
-.parcel-cache
+tmp
+temp
 
 # Backups
-backups/
+backups
+*.bak
+
+# Testing
+coverage
+.nyc_output
+
+# Build artifacts
+dist
+build

@@ -87,5 +87,9 @@ Thumbs.db
 *.tmp
 *.temp
 
-# Test files
-test-relationship-api.js
+# Docker volumes and data
+backups/
+*.rdb
+
+# Production environment file
+.env.production

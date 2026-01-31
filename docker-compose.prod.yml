@@ -2,6 +2,15 @@ version: '3.8'
 
 services:
   app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env.production
+    deploy:
+      replicas: 2
     image: ghcr.io/${GITHUB_REPOSITORY:-adahandles/hoskdog}:latest
     environment:
       - NODE_ENV=production

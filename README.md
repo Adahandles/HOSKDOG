@@ -88,6 +88,31 @@ Then visit: `http://localhost:8080/deposit.html`
 8. Confirm the transaction in your wallet
 9. Wait for the transaction hash to appear
 
+### 🐳 Docker Setup (Recommended)
+
+For a complete containerized setup with PostgreSQL, Redis, and Nginx, see the [Docker Setup Guide](DOCKER_SETUP.md).
+
+**Quick Start with Docker:**
+```bash
+# Validate setup
+npm run docker:validate
+
+# Start all services (app, database, redis, nginx)
+npm run docker:dev
+
+# Access the application at http://localhost:8080
+```
+
+**Features:**
+- ✅ PostgreSQL database for transaction history
+- ✅ Redis for caching and rate limiting
+- ✅ Nginx reverse proxy with SSL support
+- ✅ Automated backups
+- ✅ Health monitoring
+- ✅ Production-ready configuration
+
+See [DOCKER_SETUP.md](DOCKER_SETUP.md) for complete documentation.
+
 ### Server API Endpoints
 
 | Endpoint | Method | Description |
