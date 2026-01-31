@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [
     "cardano",
@@ -20,5 +22,9 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "lucid-cardano": "^0.10.11"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
   }
 }
